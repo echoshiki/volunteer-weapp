@@ -46,7 +46,7 @@ export default defineAppConfig({
 			},
 		],
 		color: '#3a3a3a',
-		selectedColor: '#d4af37',
+		selectedColor: '#EA3323',
 		backgroundColor: '#fff',
 		borderStyle: 'white',
 	},
