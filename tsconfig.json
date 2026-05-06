@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    /* 核心改动：支持 Tailwind v4 的关键 */
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+
+    /* 基础配置保持/优化 */
+    "jsx": "react-jsx",
+    "strict": true, // 建议开启严格模式，既然是新项目，咱们规范点
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "noEmit": true, // Vite 模式下由 Vite 负责输出，TS 只负责校验
+    "isolatedModules": true,
+    "allowImportingTsExtensions": true, // 允许在 ts 中 import ts
+
+    /* 路径别名 */
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+
+    /* 装饰器与声明 */
+    "experimentalDecorators": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "./types" // 确保你自己定义的类型也能被搜到
+    ],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"]
+  },
+  "include": ["src", "types", "config", "tailwind.config.ts"], // 如果你以后想用 ts 写配置也可以加进来
+  "exclude": ["node_modules", "dist"]
+}
