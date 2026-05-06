@@ -7,32 +7,24 @@ import { AuthStage, UserInfo } from '@/types/user';
  * 认证状态
  * @param uid 用户ID
  * @param token 用户 token
- * @param tempCode wxcode
- * @param authKey 临时通行证，用于绑定手机号
+ * @param uuid 临时通行证，用于绑定手机号
  * @param userInfo 用户信息
- * @param spread 推广人 ID
- * @param authStage 登陆阶段状态机
+ * @param authStage 登陆阶段状态机：UNLOGIN-未登录, NEED_BIND_PHONE-需绑定手机, LOGGED_IN-已登录
  * @param setLoginSuccess 状态设置：登录成功
  * @param setNeedBind 状态设置：需要绑定手机号
  * @param updateUserInfo 更新用户信息
- * @param setSpread 设置推广人 ID
- * @param clearSpread 清除推广人 ID
- * @param logout 退出登录
+ * @param setLogout 退出登录，清空状态并重置存储
  */
 interface AuthState {
-	uid: number | null;
+	uid: string | number | null;
 	token: string | null;
-	tempCode: string | null;
-	authKey: string | null;
+	uuid: string | null;
 	userInfo: UserInfo | null;
-	spread: number | null;
 	authStage: AuthStage;
 
-	setLoginSuccess: (token: string, uid: number) => void;
-	setNeedBind: (key: string, code: string) => void;
+	setLoginSuccess: (token: string, userInfo?: UserInfo) => void;
+	setNeedBind: (uuid: string) => void;
 	updateUserInfo: (info: UserInfo) => void;
-	setSpread: (id: number) => void;
-	clearSpread: () => void;
 	setLogout: () => void;
 }
 
@@ -41,41 +33,39 @@ export const useAuthStore = create<AuthState>()(
 		(set) => ({
 			uid: null,
 			token: null,
-			authKey: null,
-			tempCode: null,
+			uuid: null,
 			userInfo: null,
 			authStage: 'UNLOGIN',
-			spread: null,
-
-			setSpread: (id) => set({ spread: id }),
-			clearSpread: () => set({ spread: null }),
 
 			// 状态 A：直接登录成功
-			setLoginSuccess: (token, uid) =>
+			setLoginSuccess: (token) =>
 				set({
-					uid,
 					token,
 					authStage: 'LOGGED_IN',
-					authKey: null,
-					tempCode: null,
+					uuid: null,
 				}),
 
 			// 状态 B：半登录，需补全手机号
-			setNeedBind: (key, code) =>
+			setNeedBind: (uuid) =>
 				set({
-					authKey: key,
-					tempCode: code,
+					uuid: uuid,
 					authStage: 'NEED_BIND_PHONE',
 					token: null,
+					uid: null,
+					userInfo: null,
 				}),
 
-			updateUserInfo: (userInfo) => set({ userInfo }),
+			updateUserInfo: (userInfo) =>
+				set({
+					uid: userInfo.userId,
+					userInfo: userInfo,
+				}),
 
 			setLogout: () => {
 				set({
 					token: null,
 					uid: null,
-					authKey: null,
+					uuid: null,
 					userInfo: null,
 					authStage: 'UNLOGIN',
 				});

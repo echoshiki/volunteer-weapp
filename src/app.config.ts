@@ -5,6 +5,7 @@ export default defineAppConfig({
 		'pages/hall/index',
 		'pages/job/index',
 		'pages/user/index',
+		'pages/login/index',
 	],
 	window: {
 		backgroundTextStyle: 'light',

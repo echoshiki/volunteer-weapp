@@ -1,14 +1,15 @@
 import { PropsWithChildren } from 'react';
 import { useLaunch } from '@tarojs/taro';
-
+import { useLogin } from './hooks/useLogin';
 import './app.css';
 
 function App({ children }: PropsWithChildren<any>) {
+	const { onSilentLogin, isLoggedIn } = useLogin();
+
 	useLaunch(() => {
-		console.log('App launched.');
+		if (!isLoggedIn) onSilentLogin();
 	});
 
-	// children 是将要会渲染的页面
 	return children;
 }
 

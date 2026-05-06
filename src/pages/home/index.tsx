@@ -1,7 +1,7 @@
 import { View, Text } from '@tarojs/components';
 import { useLoad } from '@tarojs/taro';
 
-export default function Index() {
+export default function HomePage() {
 	useLoad(() => {
 		console.log('Page loaded.');
 	});

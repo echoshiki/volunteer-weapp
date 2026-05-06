@@ -9,6 +9,7 @@ export type AuthStage = 'UNLOGIN' | 'NEED_BIND_PHONE' | 'LOGGED_IN';
 /**
  * 用户信息
  * @param userId 用户ID
+ * @param avatar 用户头像
  * @param nickName 用户昵称
  * @param sex 性别，0代表男，1代表女，2代表未知
  * @param phonenumber 联系电话
@@ -30,7 +31,8 @@ export type AuthStage = 'UNLOGIN' | 'NEED_BIND_PHONE' | 'LOGGED_IN';
  * @param regionName 小区名称
  */
 export interface UserInfo {
-	userId?: number;
+	userId?: string | number;
+	avatar?: string;
 	nickName?: string;
 	sex?: string;
 	phonenumber?: string;
