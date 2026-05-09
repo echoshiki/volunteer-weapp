@@ -47,7 +47,7 @@ export default function ActivityList() {
 							className="bg-white rounded-xl overflow-hidden shadow-sm active:opacity-90"
 							onClick={() =>
 								Taro.navigateTo({
-									url: `/pages/volunteer/detail/index?id=${item.activityId}`,
+									url: `/pages/activity/detail/index?id=${item.activityId}`,
 								})
 							}
 						>
