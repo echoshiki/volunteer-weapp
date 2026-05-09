@@ -2,7 +2,7 @@
   "libVersion": "3.15.2",
   "projectname": "%E5%BF%97%E6%84%BF%E8%80%85%E5%B9%B3%E5%8F%B0",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "coverView": false,
     "lazyloadPlaceholderEnable": false,
     "skylineRenderEnable": false,
@@ -17,5 +17,18 @@
     "checkInvalidKey": true,
     "ignoreDevUnusedFiles": true,
     "bigPackageSizeSupport": false
+  },
+  "condition": {
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/activity/list/index",
+          "pathName": "pages/activity/list/index",
+          "query": "",
+          "scene": null,
+          "launchMode": "default"
+        }
+      ]
+    }
   }
 }

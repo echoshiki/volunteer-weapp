@@ -78,7 +78,6 @@ export const useLogin = () => {
 				uuid: uuid!,
 				code: e.detail.code,
 			});
-
 			if (res.token) {
 				await handleLoginEffect(res.token, true);
 				Taro.showToast({ title: '欢迎回来', icon: 'success' });

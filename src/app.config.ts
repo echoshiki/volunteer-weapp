@@ -1,7 +1,8 @@
 export default defineAppConfig({
 	pages: [
 		'pages/home/index',
-		'pages/activity/index',
+		'pages/activity/list/index',
+		'pages/activity/detail/index',
 		'pages/hall/index',
 		'pages/job/index',
 		'pages/user/index',
@@ -24,7 +25,7 @@ export default defineAppConfig({
 			{
 				iconPath: 'assets/icons/activity.png',
 				selectedIconPath: 'assets/icons/activity_fill.png',
-				pagePath: 'pages/activity/index',
+				pagePath: 'pages/activity/list/index',
 				text: '志愿活动',
 			},
 			{
