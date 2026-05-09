@@ -20,7 +20,7 @@ export default function ActivityDetail() {
 					{/* 标题与状态 */}
 					<View className="flex items-center space-x-2">
 						<Text
-							className={`px-2 py-0.5 rounded text-[10px] ${activity.status === 'started' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}
+							className={`px-2 py-0.5 rounded text-xs ${activity.status === 'started' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}
 						>
 							{activity.status === 'started' ? '报名中' : '已结束'}
 						</Text>

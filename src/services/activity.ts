@@ -1,5 +1,10 @@
 import { http } from '@/utils/http';
-import { ActivityCategory, Activity, ActivityListParams, ActivityListRes } from '@/types/activity';
+import {
+	ActivityCategory,
+	ActivityItem,
+	ActivityListParams,
+	ActivityListRes,
+} from '@/types/activity';
 
 /** 获取分类列表 */
 export const getActivityCategoryListAPI = () =>
@@ -11,4 +16,4 @@ export const getActivityListAPI = (params: ActivityListParams) =>
 
 /** 获取活动详情 */
 export const getActivityDetailAPI = (activityId: string | number) =>
-	http.get<Activity>(`/volunteer/activity/web/${activityId}`);
+	http.get<ActivityItem>(`/volunteer/activity/web/${activityId}`);

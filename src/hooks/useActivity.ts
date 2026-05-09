@@ -18,7 +18,11 @@ export const useActivities = (params: { categoryId?: number; keyword?: string })
 	return useInfiniteQuery({
 		queryKey: ['activity', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
-			getActivityListAPI({ ...params, page: pageParam, limit: 10 }),
+			getActivityListAPI({
+				...params,
+				pageNum: pageParam,
+				pageSize: 10,
+			}),
 		getNextPageParam: (lastPage) =>
 			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
 	});

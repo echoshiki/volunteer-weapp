@@ -7,7 +7,7 @@ export interface ActivityCategory {
 }
 
 /** 志愿活动基础对象 */
-export interface Activity {
+export interface ActivityItem {
 	activityId: number;
 	activityName: string;
 	categoryId: number;
@@ -28,8 +28,8 @@ export interface Activity {
 
 /** 活动列表请求参数 */
 export interface ActivityListParams {
-	page: number;
-	limit: number;
+	pageNum: number;
+	pageSize: number;
 	categoryId?: number;
 	keyword?: string;
 	status?: string;
@@ -37,7 +37,7 @@ export interface ActivityListParams {
 
 /** 活动列表响应结构 */
 export interface ActivityListRes {
-	list: Activity[];
+	list: ActivityItem[];
 	total: number;
 	totalPage: number;
 	page: number;

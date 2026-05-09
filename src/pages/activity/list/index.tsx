@@ -2,13 +2,20 @@ import { useState } from 'react';
 import { View, Text, Input, ScrollView, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { useActivities } from '@/hooks/useActivity';
+import { BaseEmpty } from '@/components/BaseEmpty';
 
 export default function ActivityList() {
 	const [keyword, setKeyword] = useState('');
 	const [categoryId, setCategoryId] = useState<number | undefined>();
 	const [isFilterOpen, setIsFilterOpen] = useState(false);
 
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useActivities({
+	const {
+		data,
+		fetchNextPage,
+		hasNextPage,
+		isFetchingNextPage,
+		isLoading: isListLoading,
+	} = useActivities({
 		keyword,
 		categoryId,
 	});
@@ -37,7 +44,7 @@ export default function ActivityList() {
 			{/* 活动列表 */}
 			<ScrollView
 				scrollY
-				className="flex-1"
+				className="h-[calc(100vh-120px)]"
 				onScrollToLower={() => hasNextPage && fetchNextPage()}
 			>
 				<View className="p-4 space-y-4">
@@ -58,7 +65,7 @@ export default function ActivityList() {
 										{item.activityName}
 									</Text>
 									<Text
-										className={`ml-2 px-2 py-0.5 rounded text-[10px] ${item.status === 'started' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}
+										className={`ml-2 px-2 py-0.5 rounded text-xs ${item.status === 'started' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}
 									>
 										{item.status === 'started' ? '报名中' : '已结束'}
 									</Text>
@@ -72,13 +79,16 @@ export default function ActivityList() {
 									<Text className="text-xs text-blue-600 font-medium">
 										已报 {item.attendance} / {item.maxPeople} 人
 									</Text>
-									<Text className="text-[10px] text-gray-400">
+									<Text className="text-xs text-gray-400">
 										{item.startTime} 开始
 									</Text>
 								</View>
 							</View>
 						</View>
 					))}
+
+					{list.length === 0 && !isListLoading && <BaseEmpty title="暂无志愿活动" />}
+
 					{isFetchingNextPage && (
 						<View className="text-center py-4 text-gray-400 text-xs">加载中...</View>
 					)}
