@@ -1,5 +1,5 @@
 import { useRouter } from '@tarojs/taro';
-import { View, Text, Image, RichText, ScrollView } from '@tarojs/components';
+import { View, Text, Image, RichText, ScrollView, Button } from '@tarojs/components';
 import { useActivityDetail } from '@/hooks/useActivity';
 import { Badge } from '@/components/Badge';
 
@@ -58,7 +58,6 @@ export default function ActivityDetail() {
 						<Text className="text-lg font-bold border-l-4 border-primary pl-3">
 							活动详情
 						</Text>
-						<View className="icon-[ph--align-top-simple-light] w-10 h-10 text-title" />
 						<View className="mt-4 text-gray-700 leading-relaxed text-sm">
 							<RichText nodes={activity.content} />
 						</View>
@@ -78,16 +77,17 @@ export default function ActivityDetail() {
 
 			{/* 底部悬浮按钮 (预留交互位置) */}
 			<View className="fixed bottom-0 inset-x-0 p-4 bg-white/80 backdrop-blur-md border-t border-gray-100 flex items-center justify-between">
-				<View className="flex flex-col gap-1">
+				<View className="flex flex-1 flex-col gap-1">
 					<Text className="text-xs text-text-muted">当前进度</Text>
 					<Text className="text-sm">
 						<Text className="font-bold text-primary">{activity.attendance}</Text>{' '}
 						人已报名
 					</Text>
 				</View>
-				<View className="bg-primary text-white px-10 py-2.5 rounded-full font-bold active:opacity-80">
+				<Button className="w-32 h-10 text-sm bg-primary text-white rounded-full font-bold flex justify-center items-center gap-1.5">
+					<View className="size-5 icon-[ph--hand-tap]" />
 					立即报名
-				</View>
+				</Button>
 			</View>
 		</View>
 	);

@@ -60,7 +60,8 @@ export default function ActivityList() {
 							}
 						>
 							<Image src={item.banner} className="w-full h-40 object-cover" />
-							<View className="p-3">
+							<View className="px-3 py-5">
+								{/* 活动标题和状态 */}
 								<View className="flex justify-between items-center">
 									<Text className="text-lg font-bold text-text-title flex-1 truncate">
 										{item.activityName}
@@ -69,19 +70,26 @@ export default function ActivityList() {
 										{item.status === 'started' ? '报名中' : '已结束'}
 									</Badge>
 								</View>
+
+								{/* 活动类型和地址 */}
 								<View className="mt-2 flex items-center text-xs text-gray-500 space-x-2">
 									<Text>{item.categoryName}</Text>
 									<Text>|</Text>
 									<Text>{item.address}</Text>
 								</View>
+
+								{/* 报名人数和时间 */}
 								<View className="mt-3 flex justify-between items-center">
-									<Text className="text-xs text-text-muted ">
-										已报{' '}
-										<Text className="text-primary font-bold">
-											{item.attendance} / {item.maxPeople}
-										</Text>{' '}
-										人
-									</Text>
+									<View className="flex items-center gap-1.5 text-text-muted">
+										<View className="icon-[ph--users-three] size-4" />
+										<Text className="text-xs">
+											已报{' '}
+											<Text className="text-primary font-bold">
+												{item.attendance} / {item.maxPeople}
+											</Text>{' '}
+											人
+										</Text>
+									</View>
 									<Text className="text-xs text-text-muted">
 										{item.startTime} 开始
 									</Text>

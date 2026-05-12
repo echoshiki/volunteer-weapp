@@ -9,6 +9,7 @@ export default function HomePage() {
 	return (
 		<View className="index">
 			<Text>Hello world!</Text>
+			<View className="icon-[ph--align-top-simple-light] w-5 h-5" />
 		</View>
 	);
 }
