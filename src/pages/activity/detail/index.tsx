@@ -1,7 +1,7 @@
 import { useRouter } from '@tarojs/taro';
 import { View, Text, Image, RichText, ScrollView, Button } from '@tarojs/components';
 import { useActivityDetail } from '@/hooks/useActivity';
-import { Badge } from '@/components/Badge';
+import { Badge } from '@/components/ui/Badge';
 
 export default function ActivityDetail() {
 	const router = useRouter();

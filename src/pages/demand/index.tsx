@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
 import { useRouter, navigateTo } from '@tarojs/taro';
 import { useDemandTargets, useDemandTags, useDemandOrders } from '@/hooks/useDemand';
-import { Badge } from '@/components/Badge';
+import { Badge } from '@/components/ui/Badge';
 
 export default function DemandPage() {
 	// 筛选状态字典

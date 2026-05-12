@@ -1,7 +1,7 @@
 import { useRouter } from '@tarojs/taro';
 import { View, Text, ScrollView, Image, Button } from '@tarojs/components';
 import { useDemandDetail, useServiceUsers } from '@/hooks/useDemand';
-import { Badge } from '@/components/Badge';
+import { Badge } from '@/components/ui/Badge';
 import { useMemo } from 'react';
 
 export default function DemandDetailPage() {

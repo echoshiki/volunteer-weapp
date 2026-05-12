@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { View, Text, Input, ScrollView, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { useActivities } from '@/hooks/useActivity';
-import { BaseEmpty } from '@/components/BaseEmpty';
-import { Badge } from '@/components/Badge';
+import { BaseEmpty } from '@/components/ui/BaseEmpty';
+import { Badge } from '@/components/ui/Badge';
 
 export default function ActivityList() {
 	const [keyword, setKeyword] = useState('');
