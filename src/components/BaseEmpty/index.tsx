@@ -21,14 +21,14 @@ interface Props {
 
 // 预设不同类型的默认图片和文字
 const DEFAULT_CONFIG = {
-	order: { icon: 'icon-[lucide--clipboard-list]', text: '还没有相关订单' },
-	search: { icon: 'icon-[lucide--search-x]', text: '没找到相关商品' },
-	cart: { icon: 'icon-[lucide--shopping-cart]', text: '购物车空空如也' },
-	address: { icon: 'icon-[lucide--map-pin-off]', text: '还没有收货地址' },
-	favorite: { icon: 'icon-[lucide--heart-off]', text: '收藏夹还是空的' },
-	good: { icon: 'icon-[lucide--package-open]', text: '没有找到相关商品' },
-	merchant: { icon: 'icon-[lucide--store]', text: '没有找到相关店铺' },
-	default: { icon: 'icon-[lucide--alert-circle]', text: '空空如也' },
+	order: { icon: '', text: '还没有相关订单' },
+	search: { icon: '', text: '没找到相关商品' },
+	cart: { icon: '', text: '购物车空空如也' },
+	address: { icon: '', text: '还没有收货地址' },
+	favorite: { icon: '', text: '收藏夹还是空的' },
+	good: { icon: '', text: '没有找到相关商品' },
+	merchant: { icon: '', text: '没有找到相关店铺' },
+	default: { icon: '', text: '空空如也' },
 };
 
 export const BaseEmpty = ({
