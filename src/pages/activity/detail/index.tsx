@@ -82,7 +82,7 @@ export default function ActivityDetail() {
 
 			{/* 底部悬浮按钮 (预留交互位置) */}
 			<View className="fixed bottom-0 inset-x-0 p-4 bg-white/80 backdrop-blur-md border-t flex items-center justify-between">
-				<View className="flex flex-col">
+				<View className="flex flex-col gap-1">
 					<Text className="text-xs text-gray-400">当前进度</Text>
 					<Text className="text-sm font-bold text-blue-600">
 						{activity.attendance} 人已报名

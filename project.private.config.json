@@ -22,11 +22,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "pages/activity/detail/index",
+          "pathName": "pages/activity/detail/index",
+          "query": "id=2",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "pages/activity/list/index",
           "pathName": "pages/activity/list/index",
           "query": "",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         }
       ]
     }

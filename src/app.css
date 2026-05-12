@@ -1,1 +1,27 @@
-@import "weapp-tailwindcss/index.css";
+@import 'weapp-tailwindcss/index.css';
+
+@font-face {
+	font-family: 'Manrope';
+	src:
+		url('./assets/fonts/Manrope.woff2') format('woff2-variations'),
+		/* 针对可变字体的格式声明 */ url('./manrope.woff2') format('woff2');
+	font-weight: 100 900;
+	font-style: normal;
+	font-display: swap;
+}
+
+@theme {
+	/* 核心色彩 */
+	--color-primary: #ea3323;
+
+	/* 点缀色/辅助色*/
+	--color-main-bg: #fafafa; /* 离纸感背景 */
+	--color-text-primary: #09090b;
+	--color-text-body: #27272a;
+	--color-text-muted: #71717a;
+
+	/* 也可以定义通用的间距或圆角，保持全局统一 */
+	--radius-card: 16rpx;
+
+	--font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+}
