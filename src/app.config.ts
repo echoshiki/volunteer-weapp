@@ -3,7 +3,8 @@ export default defineAppConfig({
 		'pages/home/index',
 		'pages/activity/list/index',
 		'pages/activity/detail/index',
-		'pages/hall/index',
+		'pages/demand/index',
+		'pages/demand/detail/index',
 		'pages/job/index',
 		'pages/user/index',
 		'pages/login/index',
@@ -29,9 +30,9 @@ export default defineAppConfig({
 				text: '志愿活动',
 			},
 			{
-				iconPath: 'assets/icons/hall.png',
-				selectedIconPath: 'assets/icons/hall_fill.png',
-				pagePath: 'pages/hall/index',
+				iconPath: 'assets/icons/demand.png',
+				selectedIconPath: 'assets/icons/demand_fill.png',
+				pagePath: 'pages/demand/index',
 				text: '服务大厅',
 			},
 			{

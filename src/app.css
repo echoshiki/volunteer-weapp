@@ -32,15 +32,3 @@
 	font-family: var(--font-sans);
 	color: var(--font-body);
 }
-
-button::after {
-	border: none;
-}
-
-button {
-	line-height: inherit;
-	border-radius: 0;
-	padding: 0;
-	margin: 0;
-	background-color: transparent;
-}

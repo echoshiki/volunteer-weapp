@@ -1,11 +1,11 @@
-// 统一请求响应格式
+/** 统一响应结构 */
 export interface BaseResponse<T> {
 	code: number;
 	data: T;
 	msg: string;
 }
 
-// 基础分页结构，对齐你提供的 JSON 结构
+/** 基础分页结构 */
 export interface PageRes<T> {
 	list: T[];
 	page: number;
@@ -14,14 +14,22 @@ export interface PageRes<T> {
 	totalPage: number;
 }
 
-// 轮播图数据
+/** 基础列表结构 */
+export interface ListRes<T> {
+	list: T[];
+}
+
+/** 审核状态 */
+export type ApprovalStatus = 'pending' | 'approved' | 'rejected';
+
+/** 轮播图 */
 export interface SwiperData {
 	id?: number | string;
 	pic: string;
 	url?: string;
 }
 
-// Tab 项
+/** 选项卡 */
 export interface TabItem {
 	label: string;
 	value: string;
