@@ -1,5 +1,7 @@
 @import 'weapp-tailwindcss/index.css';
 
+@plugin "@iconify/tailwind4";
+
 @font-face {
 	font-family: 'Manrope';
 	src:
@@ -16,7 +18,7 @@
 
 	/* 点缀色/辅助色*/
 	--color-main-bg: #fafafa; /* 离纸感背景 */
-	--color-text-primary: #09090b;
+	--color-text-title: #09090b;
 	--color-text-body: #27272a;
 	--color-text-muted: #71717a;
 
@@ -24,4 +26,9 @@
 	--radius-card: 16rpx;
 
 	--font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+}
+
+* {
+	font-family: var(--font-sans);
+	color: var(--font-body);
 }

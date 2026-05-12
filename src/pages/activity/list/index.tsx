@@ -3,6 +3,7 @@ import { View, Text, Input, ScrollView, Image } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { useActivities } from '@/hooks/useActivity';
 import { BaseEmpty } from '@/components/BaseEmpty';
+import { Badge } from '@/components/Badge';
 
 export default function ActivityList() {
 	const [keyword, setKeyword] = useState('');
@@ -34,7 +35,7 @@ export default function ActivityList() {
 					/>
 				</View>
 				<View
-					className="text-blue-600 text-sm font-medium"
+					className="text-primary text-sm font-medium"
 					onClick={() => setIsFilterOpen(true)}
 				>
 					筛选
@@ -51,7 +52,7 @@ export default function ActivityList() {
 					{list.map((item) => (
 						<View
 							key={item.activityId}
-							className="bg-white rounded-xl overflow-hidden shadow-sm active:opacity-90"
+							className="bg-white rounded-card overflow-hidden shadow-sm active:opacity-90"
 							onClick={() =>
 								Taro.navigateTo({
 									url: `/pages/activity/detail/index?id=${item.activityId}`,
@@ -60,15 +61,13 @@ export default function ActivityList() {
 						>
 							<Image src={item.banner} className="w-full h-40 object-cover" />
 							<View className="p-3">
-								<View className="flex justify-between items-start">
-									<Text className="text-lg font-bold text-gray-900 flex-1 truncate">
+								<View className="flex justify-between items-center">
+									<Text className="text-lg font-bold text-text-title flex-1 truncate">
 										{item.activityName}
 									</Text>
-									<Text
-										className={`ml-2 px-2 py-0.5 rounded text-xs ${item.status === 'started' ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-400'}`}
-									>
+									<Badge variant={item.status === 'started' ? 'success' : 'gray'}>
 										{item.status === 'started' ? '报名中' : '已结束'}
-									</Text>
+									</Badge>
 								</View>
 								<View className="mt-2 flex items-center text-xs text-gray-500 space-x-2">
 									<Text>{item.categoryName}</Text>
@@ -76,10 +75,14 @@ export default function ActivityList() {
 									<Text>{item.address}</Text>
 								</View>
 								<View className="mt-3 flex justify-between items-center">
-									<Text className="text-xs text-blue-600 font-medium">
-										已报 {item.attendance} / {item.maxPeople} 人
+									<Text className="text-xs text-text-muted ">
+										已报{' '}
+										<Text className="text-primary font-bold">
+											{item.attendance} / {item.maxPeople}
+										</Text>{' '}
+										人
 									</Text>
-									<Text className="text-xs text-gray-400">
+									<Text className="text-xs text-text-muted">
 										{item.startTime} 开始
 									</Text>
 								</View>
@@ -90,7 +93,7 @@ export default function ActivityList() {
 					{list.length === 0 && !isListLoading && <BaseEmpty title="暂无志愿活动" />}
 
 					{isFetchingNextPage && (
-						<View className="text-center py-4 text-gray-400 text-xs">加载中...</View>
+						<View className="text-center py-4 text-text-muted text-xs">加载中...</View>
 					)}
 				</View>
 			</ScrollView>
@@ -106,7 +109,7 @@ export default function ActivityList() {
 						<Text className="text-lg font-bold block mb-4">全部分类</Text>
 						<View className="grid grid-cols-2 gap-2">
 							<View
-								className={`py-2 text-center rounded-lg text-sm ${!categoryId ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600'}`}
+								className={`py-2 text-center rounded-lg text-sm ${!categoryId ? 'bg-primary text-white' : 'bg-gray-100 text-text-body'}`}
 								onClick={() => {
 									setCategoryId(undefined);
 									setIsFilterOpen(false);
