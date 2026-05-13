@@ -7,46 +7,55 @@ export interface JobCategory {
 
 /** 岗位列表请求参数 */
 export interface JobListParams {
-	jobId?: number | string; // 按分类筛选
-	keyword?: string; // 预留关键字搜索
+	/** 岗位分类 ID */
+	jobId?: number | string;
+
+	/** 关键字 */
+	keyword?: string;
 	pageNum: number;
 	pageSize: number;
 }
 
-/** 岗位实体 */
-export interface Job {
+/** 岗位列表项目 */
+export interface JobItem {
 	id: number;
 	title: string;
+	content: string;
 	enterprisesId: number;
 	enterprisesName: string;
+
+	/** 岗位分类 ID */
 	jobId: number;
+
+	/** 岗位分类名称 */
 	jobTitle: string;
-	description: string;
+
+	/** 招聘数目 */
 	hireCount: number;
+
+	/** 薪资范围，单位 k */
 	salaryBudget: string;
 }
 
 /** 岗位详情实体 */
-export interface JobDetail {
-	id: number;
-	title: string;
-	enterprisesId: number;
-	enterprisesName: string;
-	jobId: number;
-	jobTitle: string;
-	description: string;
-	hireCount: number;
-	salaryBudget: string; // 薪资范围，如 "5-8"
-}
+export interface JobDetail extends JobItem {}
 
 /** 企业详情内的简易岗位实体 */
 export interface EnterpriseJob {
 	id: number;
 	title: string;
 	description: string;
+
+	/** 岗位分类 ID */
 	jobId: number;
+
+	/** 岗位分类名称 */
 	jobTitle: string;
+
+	/** 招聘数目 */
 	hireCount: number;
+
+	/** 薪资范围，单位 k */
 	salaryBudget: string;
 }
 
@@ -64,6 +73,8 @@ export interface EnterpriseDetail {
 	districtName: string;
 	address: string;
 	logo: string;
+
+	/** 成立时间 */
 	setupTime: string;
 	description: string;
 	jobList: EnterpriseJob[];
