@@ -6,6 +6,8 @@ export default defineAppConfig({
 		'pages/demand/index',
 		'pages/demand/detail/index',
 		'pages/job/index',
+		'pages/job/detail/index',
+		'pages/job/enterprise/index',
 		'pages/user/index',
 		'pages/login/index',
 	],
