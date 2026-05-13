@@ -17,14 +17,14 @@ export default function EnterpriseDetail() {
 	return (
 		<View className="min-h-screen bg-main-bg pb-24">
 			<ScrollView scrollY className="h-full">
-				{/* 1. 企业名片 Header */}
+				{/* 企业名片 Header */}
 				<View className="bg-white p-5 border-b border-gray-100">
 					<View className="flex items-start gap-4 mb-4">
 						<Image
 							src={detail.logo}
-							className="w-16 h-16 rounded-xl border border-gray-100 object-cover bg-gray-50"
+							className="size-16 rounded border border-gray-100 object-cover bg-gray-50"
 						/>
-						<View className="flex-1">
+						<View className="flex-1 flex flex-col justify-between">
 							<Text className="text-xl font-bold text-text-title leading-tight block mb-1">
 								{detail.enterprisesName}
 							</Text>
@@ -37,7 +37,7 @@ export default function EnterpriseDetail() {
 					{/* 地理位置与联系人 */}
 					<View className="space-y-2 mt-4 bg-gray-50 p-3 rounded-card text-sm">
 						<View className="flex items-start gap-2">
-							<View className="icon-[ph--map-pin] w-4 h-4 text-text-muted mt-0.5 shrink-0" />
+							<View className="icon-[ph--map-pin] size-5 text-text-muted mt-0.5 shrink-0" />
 							<Text className="text-text-body">
 								{detail.provinceName}
 								{detail.cityName}
@@ -46,7 +46,7 @@ export default function EnterpriseDetail() {
 							</Text>
 						</View>
 						<View className="flex items-center gap-2">
-							<View className="icon-[ph--user-circle] w-4 h-4 text-text-muted shrink-0" />
+							<View className="icon-[ph--user-circle] size-5 text-text-muted shrink-0" />
 							<Text className="text-text-body">
 								{detail.contactName} · {detail.contactPhone}
 							</Text>

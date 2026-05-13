@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
 import { navigateTo } from '@tarojs/taro';
 import { useJobCategories, useJobs } from '@/hooks/useJob';
+import { Badge } from '@/components/ui/Badge';
 
 export default function JobHall() {
 	const [activeJobId, setActiveJobId] = useState<number | string>('');
@@ -29,39 +30,32 @@ export default function JobHall() {
 		<View className="min-h-screen bg-main-bg flex flex-col">
 			{/* 顶部岗位分类筛选 */}
 			<View className="sticky top-0 z-10 bg-white border-b border-gray-100 shadow-sm">
-				<ScrollView scrollX className="whitespace-nowrap px-4 py-3" showScrollbar={false}>
-					<View className="flex gap-4">
-						<View
-							className={`px-4 py-1.5 rounded-full text-sm transition-colors ${
-								activeJobId === ''
-									? 'bg-primary text-white font-bold'
-									: 'bg-gray-100 text-text-muted'
-							}`}
-							onClick={() => setActiveJobId('')}
+				<View className="flex flex-wrap gap-2 p-4 ">
+					<Badge
+						variant={activeJobId === '' ? 'primary' : 'gray'}
+						size="md"
+						onClick={() => setActiveJobId('')}
+					>
+						全部岗位
+					</Badge>
+
+					{categories?.map((cat) => (
+						<Badge
+							key={cat.jobId}
+							size="md"
+							variant={activeJobId === cat.jobId ? 'primary' : 'gray'}
+							onClick={() => setActiveJobId(cat.jobId)}
 						>
-							全部岗位
-						</View>
-						{categories?.map((cat) => (
-							<View
-								key={cat.jobId}
-								className={`px-4 py-1.5 rounded-full text-sm transition-colors ${
-									activeJobId === cat.jobId
-										? 'bg-primary text-white font-bold'
-										: 'bg-gray-100 text-text-muted'
-								}`}
-								onClick={() => setActiveJobId(cat.jobId)}
-							>
-								{cat.jobTitle}
-							</View>
-						))}
-					</View>
-				</ScrollView>
+							{cat.jobTitle}
+						</Badge>
+					))}
+				</View>
 			</View>
 
 			{/* 岗位列表 */}
 			<ScrollView
 				scrollY
-				className="flex-1"
+				className="h-[calc(100vh-120px)]"
 				onScrollToLower={handleScrollToLower}
 				style={{ height: 'calc(100vh - 60px)' }}
 			>

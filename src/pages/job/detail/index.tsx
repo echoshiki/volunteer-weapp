@@ -16,7 +16,7 @@ export default function JobDetail() {
 	return (
 		<View className="min-h-screen bg-main-bg pb-24">
 			<ScrollView scrollY className="h-full">
-				{/* 1. 岗位核心信息 */}
+				{/* 岗位核心信息 */}
 				<View className="bg-white p-5 border-b border-gray-100">
 					<View className="flex justify-between items-start mb-4">
 						<Text className="text-2xl font-bold text-text-title leading-tight flex-1 pr-4">
@@ -29,18 +29,17 @@ export default function JobDetail() {
 
 					<View className="flex items-center gap-3">
 						<View className="flex items-center gap-1 text-xs text-text-muted bg-gray-50 px-2 py-1 rounded">
-							{/* ✨ 使用规范的 Iconify 写法 */}
-							<View className="icon-[ph--briefcase] w-3 h-3" />
+							<View className="icon-[ph--briefcase] size-4" />
 							<Text>{detail.jobTitle}</Text>
 						</View>
 						<View className="flex items-center gap-1 text-xs text-text-muted bg-gray-50 px-2 py-1 rounded">
-							<View className="icon-[ph--users] w-3 h-3" />
+							<View className="icon-[ph--user] size-4" />
 							<Text>招 {detail.hireCount} 人</Text>
 						</View>
 					</View>
 				</View>
 
-				{/* 2. 企业入口卡片 ✨ [功能：进入企业主页] */}
+				{/* 企业入口卡片 */}
 				<View
 					className="mt-3 bg-white p-4 flex items-center justify-between active:bg-gray-50 transition-colors"
 					onClick={() =>
@@ -63,20 +62,18 @@ export default function JobDetail() {
 					<View className="icon-[ph--caret-right] w-5 h-5 text-text-muted" />
 				</View>
 
-				{/* 3. 岗位描述内容 */}
+				{/* 岗位描述内容 */}
 				<View className="mt-3 bg-white p-5">
 					<View className="flex items-center gap-2 mb-4">
-						{/* 🎨 使用主题定义的 primary 圆角装饰 */}
 						<View className="w-1 h-4 bg-primary rounded-full" />
 						<Text className="font-bold text-text-title">岗位描述</Text>
 					</View>
-					{/* 🎨 使用 text-text-body 和标准行高 */}
 					<View className="text-sm text-text-body leading-relaxed space-y-2">
-						<Text className="block whitespace-pre-wrap">{detail.description}</Text>
+						<Text className="block whitespace-pre-wrap">{detail.content}</Text>
 					</View>
 				</View>
 
-				{/* 4. 温馨提示 */}
+				{/* 温馨提示 */}
 				<View className="p-5">
 					<View className="bg-orange-50 rounded-card p-4 flex items-start gap-2">
 						<View className="icon-[ph--warning-circle] w-4 h-4 text-orange-500 mt-0.5 shrink-0" />
