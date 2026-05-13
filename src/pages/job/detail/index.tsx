@@ -1,6 +1,7 @@
-import { useRouter, navigateTo, makePhoneCall } from '@tarojs/taro';
+import { useRouter, makePhoneCall } from '@tarojs/taro';
 import { View, Text, ScrollView, Button } from '@tarojs/components';
 import { useJobDetail } from '@/hooks/useJob';
+import { mapsTo } from '@/utils/common';
 
 export default function JobDetail() {
 	const { params } = useRouter();
@@ -42,11 +43,7 @@ export default function JobDetail() {
 				{/* 企业入口卡片 */}
 				<View
 					className="mt-3 bg-white p-4 flex items-center justify-between active:bg-gray-50 transition-colors"
-					onClick={() =>
-						navigateTo({
-							url: `/pages/job/enterprise/index?id=${detail.enterprisesId}`,
-						})
-					}
+					onClick={() => mapsTo(`/pages/job/enterprise/index?id=${detail.enterprisesId}`)}
 				>
 					<View className="flex items-center gap-3">
 						<View className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">

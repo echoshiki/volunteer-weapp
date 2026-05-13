@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
-import { navigateTo } from '@tarojs/taro';
 import { useJobCategories, useJobs } from '@/hooks/useJob';
 import { Badge } from '@/components/ui/Badge';
+import { mapsTo } from '@/utils/common';
 
 export default function JobHall() {
 	const [activeJobId, setActiveJobId] = useState<number | string>('');
@@ -72,9 +72,7 @@ export default function JobHall() {
 								key={job.id}
 								className="bg-white rounded-card p-4 shadow-sm active:scale-[0.98] transition-transform"
 								onClick={() =>
-									navigateTo({
-										url: `/pages/job/detail/index?id=${job.enterprisesId}`,
-									})
+									mapsTo(`/pages/job/detail/index?id=${job.enterprisesId}`)
 								}
 							>
 								<View className="flex justify-between items-start mb-2">

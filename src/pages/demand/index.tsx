@@ -1,8 +1,8 @@
 import { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
-import { useRouter, navigateTo } from '@tarojs/taro';
 import { useDemandTargets, useDemandTags, useDemandOrders } from '@/hooks/useDemand';
-import { Badge } from '@/components/ui/Badge';
+import { mapsTo } from '@/utils/common';
+import { DemandStatusBadge } from '@/components/biz/DemandStatusBadge';
 
 export default function DemandPage() {
 	// 筛选状态字典
@@ -15,6 +15,7 @@ export default function DemandPage() {
 	// 标签请求：传入当前选中的分类ID，实现级联
 	const { data: tags, isLoading: tagsLoading } = useDemandTags(activeCategoryId || undefined);
 
+	// 需求订单请求：默认只请求待接单状态的订单，且根据 activeCategoryId 和 activeTagId 进行过滤
 	const {
 		data: ordersData,
 		isLoading: ordersLoading,
@@ -24,7 +25,6 @@ export default function DemandPage() {
 	} = useDemandOrders({
 		categoryUserId: activeCategoryId || undefined,
 		demandId: activeTagId || undefined,
-		// 大厅默认只展示已审批通过且正在派发中的订单
 		status: 'approved',
 		acceptStatus: 'dispatching',
 	});
@@ -41,27 +41,11 @@ export default function DemandPage() {
 		}
 	};
 
-	// 翻译接取状态
-	const getAcceptStatusText = (status: string) => {
-		switch (status) {
-			case 'dispatching':
-				return '待接单';
-			case 'accepted':
-				return '已接单';
-			case 'servicing':
-				return '服务中';
-			case 'completed':
-				return '已完成';
-			default:
-				return status;
-		}
-	};
-
 	return (
 		<View className="min-h-screen bg-main-bg flex flex-col relative">
 			{/* 顶部 Sticky 筛选区 */}
 			<View className="sticky top-0 z-10 bg-white border-b border-gray-100 shadow-sm">
-				{/* 1. 服务对象分类 */}
+				{/* 服务对象分类 */}
 				<ScrollView scrollX className="whitespace-nowrap px-4 py-3" showScrollbar={false}>
 					<View className="flex gap-4">
 						<View
@@ -96,7 +80,7 @@ export default function DemandPage() {
 					</View>
 				</ScrollView>
 
-				{/* 2. 需求标签 */}
+				{/* 需求标签 */}
 				<ScrollView
 					scrollX
 					className="whitespace-nowrap px-4 py-2 pb-3"
@@ -148,28 +132,16 @@ export default function DemandPage() {
 						orders.map((order) => (
 							<View
 								key={order.oderId}
-								// 🎨 使用了 theme 中定义的 rounded-card
 								className="bg-white rounded-card p-4 shadow-sm active:scale-[0.98] transition-transform"
 								onClick={() =>
-									navigateTo({
-										url: `/pages/demand/detail/index?id=${order.oderId}`,
-									})
+									mapsTo(`/pages/demand/detail/index?id=${order.oderId}`)
 								}
 							>
 								<View className="flex justify-between items-start mb-2">
-									{/* 🎨 使用了 theme 中定义的 text-text-title */}
 									<Text className="text-text-title font-bold text-base line-clamp-1 flex-1 pr-2">
 										{order.oderName}
 									</Text>
-									<Badge
-										variant={
-											order.acceptStatus === 'dispatching'
-												? 'primary'
-												: 'gray'
-										}
-									>
-										{getAcceptStatusText(order.acceptStatus)}
-									</Badge>
+									<DemandStatusBadge status={order.acceptStatus} />
 								</View>
 
 								<View className="flex items-center gap-2 mb-3">
@@ -186,7 +158,6 @@ export default function DemandPage() {
 									</Text>
 								</View>
 
-								{/* 🎨 使用了 theme 中定义的 text-text-body */}
 								<Text className="text-sm text-text-body line-clamp-2 mb-3">
 									{order.description}
 								</Text>
@@ -194,10 +165,8 @@ export default function DemandPage() {
 								<View className="flex justify-between items-end border-t border-gray-50 pt-3">
 									<View className="flex flex-col gap-1">
 										<View className="flex items-center gap-1 text-text-muted text-xs">
-											{/* ✨ 修复了 Iconify 写法，符合 v4 w-4 h-4 标准 */}
 											<View className="icon-[ph--user] w-3 h-3" />
 											<Text>{order.nickName}</Text>
-											{/* ✨ 移除了非标准的 text-[10px]，统一使用 text-xs 进行兜底 */}
 											<Text className="ml-1 px-1 bg-gray-100 rounded text-xs scale-90 origin-left">
 												{order.serviceScope === 'group' ? '集体' : '个人'}
 											</Text>
@@ -229,12 +198,10 @@ export default function DemandPage() {
 			{/* 发布需求按钮 */}
 			<View
 				className="fixed right-6 bottom-10 w-14 h-14 bg-primary text-white rounded-full flex items-center justify-center shadow-lg shadow-red-200 active:scale-95 transition-transform z-20"
-				onClick={() => navigateTo({ url: '/pages/demand/publish/index' })}
+				onClick={() => mapsTo('/pages/demand/publish/index')}
 			>
 				<View className="flex flex-col items-center justify-center">
-					{/* ✨ 修复了 Iconify 写法，规范宽高 */}
 					<View className="icon-[ph--plus-bold] w-6 h-6" />
-					{/* ✨ 移除了 text-[10px]，使用 text-xs */}
 					<Text className="text-xs font-bold scale-90 mt-0.5">发布</Text>
 				</View>
 			</View>

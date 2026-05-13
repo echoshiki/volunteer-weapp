@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { View, Text, Input, ScrollView, Image } from '@tarojs/components';
-import Taro from '@tarojs/taro';
 import { useActivities } from '@/hooks/useActivity';
-import { BaseEmpty } from '@/components/ui/BaseEmpty';
+import { EmptyStatus } from '@/components/ui/EmptyStatus';
 import { Badge } from '@/components/ui/Badge';
+import { mapsTo } from '@/utils/common';
 
 export default function ActivityList() {
 	const [keyword, setKeyword] = useState('');
@@ -54,9 +54,7 @@ export default function ActivityList() {
 							key={item.activityId}
 							className="bg-white rounded-card overflow-hidden shadow-sm active:opacity-90"
 							onClick={() =>
-								Taro.navigateTo({
-									url: `/pages/activity/detail/index?id=${item.activityId}`,
-								})
+								mapsTo(`/pages/activity/detail/index?id=${item.activityId}`)
 							}
 						>
 							<Image src={item.banner} className="w-full h-40 object-cover" />
@@ -98,7 +96,7 @@ export default function ActivityList() {
 						</View>
 					))}
 
-					{list.length === 0 && !isListLoading && <BaseEmpty title="暂无志愿活动" />}
+					{list.length === 0 && !isListLoading && <EmptyStatus title="暂无志愿活动" />}
 
 					{isFetchingNextPage && (
 						<View className="text-center py-4 text-text-muted text-xs">加载中...</View>

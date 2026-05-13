@@ -1,8 +1,8 @@
+import { useMemo } from 'react';
 import { useRouter } from '@tarojs/taro';
 import { View, Text, ScrollView, Image, Button } from '@tarojs/components';
 import { useDemandDetail, useServiceUsers } from '@/hooks/useDemand';
-import { Badge } from '@/components/ui/Badge';
-import { useMemo } from 'react';
+import { DemandStatusBadge } from '@/components/biz/DemandStatusBadge';
 
 export default function DemandDetailPage() {
 	const { params } = useRouter();
@@ -26,9 +26,7 @@ export default function DemandDetailPage() {
 				{/* 头部核心信息 */}
 				<View className="bg-white p-5 border-b border-gray-100">
 					<View className="flex items-center gap-2 mb-3">
-						<Badge variant={detail.acceptStatus === 'dispatching' ? 'primary' : 'gray'}>
-							{detail.acceptStatus === 'dispatching' ? '招募中' : '服务中'}
-						</Badge>
+						<DemandStatusBadge status={detail.acceptStatus} />
 						<Text className="text-xs text-text-muted">ID: {detail.oderId}</Text>
 					</View>
 					<Text className="text-xl font-bold text-text-title leading-tight">

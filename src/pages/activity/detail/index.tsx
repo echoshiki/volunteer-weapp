@@ -1,7 +1,8 @@
 import { useRouter } from '@tarojs/taro';
-import { View, Text, Image, RichText, ScrollView, Button } from '@tarojs/components';
+import { View, Text, Image, RichText, ScrollView } from '@tarojs/components';
 import { useActivityDetail } from '@/hooks/useActivity';
 import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 
 export default function ActivityDetail() {
 	const router = useRouter();
@@ -84,8 +85,7 @@ export default function ActivityDetail() {
 						人已报名
 					</Text>
 				</View>
-				<Button className="w-32 h-10 text-sm bg-primary text-white rounded-full font-bold flex justify-center items-center gap-1.5">
-					<View className="size-5 icon-[ph--hand-tap]" />
+				<Button icon="icon-[ph--hand-tap]" size="md" variant="primary">
 					立即报名
 				</Button>
 			</View>

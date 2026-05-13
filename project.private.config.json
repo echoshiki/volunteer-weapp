@@ -22,11 +22,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "个人中心",
+          "pathName": "pages/user/index",
+          "query": "",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "pages/job/enterprise/index",
           "pathName": "pages/job/enterprise/index",
           "query": "id=6",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "求职频道",

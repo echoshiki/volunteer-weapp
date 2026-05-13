@@ -31,7 +31,7 @@ const DEFAULT_CONFIG = {
 	default: { icon: '', text: '空空如也' },
 };
 
-export const BaseEmpty = ({
+export const EmptyStatus = ({
 	type = 'order',
 	title,
 	subTitle,

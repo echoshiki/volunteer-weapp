@@ -1,81 +1,146 @@
-import { View, Text, Image, Button } from '@tarojs/components';
+import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { useAuthStore } from '@/store/auth';
 import { useLogin } from '@/hooks/useLogin';
+import { useUser } from '@/hooks/useUser';
+import { MenuItem } from './components/MenuItem';
+import { BaseAvatar } from '@/components/ui/Avatar';
+import { mapsTo } from '@/utils/common';
+import { AssetItem } from './components/AssetItem';
+import { UserIdentityBadge } from '@/components/biz/UserIdentityBadge';
 
-const UserPage = () => {
+export default function UserPage() {
 	const { userInfo } = useAuthStore();
 	const { isLoggedIn, onLogout } = useLogin();
 
-	const goLogin = () => Taro.navigateTo({ url: '/pages/login/index' });
+	const { isFetching } = useUser();
+
+	const goLogin = () => !isLoggedIn && mapsTo('/pages/login/index');
 
 	return (
-		<View className="min-h-screen bg-gray-50">
-			{/* 头部卡片 */}
-			<View
-				className="bg-white p-6 flex items-center shadow-sm"
-				onClick={!isLoggedIn ? goLogin : undefined}
-			>
-				<Image
-					className="w-16 h-16 rounded-full bg-gray-200"
-					src={
-						userInfo?.avatar ||
-						'https://api.dicebear.com/7.x/avataaars/svg?seed=default'
-					}
-				/>
-				<View className="ml-4 flex-1">
-					{isLoggedIn ? (
-						<View>
-							<View className="flex items-center">
-								<Text className="text-xl font-bold text-gray-800">
-									{userInfo?.nickName}
-								</Text>
-								<Text className="ml-2 px-2 py-0.5 text-xs bg-blue-100 text-blue-600 rounded">
-									{userInfo?.identity === 'volunteer' ? '志愿者' : '普通用户'}
+		<View className="min-h-screen bg-main-bg">
+			<View className="bg-zinc-200 h-42 pt-8 px-6">
+				<View className="flex items-center gap-4">
+					{/* 用户头像 */}
+					<View className="border-8 border-white rounded-full">
+						<BaseAvatar
+							src={isLoggedIn ? userInfo?.avatar : ''}
+							name={isLoggedIn ? userInfo?.nickName : '游客'}
+							size="lg"
+						/>
+					</View>
+
+					{/* 用户信息 */}
+					<View className="flex-1">
+						{isLoggedIn && userInfo ? (
+							<View className="flex flex-col">
+								<View className="flex items-center gap-2">
+									<Text className="text-lg font-bold text-text-title block">
+										{userInfo.nickName}
+									</Text>
+									<UserIdentityBadge identity={userInfo.identity} />
+								</View>
+								<View className="flex items-center gap-1 text-xs text-text-muted mt-1">
+									<View className="flex items-center gap-1 mt-0.5">
+										<View className="icon-[ph--device-mobile-thin] size-3" />
+										<Text className="text-xs text-text-muted">
+											{userInfo?.phonenumber || '暂无手机号'}
+										</Text>
+									</View>
+									<View className="flex items-center gap-1 mt-0.5">
+										<View className="icon-[ph--map-pin-thin] size-3" />
+										<Text className="text-xs text-text-muted">
+											{userInfo?.regionName || '未绑定社区'}
+										</Text>
+									</View>
+								</View>
+							</View>
+						) : (
+							<View onClick={() => mapsTo('/pages/login/index')}>
+								<Text className="text-xl font-bold text-white">点击登录</Text>
+								<Text className="text-sm text-white/50 block mt-1">
+									登录发现更多精彩
 								</Text>
 							</View>
-							<Text className="text-sm text-gray-500 mt-1">
-								ID: {userInfo?.userId}
-							</Text>
-						</View>
-					) : (
-						<Text className="text-lg font-medium text-blue-600">点击登录账户</Text>
+						)}
+					</View>
+
+					{/* 设置按钮 */}
+					{isLoggedIn && (
+						<View
+							className="icon-[ph--gear] w-6 h-6 text-text-title"
+							onClick={() => mapsTo('/pages/user/profile/index')}
+						/>
 					)}
 				</View>
-				{!isLoggedIn && <View className="text-gray-400 text-xl font-bold">{'>'}</View>}
 			</View>
 
-			{/* 统计栏 */}
-			{isLoggedIn && (
-				<View className="flex bg-white mt-2 py-4 border-t border-b">
-					<View className="flex-1 flex flex-col items-center border-r">
-						<Text className="text-lg font-bold text-orange-500">
-							{userInfo?.points || 0}
-						</Text>
-						<Text className="text-xs text-gray-500">积分</Text>
-					</View>
-					<View className="flex-1 flex flex-col items-center">
-						<Text className="text-lg font-bold text-green-500">
-							{userInfo?.duration || 0}
-						</Text>
-						<Text className="text-xs text-gray-500">时长 (h)</Text>
-					</View>
+			<View className="px-4 -mt-10 flex flex-col gap-4">
+				<View className="bg-white rounded-lg px-4 py-6 shadow-sm flex items-center">
+					<AssetItem label="我的积分" value={userInfo?.points || 0} />
+					<View className="w-px h-8 bg-slate-100" />
+					<AssetItem
+						label="志愿时长"
+						value={userInfo?.duration || 0}
+						onClick={() => mapsTo('/pages/user/coupons/index')}
+					/>
 				</View>
-			)}
 
-			{/* 操作列表 */}
-			<View className="mt-4 px-4">
-				{isLoggedIn && (
-					<Button
-						className="w-full bg-white text-red-500 border-none rounded-lg py-1"
-						onClick={onLogout}
-					>
-						退出登录
-					</Button>
-				)}
+				{/* 功能列表区域 */}
+				<View className="space-y-4 pb-10">
+					{/* 服务管理模块 */}
+					<View className="bg-white rounded-card overflow-hidden">
+						<MenuItem
+							icon="icon-[ph--clipboard-text-light]"
+							label="我的服务订单"
+							onClick={() => mapsTo('/pages/demand/my/index')}
+						/>
+						<MenuItem
+							icon="icon-[ph--star-light]"
+							label="我的志愿活动"
+							onClick={() => mapsTo('/pages/volunteer/my/index')}
+						/>
+						<MenuItem
+							icon="icon-[ph--user-focus-light]"
+							label="我的求职意向"
+							onClick={() => mapsTo('/pages/job/my/index')}
+						/>
+					</View>
+
+					{/* 设置与账号模块 */}
+					<View className="bg-white rounded-card overflow-hidden">
+						<MenuItem
+							icon="icon-[ph--user-gear-light]"
+							label="个人资料"
+							onClick={() => mapsTo('/pages/user/profile/index')}
+						/>
+						<MenuItem
+							icon="icon-[ph--shield-warning-light]"
+							label="实名认证"
+							extra={userInfo?.reviewId ? '已认证' : '未认证'}
+							onClick={() => mapsTo('/pages/user/auth/index')}
+						/>
+						<MenuItem icon="icon-[ph--question]" label="帮助与反馈" />
+					</View>
+
+					{/* 退出按钮 */}
+					{isLoggedIn && (
+						<View
+							className="bg-white rounded-card p-4 flex items-center justify-center active:bg-red-50 transition-colors"
+							onClick={() => {
+								Taro.showModal({
+									title: '提示',
+									content: '确定要退出当前账户吗？',
+									success: (res) => res.confirm && onLogout(),
+								});
+							}}
+						>
+							<View className="icon-[ph--sign-out-light] w-5 h-5 text-primary mr-2" />
+							<Text className="text-sm text-primary font-bold">退出登录</Text>
+						</View>
+					)}
+				</View>
 			</View>
 		</View>
 	);
-};
-
-export default UserPage;
+}
