@@ -26,15 +26,6 @@ export interface ActivityItem {
 	status: 'started' | 'ended';
 }
 
-/** 活动列表请求参数 */
-export interface ActivityListParams {
-	pageNum: number;
-	pageSize: number;
-	categoryId?: number;
-	keyword?: string;
-	status?: string;
-}
-
 /** 活动列表响应结构 */
 export interface ActivityListRes {
 	list: ActivityItem[];

@@ -3,14 +3,13 @@ import { UserInfo } from '@/types/user';
 
 /**
  * 登录响应对象
- * @param isWxCode 是否已注册 (true:直接登录, false:需绑定手机号)
- * @param token 用户正式 token (isWxCode 为 true 时返回)
- * @param uuid 用户临时登录凭证 (isWxCode 为 false 时返回，存入 Redis)
- * @param userInfo 用户详细信息
  */
 export interface AuthLoginRes {
+	/** 是否已注册 (true:直接登录, false:需绑定手机号) */
 	isWxCode?: boolean;
+	/** 用户 token (isWxCode 为 true 时返回) */
 	token?: string;
+	/** 用户临时登录凭证 (isWxCode 为 false 时返回，存入 Redis) */
 	uuid?: string;
 }
 
@@ -22,20 +21,19 @@ export const loginAPI = (code: string) => http.post<AuthLoginRes>(`/wx/isWxCode?
 
 /**
  * 微信绑定手机号请求参数
- * @param code 微信 getPhoneNumber 获取的手机号 code (code2)
- * @param uuid 第一步获取的临时凭证 (authKey)
  */
 export interface BindPhoneParams {
+	/** 微信 getPhoneNumber 获取的手机号 code (code2) */
 	code: string;
+	/** 第一步获取的临时凭证 (authKey) */
 	uuid: string;
 }
 
 /**
  * 绑定手机号响应对象
- * @param token 用户 token
- * @param userInfo 用户信息
  */
 export interface BindPhoneRes {
+	/** 用户 token 凭证 */
 	token?: string;
 }
 

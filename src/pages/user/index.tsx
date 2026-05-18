@@ -3,10 +3,8 @@ import Taro from '@tarojs/taro';
 import { useAuthStore } from '@/store/auth';
 import { useLogin } from '@/hooks/useLogin';
 import { useUser } from '@/hooks/useUser';
-import { MenuItem } from './components/MenuItem';
-import { BaseAvatar } from '@/components/ui/Avatar';
+import { Avatar, AssetItem, ColumnNav } from '@/components/ui';
 import { mapsTo } from '@/utils/common';
-import { AssetItem } from './components/AssetItem';
 import { UserIdentityBadge } from '@/components/biz/UserIdentityBadge';
 
 export default function UserPage() {
@@ -23,7 +21,7 @@ export default function UserPage() {
 				<View className="flex items-center gap-4">
 					{/* 用户头像 */}
 					<View className="border-8 border-white rounded-full">
-						<BaseAvatar
+						<Avatar
 							src={isLoggedIn ? userInfo?.avatar : ''}
 							name={isLoggedIn ? userInfo?.nickName : '游客'}
 							size="lg"
@@ -90,17 +88,17 @@ export default function UserPage() {
 				<View className="space-y-4 pb-10">
 					{/* 服务管理模块 */}
 					<View className="bg-white rounded-card overflow-hidden">
-						<MenuItem
+						<ColumnNav
 							icon="icon-[ph--clipboard-text-light]"
 							label="我的服务订单"
 							onClick={() => mapsTo('/pages/demand/my/index')}
 						/>
-						<MenuItem
+						<ColumnNav
 							icon="icon-[ph--star-light]"
 							label="我的志愿活动"
 							onClick={() => mapsTo('/pages/volunteer/my/index')}
 						/>
-						<MenuItem
+						<ColumnNav
 							icon="icon-[ph--user-focus-light]"
 							label="我的求职意向"
 							onClick={() => mapsTo('/pages/job/my/index')}
@@ -109,18 +107,18 @@ export default function UserPage() {
 
 					{/* 设置与账号模块 */}
 					<View className="bg-white rounded-card overflow-hidden">
-						<MenuItem
+						<ColumnNav
 							icon="icon-[ph--user-gear-light]"
 							label="个人资料"
 							onClick={() => mapsTo('/pages/user/profile/index')}
 						/>
-						<MenuItem
+						<ColumnNav
 							icon="icon-[ph--shield-warning-light]"
 							label="实名认证"
 							extra={userInfo?.reviewId ? '已认证' : '未认证'}
 							onClick={() => mapsTo('/pages/user/auth/index')}
 						/>
-						<MenuItem icon="icon-[ph--question]" label="帮助与反馈" />
+						<ColumnNav icon="icon-[ph--question]" label="帮助与反馈" />
 					</View>
 
 					{/* 退出按钮 */}

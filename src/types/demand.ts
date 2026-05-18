@@ -28,19 +28,6 @@ export interface DemandTag {
 	img?: string;
 }
 
-/** 需求订单列表请求参数 */
-export interface DemandOrderListParams {
-	oderName?: string;
-	categoryUserId?: number | string;
-	serviceScope?: ServiceScope; // 'group' | 'individual'
-	charge?: string; // 'true' 代表免费，'false' 代表收费
-	demandId?: number | string;
-	status?: ApprovalStatus;
-	acceptStatus?: DemandOrderStatus;
-	pageNum: number;
-	pageSize: number;
-}
-
 /** 需求订单实体 */
 export interface DemandOrder {
 	oderId: number;

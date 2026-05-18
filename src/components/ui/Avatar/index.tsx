@@ -27,7 +27,7 @@ const BG_COLORS = [
  * 基础头像组件
  * 在无头像时显示首字母
  */
-export const BaseAvatar = ({ src, name = 'U', size = 'md', className = '' }: Props) => {
+export const Avatar = ({ src, name = 'U', size = 'md', className = '' }: Props) => {
 	const [isError, setIsError] = useState(false);
 
 	// 尺寸映射
