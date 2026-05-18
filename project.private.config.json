@@ -22,16 +22,23 @@
     "miniprogram": {
       "list": [
         {
-          "name": "个人中心",
-          "pathName": "pages/user/index",
+          "name": "志愿活动",
+          "pathName": "pages/activity/list/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
         },
         {
-          "name": "pages/job/enterprise/index",
-          "pathName": "pages/job/enterprise/index",
-          "query": "id=6",
+          "name": "pages/demand/detail/index",
+          "pathName": "pages/demand/detail/index",
+          "query": "id=5",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "个人中心",
+          "pathName": "pages/user/index",
+          "query": "",
           "launchMode": "default",
           "scene": null
         },
@@ -45,20 +52,6 @@
         {
           "name": "服务大厅",
           "pathName": "pages/demand/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "pages/activity/detail/index",
-          "pathName": "pages/activity/detail/index",
-          "query": "id=2",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "pages/activity/list/index",
-          "pathName": "pages/activity/list/index",
           "query": "",
           "launchMode": "default",
           "scene": null

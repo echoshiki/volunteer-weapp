@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 import { useRouter } from '@tarojs/taro';
-import { View, Text, ScrollView, Image, Button } from '@tarojs/components';
+import { View, Text, ScrollView, Image } from '@tarojs/components';
 import { useDemandDetail, useServiceUsers } from '@/hooks/useDemand';
 import { DemandStatusBadge } from '@/components/biz/DemandStatusBadge';
+import { Button } from '@/components/ui/Button';
 
 export default function DemandDetailPage() {
 	const { params } = useRouter();
@@ -153,9 +154,8 @@ export default function DemandDetailPage() {
 			</ScrollView>
 
 			{/* 底部操作栏 */}
-			<View className="fixed bottom-0 inset-x-0 bg-white p-4 border-t border-gray-100 flex gap-3">
-				<Button className="flex-1 h-12 bg-gray-100 text-text-title text-sm rounded-full flex items-center justify-center border-none">
-					<View className="icon-[ph--phone-call] w-5 h-5 mr-2" />
+			<View className="fixed bottom-0 inset-x-0 bg-white p-5 border-t border-gray-100 flex gap-3">
+				<Button icon="icon-[ph--phone-call]" size="md" variant="secondary" block>
 					咨询发布者
 				</Button>
 				{detail.acceptStatus === 'dispatching' && (
