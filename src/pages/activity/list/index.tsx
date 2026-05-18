@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { View, Text, Input, ScrollView, Image } from '@tarojs/components';
 import { useActivities } from '@/hooks/useActivity';
-import { EmptyStatus } from '@/components/ui/EmptyStatus';
+import { Empty } from '@/components/ui/Empty';
 import { Badge } from '@/components/ui/Badge';
 import { mapsTo } from '@/utils/common';
 
@@ -96,7 +96,7 @@ export default function ActivityList() {
 						</View>
 					))}
 
-					{list.length === 0 && !isListLoading && <EmptyStatus title="暂无志愿活动" />}
+					{list.length === 0 && !isListLoading && <Empty title="暂无志愿活动" />}
 
 					{isFetchingNextPage && (
 						<View className="text-center py-4 text-text-muted text-xs">加载中...</View>

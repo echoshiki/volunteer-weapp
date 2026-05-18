@@ -8,6 +8,7 @@ export type AuthStage =
 
 /**
  * 用户角色身份标识
+ * 'user': 普通用户 | 'volunteer': 志愿者 | 'institution': 机构
  */
 export type UserIdentity = 'user' | 'volunteer' | 'institution';
 
@@ -17,48 +18,31 @@ export type UserIdentity = 'user' | 'volunteer' | 'institution';
  */
 export type UserSex = '0' | '1' | '2';
 
-/**
- * 用户信息实体
- */
+/** 用户信息实体 */
 export interface UserInfo {
 	/** 用户ID */
 	userId?: string | number;
-
 	/** 用户头像 URL */
 	avatar?: string;
-
 	/** 用户昵称 */
 	nickName?: string;
-
-	/** * 性别
-	 * @default '2'
-	 */
+	/** 性别 */
 	sex?: UserSex | string;
-
 	/** 联系电话 */
 	phonenumber?: string;
-
 	/** 生日 (格式如: YYYY-MM-DD) */
 	birthday?: string;
-
 	/** 邮箱 */
 	email?: string;
 
-	/** * 身份标识
-	 * user: 普通用户 | volunteer: 志愿者 | institution: 机构
-	 */
+	/** 身份标识 user: 普通用户 | volunteer: 志愿者 | institution: 机构 */
 	identity?: UserIdentity;
-
 	/** 用户总积分 */
 	points: number;
-
 	/** 志愿活动总时长 (小时) */
 	duration: number;
-
 	/** 审核信息ID (用于关联实名或资质审核记录) */
 	reviewId: number;
-
-	/* === 地区与网格化坐标信息 === */
 
 	/** 省行政编码 */
 	provinceCode?: number;

@@ -1,22 +1,22 @@
 import { View, Text, Button } from '@tarojs/components';
 
-/**
- * 基础空状态组件属性
- * @param title 提示标题
- * @param subTitle 副标题/详细描述
- * @param buttonText 按钮文字
- * @param onButtonClick 按钮点击回调，如果不传则不显示按钮
- * @param iconClass 自定义图标类名 (优先级高于 type)
- */
 interface Props {
+	/** 状态提示标题 */
 	title?: string;
+	/** 状态提示副标题 */
 	subTitle?: string;
+	/** 按钮文本 */
 	buttonText?: string;
+	/** 按钮点击事件 */
 	onButtonClick?: () => void;
+	/** 图标名，使用 Iconify 图标类名 */
 	icon?: string;
 }
 
-export const EmptyStatus = ({
+/**
+ * 空状态组件
+ */
+export const Empty = ({
 	title = '空空如也',
 	subTitle = '暂无数据，试试其他搜索关键词吧',
 	buttonText,

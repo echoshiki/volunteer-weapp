@@ -1,22 +1,18 @@
 import { View, Text, Image } from '@tarojs/components';
 import { useState } from 'react';
 
-/**
- * 基础头像组件属性
- * 用于在无头像时显示首字母
- * @param src 头像图片地址
- * @param name 头像名称，用于显示首字母
- * @param size 头像尺寸
- * @param className 自定义类名
- */
 interface Props {
+	/** 头像图片地址 */
 	src?: string;
+	/** 头像名称，用于显示首字母 */
 	name?: string;
+	/** 头像尺寸 */
 	size?: 'sm' | 'md' | 'lg' | 'xl';
+	/** 自定义类名 */
 	className?: string;
 }
 
-// 预设一套柔和的高级感配色方案
+/** 预设配色方案 */
 const BG_COLORS = [
 	'bg-blue-400',
 	'bg-emerald-400',
@@ -27,6 +23,10 @@ const BG_COLORS = [
 	'bg-cyan-400',
 ];
 
+/**
+ * 基础头像组件
+ * 在无头像时显示首字母
+ */
 export const BaseAvatar = ({ src, name = 'U', size = 'md', className = '' }: Props) => {
 	const [isError, setIsError] = useState(false);
 

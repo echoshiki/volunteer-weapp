@@ -8,21 +8,26 @@ type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
 
 interface Props extends Omit<TaroButtonProps, 'size' | 'type'> {
-	/** 尺寸，默认 md */
+	/** 尺寸，默认 md {@link ButtonSize} */
 	size?: ButtonSize;
-	/** 变体，默认 primary */
+	/** 变体，默认 primary {@link ButtonVariant} */
 	variant?: ButtonVariant;
-	/** 图标类名 (Iconify) */
+	/** 图标名，使用 Iconify 图标类名 */
 	icon?: string;
-	/** 是否为圆角，默认 true */
+	/** 是否圆角 */
 	rounded?: boolean;
 	/** 是否占满整行 */
 	block?: boolean;
-	/** 加载状态 */
+	/** 是否加载中 */
 	loading?: boolean;
+	/** 子节点 */
 	children?: React.ReactNode;
 }
 
+/**
+ * 按钮组件
+ * 重新封装了图标、大小、背景等样式
+ */
 export const Button: React.FC<Props> = ({
 	size = 'md',
 	variant = 'primary',

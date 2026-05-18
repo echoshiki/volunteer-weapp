@@ -4,6 +4,7 @@ import { UserIdentity } from '@/types/user';
 import { USER_IDENTITY_MAP } from '@/constants/user';
 
 interface Props {
+	/** 用户身份 {@link UserIdentity} */
 	identity?: UserIdentity | string;
 	className?: string;
 }

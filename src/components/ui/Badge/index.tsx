@@ -1,18 +1,31 @@
 import { Text, View } from '@tarojs/components';
 import { ReactNode } from 'react';
 
+/** 徽章变体 */
 type BadgeVariant = 'primary' | 'success' | 'warning' | 'danger' | 'gray' | 'gold';
+
+/** 徽章尺寸 */
 type BadgeSize = 'xs' | 'sm' | 'md';
 
 interface BadgeProps {
-	children: ReactNode;
+	/** 视觉变体，默认 gray {@link BadgeVariant} */
 	variant?: BadgeVariant;
+	/** 尺寸，默认 sm {@link BadgeSize} */
 	size?: BadgeSize;
-	pill?: boolean; // 是否为胶囊形状（全圆角）
+	/** 是否为胶囊形状（全圆角），默认 false */
+	pill?: boolean;
+	/** 额外的 className */
 	className?: string;
+	/** 点击事件 */
 	onClick?: () => void;
+	/** 子节点 */
+	children: ReactNode;
 }
 
+/**
+ * 徽章标签组件
+ * 用于显示状态、数量等信息，提供多种颜色和尺寸选项
+ */
 export const Badge = ({
 	children,
 	variant = 'gray',
