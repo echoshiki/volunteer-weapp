@@ -1,3 +1,8 @@
+export type ActivityStatus =
+	| 'pending' // 派单中
+	| 'started' // 已接单
+	| 'ended'; // 服务中
+
 /** 志愿活动分类 */
 export interface ActivityCategory {
 	categoryId: number;
@@ -23,7 +28,7 @@ export interface ActivityItem {
 	organizer: string;
 	banner: string;
 	content: string;
-	status: 'started' | 'ended';
+	status: ActivityStatus;
 }
 
 /** 活动列表响应结构 */

@@ -1,8 +1,8 @@
 import { useRouter } from '@tarojs/taro';
 import { View, Text, Image, RichText, ScrollView } from '@tarojs/components';
 import { useActivityDetail } from '@/hooks/useActivity';
-import { Badge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
+import { Badge, Button } from '@/components/ui';
+import { ActivityStatusBadge } from '@/components/biz/ActivityStatusBadge';
 
 export default function ActivityDetail() {
 	const router = useRouter();
@@ -21,9 +21,7 @@ export default function ActivityDetail() {
 				<View className="p-5">
 					{/* 标题与状态 */}
 					<View className="flex items-center space-x-2">
-						<Badge variant={activity.status === 'started' ? 'success' : 'gray'}>
-							{activity.status === 'started' ? '报名中' : '已结束'}
-						</Badge>
+						<ActivityStatusBadge status={activity.status} />
 						<Badge variant={'primary'}>{activity.categoryName}</Badge>
 					</View>
 					<Text className="text-2xl font-bold text-gray-900 mt-3 block leading-tight">

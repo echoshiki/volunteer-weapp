@@ -1,7 +1,7 @@
 import { DemandOrderStatus, ServiceScope } from '@/types/demand';
 
 /** 兼容 Badge 组件 variant 属性 */
-type BadgeVariant = 'primary' | 'success' | 'warning' | 'danger' | 'gray';
+type BadgeVariant = 'primary' | 'success' | 'warning' | 'danger' | 'secondary';
 
 /** 需求订单状态 UI 配置字典 */
 export const DEMAND_STATUS_MAP: Record<
@@ -12,7 +12,7 @@ export const DEMAND_STATUS_MAP: Record<
 	accepted: { label: '已接单', variant: 'warning' },
 	serving: { label: '服务中', variant: 'warning' },
 	completed: { label: '已完成', variant: 'success' },
-	cancelled: { label: '已取消', variant: 'gray' },
+	cancelled: { label: '已取消', variant: 'secondary' },
 };
 
 /** 服务范围配置字典 */

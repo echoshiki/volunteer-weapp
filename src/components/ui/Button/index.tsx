@@ -1,11 +1,12 @@
 import { Button as TaroButton, ButtonProps as TaroButtonProps, View } from '@tarojs/components';
 import React from 'react';
+import { ThemeVariant } from '@/types/common';
 
 /** 按钮尺寸预设 */
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 /** 按钮视觉变体 */
-type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'danger';
+type ButtonVariant = ThemeVariant | 'outline' | 'ghost';
 
 interface Props extends Omit<TaroButtonProps, 'size' | 'type'> {
 	/** 尺寸，默认 md {@link ButtonSize} */
@@ -61,10 +62,13 @@ export const Button: React.FC<Props> = ({
 	// 变体颜色映射 (利用 theme 变量)
 	const variantMap: Record<ButtonVariant, string> = {
 		primary: 'bg-primary text-white border-none active:opacity-90',
+		success: 'bg-emerald-500 text-white border-none active:bg-emerald-600',
 		secondary: 'bg-gray-100 text-text-body border-none active:bg-gray-200',
+		danger: 'bg-red-500 text-white border-none active:bg-red-600',
+		warning: 'bg-amber-500 text-white border-none active:bg-amber-600',
+		info: 'bg-blue-500 text-white border-none active:bg-blue-600',
 		outline: 'bg-transparent text-primary border border-primary active:bg-red-50',
 		ghost: 'bg-transparent text-text-muted border-none active:bg-gray-100',
-		danger: 'bg-red-500 text-white border-none active:bg-red-600',
 	};
 
 	// 基础类名构建

@@ -22,10 +22,19 @@
 	--color-text-body: #27272a;
 	--color-text-muted: #71717a;
 
-	/* 也可以定义通用的间距或圆角，保持全局统一 */
-	--radius-card: 16rpx;
+	/* 圆角 */
+	--radius-card: 12rpx;
 
+	/* 容器间距 */
+	--container-p-x: 32rpx;
+
+	/** 字体 */
 	--font-sans: 'Manrope', ui-sans-serif, system-ui, sans-serif;
+}
+
+@utility container-x {
+	padding-left: var(--container-p-x);
+	padding-right: var(--container-p-x);
 }
 
 * {

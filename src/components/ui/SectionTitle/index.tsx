@@ -31,7 +31,7 @@ export const SectionTitle = ({ title, icon, link }: Props) => {
 			<View className="flex items-center gap-2">
 				{icon ? (
 					<View className="flex items-center justify-center">
-						<RenderIcon icon={icon} className="w-8 h-8 font-bold text-primary" />
+						<RenderIcon icon={icon} className="w-6 h-6 text-primary" />
 					</View>
 				) : (
 					<View className="w-1 h-6 bg-primary rounded-full" />
@@ -44,11 +44,11 @@ export const SectionTitle = ({ title, icon, link }: Props) => {
 			{/* 右侧：跳转链接 */}
 			{link && (
 				<View
-					className="text-sm flex items-center text-primary gap-1"
+					className="text-sm flex justify-end items-center gap-1"
 					onClick={() => mapsTo(link.url)}
 				>
-					<Text className="text-primary">{link.name}</Text>
-					<View className="icon-[lucide--chevron-right] w-4 h-4 text-slate-300" />
+					<Text className="text-zinc-500 text-xs">{link.name}</Text>
+					<View className="icon-[ph--caret-right] w-4 h-4 text-zinc-500" />
 				</View>
 			)}
 		</View>

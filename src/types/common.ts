@@ -48,3 +48,5 @@ export interface ShareConfig {
 	imageUrl?: string;
 	params?: Record<string, any>;
 }
+
+export type ThemeVariant = 'primary' | 'success' | 'secondary' | 'warning' | 'danger' | 'info';

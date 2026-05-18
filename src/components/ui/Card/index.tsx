@@ -18,7 +18,7 @@ export const Card: React.FC<CardProps> = ({
 }) => {
 	// 统一的白底、圆角、阴影、间距
 	const baseClasses = `
-        bg-white rounded-card shadow-sm overflow-hidden
+        bg-white rounded-card overflow-hidden
         ${noPadding ? '' : 'p-4'}
         ${clickable ? 'active:scale-[0.98] transition-transform' : ''}
         ${className}

@@ -4,6 +4,7 @@ import { useActivities } from '@/hooks/useActivity';
 import { Empty } from '@/components/ui/Empty';
 import { Badge } from '@/components/ui/Badge';
 import { mapsTo } from '@/utils/common';
+import { ActivityStatusBadge } from '@/components/biz/ActivityStatusBadge';
 
 export default function ActivityList() {
 	const [keyword, setKeyword] = useState('');
@@ -64,9 +65,7 @@ export default function ActivityList() {
 									<Text className="text-lg font-bold text-text-title flex-1 truncate">
 										{item.activityName}
 									</Text>
-									<Badge variant={item.status === 'started' ? 'success' : 'gray'}>
-										{item.status === 'started' ? '报名中' : '已结束'}
-									</Badge>
+									<ActivityStatusBadge status={item.status} />
 								</View>
 
 								{/* 活动类型和地址 */}
