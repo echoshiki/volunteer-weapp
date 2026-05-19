@@ -16,11 +16,11 @@ const queryClient = new QueryClient({
 });
 
 function App({ children }: PropsWithChildren<any>) {
-	// const { onSilentLogin, isLoggedIn } = useLogin();
+	const { onSilentLogin, isLoggedIn } = useLogin();
 
-	// useLaunch(() => {
-	// 	if (!isLoggedIn) onSilentLogin();
-	// });
+	useLaunch(() => {
+		if (!isLoggedIn) onSilentLogin();
+	});
 
 	return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 }

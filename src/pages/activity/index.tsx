@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { View, Text, Input, ScrollView, Image } from '@tarojs/components';
 import { useActivities } from '@/hooks/useActivity';
 import { Empty } from '@/components/ui/Empty';
-import { Badge } from '@/components/ui/Badge';
 import { mapsTo } from '@/utils/common';
 import { ActivityStatusBadge } from '@/components/biz/ActivityStatusBadge';
 
