@@ -1,4 +1,3 @@
-import { View } from '@tarojs/components';
 import { Badge } from '@/components/ui/Badge';
 import { DemandOrderStatus } from '@/types/demand';
 import { DEMAND_STATUS_MAP } from '@/constants/demand';
@@ -19,8 +18,8 @@ export function DemandStatusBadge({ status, className = '' }: Props) {
 	const config = DEMAND_STATUS_MAP[safeIdentity] || DEMAND_STATUS_MAP['dispatching'];
 
 	return (
-		<View className={className}>
-			<Badge variant={config.variant}>{config.label}</Badge>
-		</View>
+		<Badge variant={config.variant} className={className}>
+			{config.label}
+		</Badge>
 	);
 }

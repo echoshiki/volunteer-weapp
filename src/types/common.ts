@@ -1,7 +1,7 @@
 /** 统一响应结构 */
 export interface BaseResponse<T> {
 	code: number;
-	data: T;
+	data?: T;
 	msg: string;
 }
 

@@ -26,3 +26,12 @@ export const getActivityListAPI = (params: ActivityListParams) =>
 /** 获取活动详情 */
 export const getActivityDetailAPI = (activityId: string | number) =>
 	http.get<ActivityItem>(`/volunteer/activity/web/${activityId}`);
+
+/**
+ * 志愿者报名活动
+ */
+export const entryActivityAPI = (activityId: number) => {
+	return http.post('/volunteer/activity/web/entry', {
+		activityId,
+	});
+};

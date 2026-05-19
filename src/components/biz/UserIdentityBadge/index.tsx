@@ -1,4 +1,3 @@
-import { View } from '@tarojs/components';
 import { Badge } from '@/components/ui/Badge';
 import { UserIdentity } from '@/types/user';
 import { USER_IDENTITY_MAP } from '@/constants/user';
@@ -15,8 +14,8 @@ export function UserIdentityBadge({ identity, className = '' }: Props) {
 	const config = USER_IDENTITY_MAP[safeIdentity] || USER_IDENTITY_MAP['user'];
 
 	return (
-		<View className={className}>
-			<Badge variant={config.variant}>{config.label}</Badge>
-		</View>
+		<Badge variant={config.variant} className={className}>
+			{config.label}
+		</Badge>
 	);
 }

@@ -1,7 +1,10 @@
-export type ActivityStatus =
-	| 'pending' // 派单中
-	| 'started' // 已接单
-	| 'ended'; // 服务中
+/**
+ * 活动状态类型
+ * - pending: 待开始
+ * - started: 进行中
+ * - ended: 已结束
+ */
+export type ActivityStatus = 'pending' | 'started' | 'ended';
 
 /** 志愿活动分类 */
 export interface ActivityCategory {

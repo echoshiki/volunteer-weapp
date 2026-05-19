@@ -1,4 +1,3 @@
-import { View } from '@tarojs/components';
 import { Badge } from '@/components/ui/Badge';
 import { ActivityStatus } from '@/types/activity';
 import { ACTIVITY_STATUS_MAP } from '@/constants/activity';
@@ -19,8 +18,8 @@ export function ActivityStatusBadge({ status, className = '' }: Props) {
 	const config = ACTIVITY_STATUS_MAP[safeIdentity] || ACTIVITY_STATUS_MAP['pending'];
 
 	return (
-		<View className={className}>
-			<Badge variant={config.variant}>{config.label}</Badge>
-		</View>
+		<Badge variant={config.variant} className={className}>
+			{config.label}
+		</Badge>
 	);
 }

@@ -1,34 +1,95 @@
+import Taro from '@tarojs/taro';
 import { useRouter } from '@tarojs/taro';
 import { View, Text, Image, RichText, ScrollView } from '@tarojs/components';
 import { useActivityDetail } from '@/hooks/useActivity';
-import { Badge, Button } from '@/components/ui';
+import { Badge, Button, Cell, SectionTitle } from '@/components/ui';
 import { ActivityStatusBadge } from '@/components/biz/ActivityStatusBadge';
+import { useEntryActivity } from '@/hooks/useActivity';
+import { useAuthStore } from '@/store/auth';
+import { runWithAuth } from '@/utils/auth';
 
 export default function ActivityDetail() {
+	// 数据：路由参数中的活动 ID
 	const router = useRouter();
 	const id = router.params.id as string;
+
+	// 数据：活动详情
 	const { data: activity, isLoading } = useActivityDetail(id);
 
+	const { mutate: doEntry, isLoading: isEntrying } = useEntryActivity();
+	const { userInfo } = useAuthStore();
+
+	// 执行：处理报名
+	const handleEntry = () => {
+		Taro.showModal({
+			title: '报名确认',
+			content: '您确定要报名参加此活动吗？',
+			confirmText: '确认报名',
+			confirmColor: '#ea3323',
+			cancelText: '取消',
+			success: (res) => {
+				if (res.confirm) {
+					// 报名流程
+					runWithAuth(() => {
+						if (userInfo?.identity !== 'volunteer') {
+							Taro.showModal({
+								title: '身份受限',
+								content: '该活动仅限注册志愿者报名。是否立即前往完善志愿者档案？',
+								confirmText: '去认证',
+								confirmColor: '#ea3323',
+								success: (res) => {
+									if (res.confirm) {
+										// TODO: 实际验证逻辑
+										// Taro.mapsTo('/pages/user/certification/index');
+									}
+								},
+							});
+							return;
+						}
+						// 执行报名操作
+						doEntry(Number(id));
+					});
+				}
+			},
+		});
+	};
+
+	// 状态：数据加载中、活动不存在
 	if (isLoading) return <View className="p-10 text-center text-text-muted">详情加载中...</View>;
 	if (!activity) return <View className="p-10 text-center text-text-muted">活动不存在</View>;
+
+	// 状态：是否已满员、是否未开始、是否已结束
+	const isFull = activity.attendance >= activity.maxPeople;
+	const isPending = activity.status === 'pending';
+	const isExpired = activity.status === 'ended';
+
+	const renderButtonText = () => {
+		if (isEntrying) return '报名中...';
+		if (isPending) return '活动尚未开始';
+		if (isExpired) return '活动已结束';
+		if (isFull) return '报名人数已满';
+		return '立即报名';
+	};
 
 	return (
 		<View className="min-h-screen bg-white pb-20">
 			<ScrollView scrollY className="h-full">
-				{/* Banner */}
+				{/* 活动封面 */}
 				<Image src={activity.banner} className="w-full h-56 object-cover" />
 
 				<View className="p-5">
-					{/* 标题与状态 */}
+					{/* 活动状态 */}
 					<View className="flex items-center space-x-2">
 						<ActivityStatusBadge status={activity.status} />
-						<Badge variant={'primary'}>{activity.categoryName}</Badge>
+						<Badge variant="info">{activity.categoryName}</Badge>
 					</View>
+
+					{/* 活动标题 */}
 					<Text className="text-2xl font-bold text-gray-900 mt-3 block leading-tight">
 						{activity.activityName}
 					</Text>
 
-					{/* 信息卡片 */}
+					{/* 活动信息 */}
 					<View className="mt-6 space-y-4 bg-gray-50 p-4 rounded-card">
 						<View className="flex items-start">
 							<Text className="text-text-muted text-sm w-20">活动时间</Text>
@@ -54,19 +115,15 @@ export default function ActivityDetail() {
 
 					{/* 活动详情 */}
 					<View className="mt-8">
-						<Text className="text-lg font-bold border-l-4 border-primary pl-3">
-							活动详情
-						</Text>
+						<SectionTitle title="活动详情" />
 						<View className="mt-4 text-gray-700 leading-relaxed text-sm">
 							<RichText nodes={activity.content} />
 						</View>
 					</View>
 
-					{/* 规则 */}
-					<View className="mt-8 mb-10">
-						<Text className="text-lg font-bold border-l-4 border-primary pl-3">
-							报名规则
-						</Text>
+					{/* 报名规则 */}
+					<View className="mt-8">
+						<SectionTitle title="报名规则" />
 						<Text className="mt-4 text-gray-600 text-sm block bg-orange-50 p-4 rounded-xl">
 							{activity.rules}
 						</Text>
@@ -74,17 +131,26 @@ export default function ActivityDetail() {
 				</View>
 			</ScrollView>
 
-			{/* 底部悬浮按钮 (预留交互位置) */}
+			{/* 底部按钮 */}
 			<View className="fixed bottom-0 inset-x-0 p-4 bg-white/80 backdrop-blur-md border-t border-gray-100 flex items-center justify-between">
-				<View className="flex flex-1 flex-col gap-1">
-					<Text className="text-xs text-text-muted">当前进度</Text>
-					<Text className="text-sm">
-						<Text className="font-bold text-primary">{activity.attendance}</Text>{' '}
+				<View className="flex flex-1 flex-col gap-0.5 text-text-muted text-xs ">
+					<Text>当前报名进度</Text>
+					<Text>
+						<Text className="font-bold text-primary text-sm">
+							{activity.attendance}
+						</Text>{' '}
 						人已报名
 					</Text>
 				</View>
-				<Button icon="icon-[ph--hand-tap]" size="md" variant="primary">
-					立即报名
+				<Button
+					icon="icon-[ph--hand-tap]"
+					size="md"
+					variant="primary"
+					loading={isEntrying}
+					disabled={isEntrying || isFull || isPending || isExpired}
+					onClick={handleEntry}
+				>
+					{renderButtonText()}
 				</Button>
 			</View>
 		</View>

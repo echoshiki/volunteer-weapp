@@ -1,9 +1,11 @@
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import Taro from '@tarojs/taro';
+import { useQuery, useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
 	getActivityCategoryListAPI,
 	getActivityListAPI,
 	getActivityDetailAPI,
 	ActivityListParams,
+	entryActivityAPI,
 } from '@/services/activity';
 
 /** 分类列表 Hook */
@@ -38,5 +40,32 @@ export const useActivityDetail = (id: string | number) => {
 		queryKey: ['activity', 'detail', id],
 		queryFn: () => getActivityDetailAPI(id),
 		enabled: !!id,
+	});
+};
+
+/** 报名活动 Hook */
+export const useEntryActivity = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (activityId: number) => entryActivityAPI(activityId),
+		onSuccess: (res, activityId) => {
+			Taro.showToast({
+				title: '报名成功',
+				icon: 'success',
+			});
+
+			// 更新报名人数
+			queryClient.invalidateQueries({
+				queryKey: ['activityDetail', String(activityId)],
+			});
+		},
+		onError: (err: any) => {
+			// 截止/满员/已报名
+			Taro.showToast({
+				title: err?.message || '报名失败，请重试',
+				icon: 'none',
+			});
+		},
 	});
 };
