@@ -20,32 +20,32 @@ export default defineAppConfig({
 	tabBar: {
 		list: [
 			{
-				iconPath: 'assets/icons/home.png',
-				selectedIconPath: 'assets/icons/home_fill.png',
+				iconPath: 'assets/tabbar/home.png',
+				selectedIconPath: 'assets/tabbar/home_fill.png',
 				pagePath: 'pages/home/index',
 				text: '首页',
 			},
 			{
-				iconPath: 'assets/icons/activity.png',
-				selectedIconPath: 'assets/icons/activity_fill.png',
+				iconPath: 'assets/tabbar/activity.png',
+				selectedIconPath: 'assets/tabbar/activity_fill.png',
 				pagePath: 'pages/activity/index',
 				text: '志愿活动',
 			},
 			{
-				iconPath: 'assets/icons/demand.png',
-				selectedIconPath: 'assets/icons/demand_fill.png',
+				iconPath: 'assets/tabbar/demand.png',
+				selectedIconPath: 'assets/tabbar/demand_fill.png',
 				pagePath: 'pages/demand/index',
 				text: '服务大厅',
 			},
 			{
-				iconPath: 'assets/icons/job.png',
-				selectedIconPath: 'assets/icons/job_fill.png',
+				iconPath: 'assets/tabbar/job.png',
+				selectedIconPath: 'assets/tabbar/job_fill.png',
 				pagePath: 'pages/job/index',
 				text: '求职',
 			},
 			{
-				iconPath: 'assets/icons/user.png',
-				selectedIconPath: 'assets/icons/user_fill.png',
+				iconPath: 'assets/tabbar/user.png',
+				selectedIconPath: 'assets/tabbar/user_fill.png',
 				pagePath: 'pages/user/index',
 				text: '我的',
 			},
