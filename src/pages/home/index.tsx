@@ -3,11 +3,11 @@ import { Page, SectionTitle, Badge, Carousel, GridNav, Empty, Cell } from '@/com
 import { useActivities } from '@/hooks/useActivity';
 import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';
-import { ActivityStatusBadge } from '@/components/biz/ActivityStatusBadge';
+import { ActivityStatusBadge } from '@/components/biz/BizBadge';
 
 export default function HomePage() {
-	// 获取最新的活动进行首页精选推荐
-	const { data: activityData, isLoading } = useActivities({ pageSize: 3 });
+	// 数据：5 条精选活动数据
+	const { data: activityData, isLoading } = useActivities({ pageSize: 5 });
 	const activityList = activityData?.pages.flatMap((page) => page.list) || [];
 
 	return (
@@ -52,7 +52,7 @@ export default function HomePage() {
 
 			<View className="container-x flex flex-col gap-3 mb-4">
 				{/* 核心金刚区 */}
-				<Cell className="grid grid-cols-5 space-x-0.5">
+				<Cell className="grid grid-cols-4 px-1">
 					<GridNav
 						icon="icon-[ph--gift-bold]"
 						label="志愿组织"
@@ -72,11 +72,6 @@ export default function HomePage() {
 						icon="icon-[ph--briefcase-bold]"
 						label="家门口就业"
 						path="/pages/job/index"
-					/>
-					<GridNav
-						icon="icon-[ph--gift-bold]"
-						label="积分兑换"
-						path="/pages/points/index"
 					/>
 				</Cell>
 			</View>
@@ -155,7 +150,7 @@ export default function HomePage() {
 										</View>
 
 										<View className="flex justify-between items-center">
-											<ActivityStatusBadge status={item.status} />
+											<ActivityStatusBadge value={item.status} />
 											<View className="flex items-center gap-1 text-text-muted">
 												<View className="icon-[ph--users-three-light] w-5 h-5" />
 												<Text className="text-xs">

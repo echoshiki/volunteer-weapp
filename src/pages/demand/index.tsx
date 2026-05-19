@@ -2,7 +2,7 @@ import { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
 import { useDemandTargets, useDemandTags, useDemandOrders } from '@/hooks/useDemand';
 import { mapsTo } from '@/utils/common';
-import { DemandStatusBadge } from '@/components/biz/DemandStatusBadge';
+import { DemandStatusBadge } from '@/components/biz/BizBadge';
 
 export default function DemandPage() {
 	// 筛选状态字典
@@ -141,7 +141,7 @@ export default function DemandPage() {
 									<Text className="text-text-title font-bold text-base line-clamp-1 flex-1 pr-2">
 										{order.oderName}
 									</Text>
-									<DemandStatusBadge status={order.acceptStatus} />
+									<DemandStatusBadge value={order.acceptStatus} />
 								</View>
 
 								<View className="flex items-center gap-2 mb-3">

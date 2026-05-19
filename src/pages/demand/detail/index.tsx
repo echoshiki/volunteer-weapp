@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import { useRouter } from '@tarojs/taro';
 import { View, Text, ScrollView, Image } from '@tarojs/components';
 import { useDemandDetail, useServiceUsers } from '@/hooks/useDemand';
-import { DemandStatusBadge } from '@/components/biz/DemandStatusBadge';
+import { DemandStatusBadge } from '@/components/biz/BizBadge';
 import { Button } from '@/components/ui/Button';
 
 export default function DemandDetailPage() {
@@ -27,7 +27,7 @@ export default function DemandDetailPage() {
 				{/* 头部核心信息 */}
 				<View className="bg-white p-5 border-b border-gray-100">
 					<View className="flex items-center gap-2 mb-3">
-						<DemandStatusBadge status={detail.acceptStatus} />
+						<DemandStatusBadge value={detail.acceptStatus} />
 						<Text className="text-xs text-text-muted">ID: {detail.oderId}</Text>
 					</View>
 					<Text className="text-xl font-bold text-text-title leading-tight">

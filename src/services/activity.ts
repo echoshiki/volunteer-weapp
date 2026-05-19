@@ -30,7 +30,7 @@ export const getActivityDetailAPI = (activityId: string | number) =>
 /**
  * 志愿者报名活动
  */
-export const entryActivityAPI = (activityId: number) => {
+export const enrollActivityAPI = (activityId: number) => {
 	return http.post('/volunteer/activity/web/entry', {
 		activityId,
 	});

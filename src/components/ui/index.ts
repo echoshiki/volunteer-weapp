@@ -10,3 +10,4 @@ export { GridNav } from './GridNav';
 export { ColumnNav } from './ColumnNav';
 export { Asset } from './Asset';
 export { Avatar } from './Avatar';
+export { SearchBar } from './SearchBar';

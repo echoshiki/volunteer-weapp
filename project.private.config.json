@@ -22,16 +22,16 @@
     "miniprogram": {
       "list": [
         {
-          "name": "pages/activity/detail/index",
-          "pathName": "pages/activity/detail/index",
-          "query": "id=1",
+          "name": "志愿活动",
+          "pathName": "pages/activity/index",
+          "query": "",
           "scene": null,
           "launchMode": "default"
         },
         {
-          "name": "志愿活动",
-          "pathName": "pages/activity/list/index",
-          "query": "",
+          "name": "pages/activity/detail/index",
+          "pathName": "pages/activity/detail/index",
+          "query": "id=1",
           "launchMode": "default",
           "scene": null
         },

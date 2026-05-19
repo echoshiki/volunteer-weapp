@@ -4,8 +4,8 @@ import {
 	getActivityCategoryListAPI,
 	getActivityListAPI,
 	getActivityDetailAPI,
+	enrollActivityAPI,
 	ActivityListParams,
-	entryActivityAPI,
 } from '@/services/activity';
 
 /** 分类列表 Hook */
@@ -44,11 +44,11 @@ export const useActivityDetail = (id: string | number) => {
 };
 
 /** 报名活动 Hook */
-export const useEntryActivity = () => {
+export const useEnrollActivity = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
-		mutationFn: (activityId: number) => entryActivityAPI(activityId),
+		mutationFn: (activityId: number) => enrollActivityAPI(activityId),
 		onSuccess: (res, activityId) => {
 			Taro.showToast({
 				title: '报名成功',

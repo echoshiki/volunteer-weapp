@@ -3,8 +3,8 @@ import { useRouter } from '@tarojs/taro';
 import { View, Text, Image, RichText, ScrollView } from '@tarojs/components';
 import { useActivityDetail } from '@/hooks/useActivity';
 import { Badge, Button, Cell, SectionTitle } from '@/components/ui';
-import { ActivityStatusBadge } from '@/components/biz/ActivityStatusBadge';
-import { useEntryActivity } from '@/hooks/useActivity';
+import { EnrollStatusBadge } from '@/components/biz/BizBadge';
+import { useEnrollActivity } from '@/hooks/useActivity';
 import { useAuthStore } from '@/store/auth';
 import { runWithAuth } from '@/utils/auth';
 
@@ -16,11 +16,11 @@ export default function ActivityDetail() {
 	// 数据：活动详情
 	const { data: activity, isLoading } = useActivityDetail(id);
 
-	const { mutate: doEntry, isLoading: isEntrying } = useEntryActivity();
+	const { mutate: doEnroll, isLoading: isEnrolling } = useEnrollActivity();
 	const { userInfo } = useAuthStore();
 
 	// 执行：处理报名
-	const handleEntry = () => {
+	const handleEnroll = () => {
 		Taro.showModal({
 			title: '报名确认',
 			content: '您确定要报名参加此活动吗？',
@@ -47,7 +47,7 @@ export default function ActivityDetail() {
 							return;
 						}
 						// 执行报名操作
-						doEntry(Number(id));
+						doEnroll(Number(id));
 					});
 				}
 			},
@@ -60,13 +60,13 @@ export default function ActivityDetail() {
 
 	// 状态：是否已满员、是否未开始、是否已结束
 	const isFull = activity.attendance >= activity.maxPeople;
-	const isPending = activity.status === 'pending';
-	const isExpired = activity.status === 'ended';
+	const isPending = activity.enrollStatus === 'pending';
+	const isExpired = activity.enrollStatus === 'ended';
 
 	const renderButtonText = () => {
-		if (isEntrying) return '报名中...';
-		if (isPending) return '活动尚未开始';
-		if (isExpired) return '活动已结束';
+		if (isEnrolling) return '报名中...';
+		if (isPending) return '报名未开始';
+		if (isExpired) return '报名已结束';
 		if (isFull) return '报名人数已满';
 		return '立即报名';
 	};
@@ -80,7 +80,7 @@ export default function ActivityDetail() {
 				<View className="p-5">
 					{/* 活动状态 */}
 					<View className="flex items-center space-x-2">
-						<ActivityStatusBadge status={activity.status} />
+						<EnrollStatusBadge value={activity.enrollStatus} />
 						<Badge variant="info">{activity.categoryName}</Badge>
 					</View>
 
@@ -91,23 +91,23 @@ export default function ActivityDetail() {
 
 					{/* 活动信息 */}
 					<View className="mt-6 space-y-4 bg-gray-50 p-4 rounded-card">
-						<View className="flex items-start">
+						<View className="flex items-start text-sm">
 							<Text className="text-text-muted text-sm w-20">活动时间</Text>
-							<Text className="text-title text-sm flex-1 font-sans">
+							<Text className="text-title flex-1">
 								{activity.startTime} 至 {activity.endTime}
 							</Text>
 						</View>
-						<View className="flex items-start">
-							<Text className="text-text-muted text-sm w-20">活动地点</Text>
-							<Text className="text-title text-sm flex-1">{activity.address}</Text>
+						<View className="flex items-start text-sm">
+							<Text className="text-text-muted w-20">活动地点</Text>
+							<Text className="text-title flex-1">{activity.address}</Text>
 						</View>
-						<View className="flex items-start">
+						<View className="flex items-start text-sm">
 							<Text className="text-text-muted text-sm w-20">主办单位</Text>
-							<Text className="text-title text-sm flex-1">{activity.organizer}</Text>
+							<Text className="text-title flex-1">{activity.organizer}</Text>
 						</View>
-						<View className="flex items-start">
+						<View className="flex items-start text-sm">
 							<Text className="text-text-muted text-sm w-20">招募人数</Text>
-							<Text className="text-title text-sm flex-1">
+							<Text className="text-title flex-1">
 								已招募 {activity.attendance} 人 / 限额 {activity.maxPeople} 人
 							</Text>
 						</View>
@@ -142,13 +142,15 @@ export default function ActivityDetail() {
 						人已报名
 					</Text>
 				</View>
+
+				{/* TODO: 校验用户已报名状态 */}
 				<Button
 					icon="icon-[ph--hand-tap]"
 					size="md"
 					variant="primary"
-					loading={isEntrying}
-					disabled={isEntrying || isFull || isPending || isExpired}
-					onClick={handleEntry}
+					loading={isEnrolling}
+					disabled={isEnrolling || isFull || isPending || isExpired}
+					onClick={handleEnroll}
 				>
 					{renderButtonText()}
 				</Button>

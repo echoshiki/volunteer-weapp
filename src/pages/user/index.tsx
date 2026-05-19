@@ -5,7 +5,7 @@ import { useLogin } from '@/hooks/useLogin';
 import { useUser } from '@/hooks/useUser';
 import { Avatar, Asset, ColumnNav } from '@/components/ui';
 import { mapsTo } from '@/utils/common';
-import { UserIdentityBadge } from '@/components/biz/UserIdentityBadge';
+import { UserIdentityBadge } from '@/components/biz/BizBadge';
 
 export default function UserPage() {
 	const { userInfo } = useAuthStore();
@@ -36,7 +36,7 @@ export default function UserPage() {
 									<Text className="text-lg font-bold text-text-title block">
 										{userInfo.nickName}
 									</Text>
-									<UserIdentityBadge identity={userInfo.identity} />
+									<UserIdentityBadge value={userInfo.identity} />
 								</View>
 								<View className="flex items-center gap-1 text-xs text-text-muted mt-1">
 									<View className="flex items-center gap-1 mt-0.5">
