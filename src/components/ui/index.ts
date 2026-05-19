@@ -11,3 +11,4 @@ export { ColumnNav } from './ColumnNav';
 export { Asset } from './Asset';
 export { Avatar } from './Avatar';
 export { SearchBar } from './SearchBar';
+export { Loading } from './Loading';

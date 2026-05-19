@@ -1,7 +1,7 @@
 import { Badge } from '@/components/ui/Badge';
 import { USER_IDENTITY_MAP } from '@/constants/user';
 import { DEMAND_STATUS_MAP } from '@/constants/demand';
-import { ACTIVITY_STATUS_MAP, ENROLL_STATUS_MAP } from '@/constants/activity';
+import { ACTIVITY_STATUS_MAP, ENROLL_STATUS_MAP, AUDIT_STATUS_MAP } from '@/constants/activity';
 import { ThemeVariant } from '@/types/common';
 
 /**
@@ -25,7 +25,17 @@ function createBizBadge<T extends string>(
 	};
 }
 
+/** 需求单状态 */
 export const DemandStatusBadge = createBizBadge(DEMAND_STATUS_MAP, 'dispatching');
+
+/** 用户身份 */
 export const UserIdentityBadge = createBizBadge(USER_IDENTITY_MAP, 'user');
+
+/** 活动状态 */
 export const ActivityStatusBadge = createBizBadge(ACTIVITY_STATUS_MAP, 'pending');
+
+/** 报名状态 */
 export const EnrollStatusBadge = createBizBadge(ENROLL_STATUS_MAP, 'pending');
+
+/** 用户报名审核状态 */
+export const AuditStatusBadge = createBizBadge(AUDIT_STATUS_MAP, 'pending');

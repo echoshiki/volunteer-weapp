@@ -96,7 +96,7 @@ export default function UserPage() {
 						<ColumnNav
 							icon="icon-[ph--star-light]"
 							label="我的志愿活动"
-							onClick={() => mapsTo('/pages/volunteer/my/index')}
+							onClick={() => mapsTo('/pages/user/activity/index')}
 						/>
 						<ColumnNav
 							icon="icon-[ph--user-focus-light]"

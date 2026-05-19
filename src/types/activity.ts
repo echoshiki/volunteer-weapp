@@ -14,6 +14,9 @@ export type ActivityStatus = 'pending' | 'started' | 'ended';
  */
 export type EnrollStatus = 'pending' | 'started' | 'ended';
 
+/** 我的报名审核状态 */
+export type AuditStatus = 'pending' | 'approved' | 'rejected';
+
 /** 志愿活动分类 */
 export interface ActivityCategory {
 	categoryId: number;
@@ -48,11 +51,31 @@ export interface ActivityItem {
 	isEnrolled: boolean;
 }
 
-/** 活动列表响应结构 */
-export interface ActivityListRes {
-	list: ActivityItem[];
-	total: number;
-	totalPage: number;
-	page: number;
-	limit: number;
+export interface MyActivityItem {
+	/** 活动 ID */
+	activityId: number;
+	/** 活动名称 */
+	activityName: string;
+	/** 分类名称 */
+	categoryName: string;
+	/** 组织者 */
+	organizer: string;
+	/** 活动图片 */
+	banner: string;
+	/** 活动开始时间 */
+	startTime: string;
+	/** 活动结束时间 */
+	endTime: string;
+	/** 活动地址 */
+	address: string;
+	/** 报名审核状态 */
+	auditStatus: AuditStatus;
+	/** 拒绝理由 */
+	rejectReason?: string;
+	/** 签到时间 */
+	checkInTime: string | null;
+	/** 签退时间 */
+	checkOutTime: string | null;
+	/** 服务时长 */
+	duration: number | null;
 }

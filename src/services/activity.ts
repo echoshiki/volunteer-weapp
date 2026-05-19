@@ -1,5 +1,6 @@
 import { http } from '@/utils/http';
-import { ActivityCategory, ActivityItem, ActivityListRes } from '@/types/activity';
+import { ActivityCategory, ActivityItem, MyActivityItem } from '@/types/activity';
+import { PageRes } from '@/types/common';
 
 /** 获取分类列表 */
 export const getActivityCategoryListAPI = () =>
@@ -21,7 +22,7 @@ export interface ActivityListParams {
 
 /** 获取活动列表 */
 export const getActivityListAPI = (params: ActivityListParams) =>
-	http.get<ActivityListRes>('/volunteer/activity/web/list', params);
+	http.get<PageRes<ActivityItem>>('/volunteer/activity/web/list', params);
 
 /** 获取活动详情 */
 export const getActivityDetailAPI = (activityId: string | number) =>
@@ -33,5 +34,15 @@ export const getActivityDetailAPI = (activityId: string | number) =>
 export const enrollActivityAPI = (activityId: number) => {
 	return http.post('/volunteer/activity/web/entry', {
 		activityId,
+	});
+};
+
+/**
+ * 获取我的志愿活动列表
+ */
+export const getMyActivityListApi = (pageNum: number, pageSize: number = 10) => {
+	return http.get<PageRes<MyActivityItem>>('/volunteer/activity/web/activityList', {
+		pageNum,
+		pageSize,
 	});
 };

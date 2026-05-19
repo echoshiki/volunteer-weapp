@@ -7,6 +7,7 @@ import { mapsTo } from '@/utils/common';
 
 export default function ActivityList() {
 	const [keyword, setKeyword] = useState('');
+	const [searchValue, setSearchValue] = useState('');
 
 	// TODO: 活动分类筛选
 	const [categoryId, setCategoryId] = useState<number | undefined>();
@@ -19,11 +20,12 @@ export default function ActivityList() {
 		isFetchingNextPage,
 		isLoading: isListLoading,
 	} = useActivities({
-		keyword,
+		keyword: searchValue,
 		categoryId,
 	});
-
 	const list = data?.pages.flatMap((page) => page.list) || [];
+
+	const handleSearch = () => setSearchValue(keyword);
 
 	return (
 		<Page hasTabBar>
@@ -32,7 +34,9 @@ export default function ActivityList() {
 				<SearchBar
 					value={keyword}
 					placeholder="搜索感兴趣的活动"
-					onInput={(e) => setKeyword(e.detail.value)}
+					onInput={setKeyword}
+					onConfirm={handleSearch}
+					onSearch={handleSearch}
 					showBtn
 				/>
 			</View>

@@ -5,6 +5,7 @@ import {
 	getActivityListAPI,
 	getActivityDetailAPI,
 	enrollActivityAPI,
+	getMyActivityListApi,
 	ActivityListParams,
 } from '@/services/activity';
 
@@ -67,5 +68,17 @@ export const useEnrollActivity = () => {
 				icon: 'none',
 			});
 		},
+	});
+};
+
+/**
+ * 获取我的志愿活动列表 (无限滚动)
+ */
+export const useMyActivities = () => {
+	return useInfiniteQuery({
+		queryKey: ['myActivities'],
+		queryFn: ({ pageParam = 1 }) => getMyActivityListApi(pageParam),
+		getNextPageParam: (lastPage) =>
+			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
 	});
 };

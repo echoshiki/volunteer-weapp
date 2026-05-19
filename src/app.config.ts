@@ -9,6 +9,7 @@ export default defineAppConfig({
 		'pages/job/detail/index',
 		'pages/job/enterprise/index',
 		'pages/user/index',
+		'pages/user/activity/index',
 		'pages/login/index',
 	],
 	window: {

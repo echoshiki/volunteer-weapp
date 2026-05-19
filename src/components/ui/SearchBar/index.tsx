@@ -9,11 +9,11 @@ interface Props {
 	placeholder?: string;
 	/** 只读模式下的点击回调 */
 	onClick?: () => void;
-	/** 输入回调 */
-	onInput?: (e: any) => void;
-	/** 确认搜索回调（点击键盘搜索） */
+	/** 输入的回调，注意使用 debounce 防抖 */
+	onInput?: (e: string) => void;
+	/** 确认搜索的回调（输入法键盘） */
 	onConfirm?: () => void;
-	/** 点击右侧“搜索”文字按钮的回调 */
+	/** 点击右侧按钮的回调 */
 	onSearch?: () => void;
 	/** 是否显示输入框边框 */
 	showBtn?: boolean;
