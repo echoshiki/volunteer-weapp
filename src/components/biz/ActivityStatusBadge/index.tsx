@@ -4,7 +4,7 @@ import { ActivityStatus } from '@/types/activity';
 import { ACTIVITY_STATUS_MAP } from '@/constants/activity';
 
 interface Props {
-	/** 活动状态，默认 'pending' {@link ActivityStatus} */
+	/** 活动状态，默认 'pending' */
 	status?: ActivityStatus | string;
 	/** 自定义类名 */
 	className?: string;

@@ -1,10 +1,8 @@
 import { View, Text, Image } from '@tarojs/components';
-import { Card, Page, SectionTitle, Badge, Carousel, GridNav, Empty } from '@/components/ui';
-import { navigateTo, switchTab } from '@tarojs/taro';
+import { Page, SectionTitle, Badge, Carousel, GridNav, Empty, Cell } from '@/components/ui';
 import { useActivities } from '@/hooks/useActivity';
 import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';
-import Activity from '../activity';
 import { ActivityStatusBadge } from '@/components/biz/ActivityStatusBadge';
 
 export default function HomePage() {
@@ -54,7 +52,7 @@ export default function HomePage() {
 
 			<View className="container-x flex flex-col gap-3 mb-4">
 				{/* 核心金刚区 */}
-				<Card className="grid grid-cols-5 space-x-0.5">
+				<Cell className="grid grid-cols-5 space-x-0.5">
 					<GridNav
 						icon="icon-[ph--gift-bold]"
 						label="志愿组织"
@@ -80,12 +78,12 @@ export default function HomePage() {
 						label="积分兑换"
 						path="/pages/points/index"
 					/>
-				</Card>
+				</Cell>
 			</View>
 
 			{/* 社区风采/数据看板 */}
 			<View className="container-x mb-4">
-				<Card>
+				<Cell>
 					<View className="flex items-center justify-between mb-3 border-b border-gray-50 pb-2">
 						<Text className="text-sm font-bold text-text-title">智慧社区网格概览</Text>
 						<Text className="text-xs text-text-muted font-sans scale-90">
@@ -110,12 +108,12 @@ export default function HomePage() {
 							<Text className="text-xs text-text-muted mt-0.5 block">已解决求助</Text>
 						</View>
 					</View>
-				</Card>
+				</Cell>
 			</View>
 
 			{/* 精选志愿活动推荐区域 */}
 			<View className="container-x mb-4">
-				<Card>
+				<Cell>
 					<SectionTitle
 						title="精选活动推荐"
 						link={{ name: '更多活动', url: '/pages/activity/index' }}
@@ -173,7 +171,7 @@ export default function HomePage() {
 								</View>
 							))}
 					</View>
-				</Card>
+				</Cell>
 			</View>
 		</Page>
 	);

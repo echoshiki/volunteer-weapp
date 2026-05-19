@@ -4,8 +4,8 @@ import {
 	getJobListAPI,
 	getJobDetailAPI,
 	getEnterpriseDetailAPI,
+	JobListParams,
 } from '@/services/job';
-import { JobListParams } from '@/types/job';
 
 /** 岗位分类列表 Hook */
 export const useJobCategories = () => {

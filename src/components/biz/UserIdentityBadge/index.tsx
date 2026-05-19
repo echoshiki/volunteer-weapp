@@ -4,8 +4,9 @@ import { UserIdentity } from '@/types/user';
 import { USER_IDENTITY_MAP } from '@/constants/user';
 
 interface Props {
-	/** 用户身份 {@link UserIdentity} */
+	/** 用户身份 */
 	identity?: UserIdentity | string;
+	/** 自定义类名 */
 	className?: string;
 }
 

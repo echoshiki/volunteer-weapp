@@ -1,10 +1,16 @@
 import { View, Swiper, SwiperItem, Image } from '@tarojs/components';
-import { SwiperData } from '@/types/common';
 import { mapsTo } from '@/utils/common';
 
+/** 轮播图单项 */
+export interface SwiperItemData {
+	id?: number | string;
+	pic: string;
+	url?: string;
+}
+
 interface Props {
-	/** 轮播图数据 {@link SwiperData} */
-	list: SwiperData[];
+	/** 轮播图数据 */
+	list: SwiperItemData[];
 	/** 是否为全宽度展示 */
 	isFull?: boolean;
 }

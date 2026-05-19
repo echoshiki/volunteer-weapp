@@ -1,20 +1,13 @@
 import { View, Text } from '@tarojs/components';
 import { mapsTo } from '@/utils/common';
-import { RenderIcon } from '../RenderIcon';
+import { Icon } from '../Icon';
 
 interface Props {
 	/** 标题文字 */
 	title: string;
-
-	/**
-	 * 图标名称，仅在 variant 为 'extra' 时渲染
-	 */
+	/** Iconify 图标类名 */
 	icon?: string;
-
-	/**
-	 * 右侧“查看更多”链接配置
-	 * 如果不传，则不显示右侧链接区
-	 */
+	/** 右侧“查看更多”链接配置 */
 	link?: {
 		name: string;
 		url: string;
@@ -31,7 +24,7 @@ export const SectionTitle = ({ title, icon, link }: Props) => {
 			<View className="flex items-center gap-2">
 				{icon ? (
 					<View className="flex items-center justify-center">
-						<RenderIcon icon={icon} className="w-6 h-6 text-primary" />
+						<Icon icon={icon} className="w-6 h-6 text-primary" />
 					</View>
 				) : (
 					<View className="w-1 h-6 bg-primary rounded-full" />

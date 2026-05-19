@@ -3,7 +3,7 @@ import Taro from '@tarojs/taro';
 import { useAuthStore } from '@/store/auth';
 import { useLogin } from '@/hooks/useLogin';
 import { useUser } from '@/hooks/useUser';
-import { Avatar, AssetItem, ColumnNav } from '@/components/ui';
+import { Avatar, Asset, ColumnNav } from '@/components/ui';
 import { mapsTo } from '@/utils/common';
 import { UserIdentityBadge } from '@/components/biz/UserIdentityBadge';
 
@@ -75,9 +75,9 @@ export default function UserPage() {
 
 			<View className="px-4 -mt-10 flex flex-col gap-4">
 				<View className="bg-white rounded-lg px-4 py-6 shadow-sm flex items-center">
-					<AssetItem label="我的积分" value={userInfo?.points || 0} />
+					<Asset label="我的积分" value={userInfo?.points || 0} />
 					<View className="w-px h-8 bg-slate-100" />
-					<AssetItem
+					<Asset
 						label="志愿时长"
 						value={userInfo?.duration || 0}
 						onClick={() => mapsTo('/pages/user/coupons/index')}

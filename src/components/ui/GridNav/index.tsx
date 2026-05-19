@@ -1,6 +1,7 @@
 import { View, Text } from '@tarojs/components';
 import { mapsTo } from '@/utils/common';
-import { ThemeVariant } from '@/types/common';
+
+export type NavIconVariant = 'primary' | 'success' | 'secondary' | 'warning' | 'danger' | 'info';
 
 interface Props {
 	/** 导航标签 */
@@ -9,8 +10,8 @@ interface Props {
 	path: string;
 	/** Iconify 图标类名 */
 	icon?: string;
-	/** 风格 {@link ThemeVariant} */
-	variant?: ThemeVariant;
+	/** 图标风格 */
+	variant?: NavIconVariant;
 }
 
 /**
@@ -18,7 +19,7 @@ interface Props {
  * 适用于首页、个人中心等模块的核心功能入口
  */
 export const GridNav = ({ label, path, icon, variant = 'primary' }: Props) => {
-	const variantMap: Record<ThemeVariant, string> = {
+	const variantMap: Record<NavIconVariant, string> = {
 		primary: 'bg-primary/10 text-primary',
 		success: 'bg-emerald-500/10 text-emerald-600',
 		secondary: 'bg-gray-500/10 text-gray-600',

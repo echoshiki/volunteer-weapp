@@ -1,4 +1,3 @@
-// src/hooks/useUser.ts
 import { useQuery } from '@tanstack/react-query';
 import { getUserInfoAPI } from '@/services/user';
 import { useAuthStore } from '@/store/auth';

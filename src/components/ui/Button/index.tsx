@@ -1,12 +1,18 @@
 import { Button as TaroButton, ButtonProps as TaroButtonProps, View } from '@tarojs/components';
-import React from 'react';
-import { ThemeVariant } from '@/types/common';
 
 /** 按钮尺寸预设 */
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 /** 按钮视觉变体 */
-type ButtonVariant = ThemeVariant | 'outline' | 'ghost';
+type ButtonVariant =
+	| 'primary'
+	| 'success'
+	| 'secondary'
+	| 'warning'
+	| 'danger'
+	| 'info'
+	| 'outline'
+	| 'ghost';
 
 interface Props extends Omit<TaroButtonProps, 'size' | 'type'> {
 	/** 尺寸，默认 md {@link ButtonSize} */
@@ -29,7 +35,7 @@ interface Props extends Omit<TaroButtonProps, 'size' | 'type'> {
  * 按钮组件
  * 重新封装了图标、大小、背景等样式
  */
-export const Button: React.FC<Props> = ({
+export const Button = ({
 	size = 'md',
 	variant = 'primary',
 	icon,
@@ -40,7 +46,7 @@ export const Button: React.FC<Props> = ({
 	children,
 	disabled,
 	...props
-}) => {
+}: Props) => {
 	// 尺寸样式映射 (高度、内边距、字体、图标大小)
 	const sizeMap: Record<ButtonSize, string> = {
 		xs: 'h-7 px-3 text-xs gap-1',

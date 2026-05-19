@@ -1,4 +1,3 @@
-// src/hooks/useDemand.ts
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import {
 	getDemandTargetListAPI,
@@ -6,8 +5,8 @@ import {
 	getDemandOrderListAPI,
 	getDemandOrderDetailAPI,
 	getServiceUserListAPI,
+	DemandOrderListParams,
 } from '@/services/demand';
-import { DemandOrderListParams } from '@/types/demand';
 
 /** 服务对象分类列表 Hook */
 export const useDemandTargets = () => {

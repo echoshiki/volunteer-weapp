@@ -4,7 +4,7 @@ import { DemandOrderStatus } from '@/types/demand';
 import { DEMAND_STATUS_MAP } from '@/constants/demand';
 
 interface Props {
-	/** 需求订单状态，默认 'dispatching' {@link DemandOrderStatus} */
+	/** 需求订单状态，默认 'dispatching' */
 	status?: DemandOrderStatus | string;
 	/** 自定义类名 */
 	className?: string;

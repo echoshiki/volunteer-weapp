@@ -7,10 +7,10 @@ interface Props {
 	subTitle?: string;
 	/** 按钮文本 */
 	buttonText?: string;
-	/** 按钮点击事件 */
-	onButtonClick?: () => void;
 	/** 图标名，使用 Iconify 图标类名 */
 	icon?: string;
+	/** 按钮点击事件 */
+	onButtonClick?: () => void;
 }
 
 /**
@@ -20,8 +20,8 @@ export const Empty = ({
 	title = '空空如也',
 	subTitle = '暂无数据，试试其他搜索关键词吧',
 	buttonText,
-	onButtonClick,
 	icon = 'icon-[ph--mailbox]',
+	onButtonClick,
 }: Props) => {
 	return (
 		<View className="min-h-84 py-20 flex flex-col gap-5 items-center animate-fade-in">

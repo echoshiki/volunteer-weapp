@@ -1,14 +1,13 @@
 import { Text, View } from '@tarojs/components';
-import { ReactNode } from 'react';
-import { ThemeVariant } from '@/types/common';
 
-/** 徽章尺寸 */
-type BadgeSize = 'xs' | 'sm' | 'md';
+export type BadgeVariant = 'primary' | 'success' | 'secondary' | 'warning' | 'danger' | 'info';
+
+export type BadgeSize = 'xs' | 'sm' | 'md';
 
 interface BadgeProps {
-	/** 视觉变体 {@link ThemeVariant} */
-	variant?: ThemeVariant;
-	/** 尺寸，默认 sm {@link BadgeSize} */
+	/** 视觉变体，默认 secondary */
+	variant?: BadgeVariant;
+	/** 尺寸，默认 sm */
 	size?: BadgeSize;
 	/** 是否为胶囊形状（全圆角），默认 false */
 	pill?: boolean;
@@ -17,7 +16,7 @@ interface BadgeProps {
 	/** 点击事件 */
 	onClick?: () => void;
 	/** 子节点 */
-	children: ReactNode;
+	children: React.ReactNode;
 }
 
 /**
@@ -32,7 +31,7 @@ export const Badge = ({
 	className = '',
 	onClick,
 }: BadgeProps) => {
-	const variantMap: Record<ThemeVariant, string> = {
+	const variantMap: Record<BadgeVariant, string> = {
 		primary: 'bg-primary/10 text-primary',
 		success: 'bg-emerald-500/10 text-emerald-600',
 		secondary: 'bg-gray-500/10 text-gray-600',

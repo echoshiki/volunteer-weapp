@@ -1,13 +1,15 @@
 import { View, Text, Image } from '@tarojs/components';
 import { useState } from 'react';
 
+export type AvatarSize = 'sm' | 'md' | 'lg' | 'xl';
+
 interface Props {
 	/** 头像图片地址 */
 	src?: string;
 	/** 头像名称，用于显示首字母 */
 	name?: string;
 	/** 头像尺寸 */
-	size?: 'sm' | 'md' | 'lg' | 'xl';
+	size?: AvatarSize;
 	/** 自定义类名 */
 	className?: string;
 }

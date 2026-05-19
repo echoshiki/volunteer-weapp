@@ -19,22 +19,6 @@ export interface ListRes<T> {
 	list: T[];
 }
 
-/** 审核状态 */
-export type ApprovalStatus = 'pending' | 'approved' | 'rejected';
-
-/** 轮播图 */
-export interface SwiperData {
-	id?: number | string;
-	pic: string;
-	url?: string;
-}
-
-/** 选项卡 */
-export interface TabItem {
-	label: string;
-	value: string;
-}
-
 /**
  * 推广分享配置
  * @param title 分享标题
@@ -49,4 +33,9 @@ export interface ShareConfig {
 	params?: Record<string, any>;
 }
 
+/** 审核状态 */
+export type ApprovalStatus = 'pending' | 'approved' | 'rejected';
+
 export type ThemeVariant = 'primary' | 'success' | 'secondary' | 'warning' | 'danger' | 'info';
+
+export type SizeVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
