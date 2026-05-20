@@ -12,19 +12,34 @@ export const doGlobalScan = () => {
 		try {
 			// 唤起扫码
 			const res = await Taro.scanCode({
-				// 生产环境建议开启，测试环境可注销
 				onlyFromCamera: true,
 			});
 
-			const resultText = res.result;
-
-			// 校验与路由
-			if (resultText && resultText.includes('activityId=')) {
-				const targetActId = resultText.replace('activityId=', '').trim();
-				mapsTo(`/pages/activity/check-result/index?activityId=${targetActId}`);
-			} else {
-				Taro.showToast({ title: '请扫描官方指定的活动二维码', icon: 'none' });
+			// ==========================================
+			// 场景 A：扫的是微信官方生成的小程序码
+			// ==========================================
+			if (res.scanType === 'WX_CODE' && res.path) {
+				// 微信会自动把码里配置的页面路径和参数解出来，例如:
+				// "pages/activity/check-result/index?scene=id%3D10023"
+				const targetPath = res.path.startsWith('/') ? res.path : `/${res.path}`;
+				mapsTo(targetPath);
+				return;
 			}
+
+			// ==========================================
+			// 场景 B：扫的是普通方形二维码
+			// ==========================================
+			if (res.result && res.result.includes('activityId=')) {
+				// 用正则安全提取纯数字 ID，防止链接里混杂其他参数
+				const match = res.result.match(/activityId=(\d+)/);
+				if (match && match[1]) {
+					const targetActId = match[1];
+					mapsTo(`/pages/activity/check-result/index?activityId=${targetActId}`);
+					return;
+				}
+			}
+
+			Taro.showToast({ title: '请扫描官方指定的活动二维码', icon: 'none' });
 		} catch (error) {
 			console.log('扫码取消或失败', error);
 		}
