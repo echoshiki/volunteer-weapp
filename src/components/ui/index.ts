@@ -12,3 +12,4 @@ export { Asset } from './Asset';
 export { Avatar } from './Avatar';
 export { SearchBar } from './SearchBar';
 export { Loading } from './Loading';
+export { Feedback } from './Feedback';

@@ -31,9 +31,10 @@ export const getCurrentPageUrl = (): string => {
 export const isTabBarPage = (path: string): boolean => {
 	const tabBars = [
 		'pages/home/index',
-		'pages/category/index',
-		'pages/cart/index',
-		'pages/user/center/index',
+		'pages/activity/index',
+		'pages/demand/index',
+		'pages/job/index',
+		'pages/user/index',
 	];
 	const normalizedPath = path.startsWith('/') ? path.substring(1) : path;
 	const purePath = normalizedPath.split('?')[0];

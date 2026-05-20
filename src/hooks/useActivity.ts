@@ -6,7 +6,9 @@ import {
 	getActivityDetailAPI,
 	enrollActivityAPI,
 	getMyActivityListApi,
+	checkActivityAPI,
 	ActivityListParams,
+	CheckActivityParams,
 } from '@/services/activity';
 
 /** 分类列表 Hook */
@@ -80,5 +82,21 @@ export const useMyActivities = () => {
 		queryFn: ({ pageParam = 1 }) => getMyActivityListApi(pageParam),
 		getNextPageParam: (lastPage) =>
 			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+	});
+};
+
+/**
+ * 活动签到签退
+ */
+export const useCheckActivity = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: (params: CheckActivityParams) => checkActivityAPI(params),
+		onSuccess: () => {
+			// 打卡成功后，立刻使“我的活动列表”和“活动详情”缓存失效
+			queryClient.invalidateQueries({ queryKey: ['myActivities'] });
+			queryClient.invalidateQueries({ queryKey: ['activityDetail'] });
+		},
 	});
 };

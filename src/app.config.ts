@@ -3,6 +3,7 @@ export default defineAppConfig({
 		'pages/home/index',
 		'pages/activity/index',
 		'pages/activity/detail/index',
+		'pages/activity/check-result/index',
 		'pages/demand/index',
 		'pages/demand/detail/index',
 		'pages/job/index',
@@ -55,5 +56,10 @@ export default defineAppConfig({
 		selectedColor: '#EA3323',
 		backgroundColor: '#fff',
 		borderStyle: 'white',
+	},
+	permission: {
+		'scope.userLocation': {
+			desc: '您的位置信息将用于核验您是否已到达志愿活动履约现场',
+		},
 	},
 });

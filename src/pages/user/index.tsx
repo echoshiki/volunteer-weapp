@@ -1,19 +1,19 @@
-import { View, Text } from '@tarojs/components';
 import Taro from '@tarojs/taro';
+import { View, Text } from '@tarojs/components';
 import { useAuthStore } from '@/store/auth';
 import { useLogin } from '@/hooks/useLogin';
 import { useUser } from '@/hooks/useUser';
 import { Avatar, Asset, ColumnNav } from '@/components/ui';
 import { mapsTo } from '@/utils/common';
 import { UserIdentityBadge } from '@/components/biz/BizBadge';
+import { doGlobalScan } from '@/utils/scan';
 
 export default function UserPage() {
 	const { userInfo } = useAuthStore();
 	const { isLoggedIn, onLogout } = useLogin();
 
-	const { isFetching } = useUser();
-
-	const goLogin = () => !isLoggedIn && mapsTo('/pages/login/index');
+	// 挂载更新用户信息
+	useUser();
 
 	return (
 		<View className="min-h-screen bg-main-bg">
@@ -54,7 +54,7 @@ export default function UserPage() {
 								</View>
 							</View>
 						) : (
-							<View onClick={() => mapsTo('/pages/login/index')}>
+							<View onClick={() => !isLoggedIn && mapsTo('/pages/login/index')}>
 								<Text className="text-xl font-bold text-white">点击登录</Text>
 								<Text className="text-sm text-white/50 block mt-1">
 									登录发现更多精彩
@@ -102,6 +102,11 @@ export default function UserPage() {
 							icon="icon-[ph--user-focus-light]"
 							label="我的求职意向"
 							onClick={() => mapsTo('/pages/job/my/index')}
+						/>
+						<ColumnNav
+							icon="icon-[ph--scan-light]"
+							label="现场扫码打卡"
+							onClick={doGlobalScan}
 						/>
 					</View>
 

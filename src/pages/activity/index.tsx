@@ -56,7 +56,11 @@ export default function ActivityList() {
 								mapsTo(`/pages/activity/detail/index?id=${item.activityId}`)
 							}
 						>
-							<Image src={item.banner} className="w-full h-40 object-cover" />
+							<Image
+								src={item.banner}
+								mode="aspectFill"
+								className="w-full h-40 object-cover"
+							/>
 							<Cell>
 								{/* 活动标题和状态 */}
 								<View className="flex justify-between items-center">

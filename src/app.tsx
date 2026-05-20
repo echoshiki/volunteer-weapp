@@ -18,6 +18,8 @@ const queryClient = new QueryClient({
 function App({ children }: PropsWithChildren<any>) {
 	const { onSilentLogin, isLoggedIn } = useLogin();
 
+	console.log(process.env.NODE_ENV);
+
 	useLaunch(() => {
 		if (!isLoggedIn) onSilentLogin();
 	});

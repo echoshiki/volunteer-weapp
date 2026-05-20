@@ -46,3 +46,27 @@ export const getMyActivityListApi = (pageNum: number, pageSize: number = 10) => 
 		pageSize,
 	});
 };
+
+export interface CheckActivityParams {
+	/** 打卡活动 ID */
+	activityId: number;
+	latitude?: number;
+	longitude?: number;
+}
+
+export interface CheckActivityRes {
+	/** 打卡类型：签到/签退 */
+	actionType: 'checkIn' | 'checkOut';
+	/** 打卡时间 */
+	checkTime: string;
+	/** 服务时长 */
+	duration: number | null;
+	message: string;
+}
+
+/**
+ * 志愿活动打卡
+ */
+export const checkActivityAPI = (params: CheckActivityParams) => {
+	return http.post<CheckActivityRes>('/volunteer/activity/web/check', params);
+};

@@ -129,9 +129,10 @@ export default function HomePage() {
 										mapsTo(`/pages/activity/detail/index?id=${item.activityId}`)
 									}
 								>
-									{/* 左侧 Banner，固定尺寸保持整齐 */}
+									{/* 左侧活动封面 */}
 									<Image
 										src={item.banner}
+										mode="aspectFill"
 										className="w-28 h-28 object-cover shrink-0"
 									/>
 

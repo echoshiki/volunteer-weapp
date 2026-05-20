@@ -69,7 +69,7 @@ export const SearchBar = ({
 						/>
 						{value && (
 							<View
-								className="icon-[lucide--circle-x] w-4 h-4 text-text-muted/40 ml-2"
+								className="icon-[ph--x-circle-light] w-4 h-4 text-text-muted/40 ml-2"
 								onClick={(e: any) => {
 									e.stopPropagation();
 									onInput?.('');
