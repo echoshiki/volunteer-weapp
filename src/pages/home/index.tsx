@@ -1,5 +1,5 @@
 import { View, Text, Image } from '@tarojs/components';
-import { Page, SectionTitle, Badge, Carousel, GridNav, Empty, Cell } from '@/components/ui';
+import { Page, SectionTitle, Carousel, GridNav, Empty, Cell } from '@/components/ui';
 import { useActivities } from '@/hooks/useActivity';
 import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';

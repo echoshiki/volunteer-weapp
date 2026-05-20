@@ -18,7 +18,7 @@ export default function MyActivityList() {
 
 	return (
 		<Page>
-			<View className="container-x space-y-4">
+			<View className="container-x">
 				<ScrollView
 					scrollY
 					className="h-[calc(100vh-10px)]"
@@ -30,12 +30,14 @@ export default function MyActivityList() {
 							onClick={() =>
 								mapsTo(`/pages/activity/detail/index?id=${item.activityId}`)
 							}
+							className="mt-5"
 							clickable
 						>
 							<View className="flex gap-3">
 								<Image
 									src={item.banner}
-									className="w-20 h-20 rounded-lg object-cover bg-gray-100 shrink-0"
+									mode="aspectFill"
+									className="size-20 rounded-lg object-cover bg-gray-100 shrink-0"
 								/>
 								<View className="flex-1 flex flex-col justify-between overflow-hidden">
 									{/* 活动标题 */}

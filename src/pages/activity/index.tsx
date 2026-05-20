@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, Input, ScrollView, Image } from '@tarojs/components';
+import { View, Text, ScrollView, Image } from '@tarojs/components';
 import { Page, Empty, SearchBar, Cell } from '@/components/ui';
 import { EnrollStatusBadge } from '@/components/biz/BizBadge';
 import { useActivities } from '@/hooks/useActivity';
