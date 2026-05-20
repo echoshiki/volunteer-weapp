@@ -24,7 +24,7 @@ export const Empty = ({
 	onButtonClick,
 }: Props) => {
 	return (
-		<View className="min-h-84 py-20 flex flex-col gap-5 items-center animate-fade-in">
+		<View className="size-full py-20 flex flex-col gap-5 items-center animate-fade-in">
 			{/* 图片部分 */}
 			<View className="rounded-full bg-gray-200 p-5">
 				<View className={`w-12 h-12 ${icon} text-white`} />

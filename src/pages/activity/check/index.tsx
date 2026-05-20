@@ -8,7 +8,7 @@ import { CheckActivityRes } from '@/services/activity';
 
 type CheckStatus = 'loading' | 'success' | 'error';
 
-export default function ActivityCheckResultPage() {
+export default function ActivityCheckPage() {
 	const [status, setStatus] = useState<CheckStatus>('loading');
 	const [message, setMessage] = useState('正在安全核验中，请稍候...');
 

@@ -1,5 +1,5 @@
 import { View, Text, Image } from '@tarojs/components';
-import { Page, SectionTitle, Carousel, GridNav, Empty, Cell } from '@/components/ui';
+import { Page, Heading, Carousel, GridNav, Empty, Cell } from '@/components/ui';
 import { useActivities } from '@/hooks/useActivity';
 import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';
@@ -109,14 +109,14 @@ export default function HomePage() {
 			{/* 精选志愿活动推荐区域 */}
 			<View className="container-x mb-4">
 				<Cell>
-					<SectionTitle
+					<Heading
 						title="精选活动推荐"
 						link={{ name: '更多活动', url: '/pages/activity/index' }}
 					/>
 
 					{/* 推荐活动卡片列表 */}
 					<View className="space-y-4 divide-y divide-gray-100">
-						{isLoading && <Loading label="加载活动中..." />}
+						{isLoading && <Loading title="加载活动中..." />}
 
 						{activityList.length === 0 && <Empty />}
 

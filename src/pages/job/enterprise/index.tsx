@@ -1,9 +1,9 @@
-// src/pages/job/enterprise/index.tsx
 import { useRouter } from '@tarojs/taro';
 import { View, Text, ScrollView, Image, Button } from '@tarojs/components';
 import { useEnterpriseDetail } from '@/hooks/useJob';
+import { Cell, Page } from '@/components/ui';
 
-export default function EnterpriseDetail() {
+export default function JobEnterprisePage() {
 	const { params } = useRouter();
 	const enterprisesId = params.id as string;
 
@@ -15,14 +15,14 @@ export default function EnterpriseDetail() {
 		return <View className="p-10 text-center text-text-muted text-sm">企业不存在</View>;
 
 	return (
-		<View className="min-h-screen bg-main-bg pb-24">
+		<Page>
 			<ScrollView scrollY className="h-full">
 				{/* 企业名片 Header */}
-				<View className="bg-white p-5 border-b border-gray-100">
+				<Cell className="border-b border-gray-100">
 					<View className="flex items-start gap-4 mb-4">
 						<Image
 							src={detail.logo}
-							className="size-16 rounded border border-gray-100 object-cover bg-gray-50"
+							className="size-18 rounded border border-gray-100 object-cover bg-gray-50"
 						/>
 						<View className="flex-1 flex flex-col justify-between">
 							<Text className="text-xl font-bold text-text-title leading-tight block mb-1">
@@ -52,7 +52,7 @@ export default function EnterpriseDetail() {
 							</Text>
 						</View>
 					</View>
-				</View>
+				</Cell>
 
 				{/* 2. 企业简介 */}
 				<View className="mt-3 bg-white p-5">
@@ -125,6 +125,6 @@ export default function EnterpriseDetail() {
 					拨打电话
 				</Button>
 			</View>
-		</View>
+		</Page>
 	);
 }

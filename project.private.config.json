@@ -22,11 +22,25 @@
     "miniprogram": {
       "list": [
         {
+          "name": "企业详情",
+          "pathName": "pages/job/enterprise/index",
+          "query": "id=0",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
+          "name": "求职详情",
+          "pathName": "pages/job/detail/index",
+          "query": "id=9",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "打卡落地页",
           "pathName": "pages/activity/check-result/index",
           "query": "activityId=10023",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "已报名列表",

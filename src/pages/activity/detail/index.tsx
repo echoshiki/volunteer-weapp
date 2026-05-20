@@ -2,7 +2,7 @@ import Taro from '@tarojs/taro';
 import { useRouter } from '@tarojs/taro';
 import { View, Text, Image, RichText, ScrollView } from '@tarojs/components';
 import { useActivityDetail } from '@/hooks/useActivity';
-import { Badge, Button, Cell, SectionTitle } from '@/components/ui';
+import { Badge, Button, Cell, Heading } from '@/components/ui';
 import { EnrollStatusBadge } from '@/components/biz/BizBadge';
 import { useEnrollActivity } from '@/hooks/useActivity';
 import { useAuthStore } from '@/store/auth';
@@ -115,7 +115,7 @@ export default function ActivityDetail() {
 
 					{/* 活动详情 */}
 					<View className="mt-8">
-						<SectionTitle title="活动详情" />
+						<Heading title="活动详情" />
 						<View className="mt-4 text-gray-700 leading-relaxed text-sm">
 							<RichText nodes={activity.content} />
 						</View>
@@ -123,7 +123,7 @@ export default function ActivityDetail() {
 
 					{/* 报名规则 */}
 					<View className="mt-8">
-						<SectionTitle title="报名规则" />
+						<Heading title="报名规则" />
 						<Text className="mt-4 text-gray-600 text-sm block bg-orange-50 p-4 rounded-xl">
 							{activity.rules}
 						</Text>

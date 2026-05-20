@@ -1,10 +1,10 @@
 import { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
 import { useJobCategories, useJobs } from '@/hooks/useJob';
-import { Badge } from '@/components/ui/Badge';
 import { mapsTo } from '@/utils/common';
+import { Cell, Empty, Loading, Badge } from '@/components/ui';
 
-export default function JobHall() {
+export default function JobPage() {
 	const [activeJobId, setActiveJobId] = useState<number | string>('');
 
 	const { data: categories } = useJobCategories();
@@ -29,11 +29,11 @@ export default function JobHall() {
 	return (
 		<View className="min-h-screen bg-main-bg flex flex-col">
 			{/* 顶部岗位分类筛选 */}
-			<View className="sticky top-0 z-10 bg-white border-b border-gray-100 shadow-sm">
-				<View className="flex flex-wrap gap-2 p-4 ">
+			<Cell className="sticky top-0 z-10 border-b border-gray-100">
+				<View className="flex flex-wrap gap-2">
 					<Badge
-						variant={activeJobId === '' ? 'primary' : 'gray'}
-						size="md"
+						variant={activeJobId === '' ? 'primary' : 'secondary'}
+						size="sm"
 						onClick={() => setActiveJobId('')}
 					>
 						全部岗位
@@ -42,15 +42,15 @@ export default function JobHall() {
 					{categories?.map((cat) => (
 						<Badge
 							key={cat.jobId}
-							size="md"
-							variant={activeJobId === cat.jobId ? 'primary' : 'gray'}
+							size="sm"
+							variant={activeJobId === cat.jobId ? 'primary' : 'secondary'}
 							onClick={() => setActiveJobId(cat.jobId)}
 						>
 							{cat.jobTitle}
 						</Badge>
 					))}
 				</View>
-			</View>
+			</Cell>
 
 			{/* 岗位列表 */}
 			<ScrollView
@@ -59,18 +59,15 @@ export default function JobHall() {
 				onScrollToLower={handleScrollToLower}
 				style={{ height: 'calc(100vh - 60px)' }}
 			>
-				<View className="p-4 space-y-3 pb-8">
-					{isLoading && jobs.length === 0 ? (
-						<View className="text-center py-10 text-text-muted text-sm">加载中...</View>
+				<View className="container-x py-4 flex flex-col gap-4">
+					{isLoading ? (
+						<Loading />
 					) : jobs.length === 0 ? (
-						<View className="text-center py-10 text-text-muted text-sm">
-							暂无匹配的岗位
-						</View>
+						<Empty title="暂无匹配的岗位" />
 					) : (
 						jobs.map((job) => (
-							<View
+							<Cell
 								key={job.id}
-								className="bg-white rounded-card p-4 shadow-sm active:scale-[0.98] transition-transform"
 								onClick={() =>
 									mapsTo(`/pages/job/detail/index?id=${job.enterprisesId}`)
 								}
@@ -101,7 +98,7 @@ export default function JobHall() {
 									<Text className="truncate flex-1">{job.enterprisesName}</Text>
 									<Text className="text-primary font-bold">查看详情 &gt;</Text>
 								</View>
-							</View>
+							</Cell>
 						))
 					)}
 					{isFetchingNextPage && (

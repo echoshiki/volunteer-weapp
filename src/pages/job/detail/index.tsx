@@ -1,7 +1,8 @@
 import { useRouter, makePhoneCall } from '@tarojs/taro';
-import { View, Text, ScrollView, Button } from '@tarojs/components';
+import { View, Text, ScrollView } from '@tarojs/components';
 import { useJobDetail } from '@/hooks/useJob';
 import { mapsTo } from '@/utils/common';
+import { Cell, Alert, Heading, Button, Empty, Loading, Page } from '@/components/ui';
 
 export default function JobDetail() {
 	const { params } = useRouter();
@@ -9,18 +10,16 @@ export default function JobDetail() {
 
 	const { data: detail, isLoading } = useJobDetail(id);
 
-	if (isLoading)
-		return <View className="p-10 text-center text-text-muted text-sm">岗位加载中...</View>;
-	if (!detail)
-		return <View className="p-10 text-center text-text-muted text-sm">岗位信息不存在</View>;
+	if (isLoading) return <Loading title="岗位加载中..." />;
+	if (!detail) return <Empty title="岗位信息不存在" />;
 
 	return (
-		<View className="min-h-screen bg-main-bg pb-24">
+		<Page>
 			<ScrollView scrollY className="h-full">
 				{/* 岗位核心信息 */}
-				<View className="bg-white p-5 border-b border-gray-100">
-					<View className="flex justify-between items-start mb-4">
-						<Text className="text-2xl font-bold text-text-title leading-tight flex-1 pr-4">
+				<Cell className="border-b border-gray-100">
+					<View className="flex justify-between items-start mb-2">
+						<Text className="text-xl font-bold text-text-title leading-tight flex-1">
 							{detail.title}
 						</Text>
 						<Text className="text-xl font-bold text-primary">
@@ -38,11 +37,11 @@ export default function JobDetail() {
 							<Text>招 {detail.hireCount} 人</Text>
 						</View>
 					</View>
-				</View>
+				</Cell>
 
 				{/* 企业入口卡片 */}
-				<View
-					className="mt-3 bg-white p-4 flex items-center justify-between active:bg-gray-50 transition-colors"
+				<Cell
+					className="mt-3 flex items-center justify-between active:bg-gray-50 transition-colors"
 					onClick={() => mapsTo(`/pages/job/enterprise/index?id=${detail.enterprisesId}`)}
 				>
 					<View className="flex items-center gap-3">
@@ -57,44 +56,37 @@ export default function JobDetail() {
 						</View>
 					</View>
 					<View className="icon-[ph--caret-right] w-5 h-5 text-text-muted" />
+				</Cell>
+
+				{/* 温馨提示 */}
+				<View className="container-x py-5">
+					<Alert>
+						温馨提示：家门口求职平台承诺不向求职者收取任何费用，请提高警惕，注意保护个人财产安全。
+					</Alert>
 				</View>
 
 				{/* 岗位描述内容 */}
-				<View className="mt-3 bg-white p-5">
-					<View className="flex items-center gap-2 mb-4">
-						<View className="w-1 h-4 bg-primary rounded-full" />
-						<Text className="font-bold text-text-title">岗位描述</Text>
-					</View>
+				<Cell className="mt-3">
+					<Heading title="岗位描述" size="md" />
 					<View className="text-sm text-text-body leading-relaxed space-y-2">
 						<Text className="block whitespace-pre-wrap">{detail.content}</Text>
 					</View>
-				</View>
-
-				{/* 温馨提示 */}
-				<View className="p-5">
-					<View className="bg-orange-50 rounded-card p-4 flex items-start gap-2">
-						<View className="icon-[ph--warning-circle] w-4 h-4 text-orange-500 mt-0.5 shrink-0" />
-						<Text className="text-xs text-orange-600 leading-normal">
-							温馨提示：家门口求职平台承诺不向求职者收取任何费用，请提高警惕，注意保护个人财产安全。
-						</Text>
-					</View>
-				</View>
+				</Cell>
 			</ScrollView>
 
-			{/* 5. 底部固定操作栏 */}
+			{/* 底部固定操作栏 */}
 			<View className="fixed bottom-0 inset-x-0 bg-white p-4 border-t border-gray-100 flex gap-3 z-20">
 				<Button
-					className="flex-1 h-12 bg-gray-100 text-text-title text-sm rounded-full flex items-center justify-center border-none"
-					onClick={() => makePhoneCall({ phoneNumber: '10086' })} // 示例逻辑
+					variant="info"
+					icon="icon-[ph--chat-centered-dots]"
+					onClick={() => makePhoneCall({ phoneNumber: '10086' })}
 				>
-					<View className="icon-[ph--chat-centered-dots] w-5 h-5 mr-2" />
 					立即咨询
 				</Button>
-				<Button className="flex-[1.5] h-12 bg-primary text-white text-sm rounded-full flex items-center justify-center border-none font-bold shadow-md shadow-red-200">
-					<View className="icon-[ph--paper-plane-tilt] w-5 h-5 mr-2" />
+				<Button variant="primary" icon="icon-[ph--paper-plane-tilt]" className="flex-[1.5]">
 					投递简历
 				</Button>
 			</View>
-		</View>
+		</Page>
 	);
 }

@@ -3,7 +3,7 @@ export default defineAppConfig({
 		'pages/home/index',
 		'pages/activity/index',
 		'pages/activity/detail/index',
-		'pages/activity/check-result/index',
+		'pages/activity/check/index',
 		'pages/demand/index',
 		'pages/demand/detail/index',
 		'pages/job/index',

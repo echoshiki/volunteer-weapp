@@ -3,7 +3,7 @@ import { View, Text } from '@tarojs/components';
 import { useAuthStore } from '@/store/auth';
 import { useLogin } from '@/hooks/useLogin';
 import { useUser } from '@/hooks/useUser';
-import { Avatar, Asset, ColumnNav } from '@/components/ui';
+import { Avatar, Asset, ColumnNav, Page } from '@/components/ui';
 import { mapsTo } from '@/utils/common';
 import { UserIdentityBadge } from '@/components/biz/BizBadge';
 import { doGlobalScan } from '@/utils/scan';
@@ -16,7 +16,7 @@ export default function UserPage() {
 	useUser();
 
 	return (
-		<View className="min-h-screen bg-main-bg">
+		<Page hasTabBar>
 			<View className="bg-zinc-200 h-42 pt-8 px-6">
 				<View className="flex items-center gap-4">
 					{/* 用户头像 */}
@@ -144,6 +144,6 @@ export default function UserPage() {
 					)}
 				</View>
 			</View>
-		</View>
+		</Page>
 	);
 }

@@ -20,7 +20,7 @@ export const doGlobalScan = () => {
 			// ==========================================
 			if (res.scanType === 'WX_CODE' && res.path) {
 				// 微信会自动把码里配置的页面路径和参数解出来，例如:
-				// "pages/activity/check-result/index?scene=id%3D10023"
+				// "pages/activity/check/index?scene=id%3D10023"
 				const targetPath = res.path.startsWith('/') ? res.path : `/${res.path}`;
 				mapsTo(targetPath);
 				return;
@@ -34,7 +34,7 @@ export const doGlobalScan = () => {
 				const match = res.result.match(/activityId=(\d+)/);
 				if (match && match[1]) {
 					const targetActId = match[1];
-					mapsTo(`/pages/activity/check-result/index?activityId=${targetActId}`);
+					mapsTo(`/pages/activity/check/index?activityId=${targetActId}`);
 					return;
 				}
 			}
