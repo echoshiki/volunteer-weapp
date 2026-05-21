@@ -15,9 +15,10 @@ export const Cell = ({
 	children,
 	...props
 }: Props) => {
+	const hasCustomBg = className.includes('bg-');
 	// 统一的白底、圆角、阴影、间距
 	const baseClasses = `
-        bg-white rounded-card overflow-hidden
+        ${hasCustomBg ? '' : 'bg-white'} rounded-card overflow-hidden
         ${noPadding ? '' : 'p-4'}
         ${clickable ? 'active:scale-[0.98] transition-transform' : ''}
         ${className}

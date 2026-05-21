@@ -1,14 +1,48 @@
-import { View, Text, Image } from '@tarojs/components';
-import { Page, Heading, Carousel, GridNav, Empty, Cell } from '@/components/ui';
+import { View, Text } from '@tarojs/components';
+import { Page, Heading, Carousel, GridNav, Empty, Cell, Divider } from '@/components/ui';
 import { useActivities } from '@/hooks/useActivity';
 import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';
-import { ActivityStatusBadge } from '@/components/biz/BizBadge';
+import { useHomeDashboard } from '@/hooks/useHome';
+import { useJobList, useEnterpriseList } from '@/hooks/useJob';
+import { ActivityCard, JobCard } from '@/components/biz';
 
 export default function HomePage() {
-	// 数据：5 条精选活动数据
-	const { data: activityData, isLoading } = useActivities({ pageSize: 5 });
+	// 数据：首页轮播图、概览数据
+	const { data: dashboard, isLoading: isDashboardLoading } = useHomeDashboard();
+
+	// 计算：提取统计数据，给兜底值 0
+	const stats = dashboard?.statistics || {
+		volunteerCount: 0,
+		totalDuration: 0,
+		resolvedDemands: 0,
+	};
+
+	// 计算：提取轮播图
+	const banners = dashboard?.banners || [];
+
+	// 数据：推荐的志愿活动
+	const { data: activityData, isLoading: isActivityLoading } = useActivities({
+		isRecommend: true,
+		pageSize: 5,
+	});
+
+	// 数据：推荐的岗位列表
+	const { data: jobData, isLoading: isJobLoading } = useJobList({
+		isRecommend: true,
+		pageSize: 5,
+	});
+
+	// 数据：推荐的企业列表
+	const { data: enterpriceData, isLoading: isEnterpriseLoading } = useEnterpriseList({
+		isRecommend: true,
+		pageSize: 10,
+	});
+
+	// 计算：扁平化分页数据
 	const activityList = activityData?.pages.flatMap((page) => page.list) || [];
+	const jobList = jobData?.pages.flatMap((page) => page.list) || [];
+	const enterpriceList = enterpriceData?.pages.flatMap((page) => page.list) || [];
 
 	return (
 		<Page hasTabBar>
@@ -32,21 +66,11 @@ export default function HomePage() {
 			{/* 轮播图区域 */}
 			<View className="mb-4">
 				<View className="overflow-hidden shadow-sm">
-					<Carousel
-						list={[
-							{
-								id: 1,
-								pic: 'https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=600&auto=format&fit=crop&q=60',
-								url: '',
-							},
-							{
-								id: 2,
-								pic: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?w=600&auto=format&fit=crop&q=60',
-								url: '',
-							},
-						]}
-						isFull
-					/>
+					{isDashboardLoading ? (
+						<View className="w-full h-32 bg-gray-100 animate-pulse rounded-lg mx-4" />
+					) : (
+						<Carousel list={banners} isFull />
+					)}
 				</View>
 			</View>
 
@@ -85,89 +109,83 @@ export default function HomePage() {
 							数据实时更新
 						</Text>
 					</View>
-					<View className="flex justify-around py-1">
+					<View
+						className={`flex justify-around py-1 transition-opacity duration-300 ${isDashboardLoading ? 'opacity-0' : 'opacity-100'}`}
+					>
 						<View className="text-center">
-							<Text className="text-xl font-bold text-primary block">1,280</Text>
+							<Text className="text-xl font-bold text-primary block">
+								{stats.volunteerCount.toLocaleString()}
+							</Text>
 							<Text className="text-xs text-text-muted mt-0.5 block">活跃志愿者</Text>
 						</View>
-						<View className="w-px bg-gray-100 h-8 my-auto" />
+						<Divider orientation="vertical" />
 						<View className="text-center">
-							<Text className="text-xl font-bold text-green-600 block">5,420</Text>
+							<Text className="text-xl font-bold text-green-600 block">
+								{stats.totalDuration.toLocaleString()}
+							</Text>
 							<Text className="text-xs text-text-muted mt-0.5 block">
 								累计服务工时
 							</Text>
 						</View>
-						<View className="w-px bg-gray-100 h-8 my-auto" />
+						<Divider orientation="vertical" />
 						<View className="text-center">
-							<Text className="text-xl font-bold text-orange-500 block">342</Text>
+							<Text className="text-xl font-bold text-orange-500 block">
+								{stats.resolvedDemands.toLocaleString()}
+							</Text>
 							<Text className="text-xs text-text-muted mt-0.5 block">已解决求助</Text>
 						</View>
 					</View>
 				</Cell>
 			</View>
 
-			{/* 精选志愿活动推荐区域 */}
 			<View className="container-x mb-4">
 				<Cell>
 					<Heading
-						title="精选活动推荐"
+						title="精选志愿活动"
 						link={{ name: '更多活动', url: '/pages/activity/index' }}
 					/>
 
-					{/* 推荐活动卡片列表 */}
-					<View className="space-y-4 divide-y divide-gray-100">
-						{isLoading && <Loading title="加载活动中..." />}
-
-						{activityList.length === 0 && <Empty />}
-
-						{activityList.length > 0 &&
-							activityList.map((item) => (
-								<View
-									key={item.activityId}
-									className="bg-white rounded-card overflow-hidden flex pt-4"
-									onClick={() =>
-										mapsTo(`/pages/activity/detail/index?id=${item.activityId}`)
-									}
-								>
-									{/* 左侧活动封面 */}
-									<Image
-										src={item.banner}
-										mode="aspectFill"
-										className="w-28 h-28 object-cover shrink-0"
+					{/* 志愿活动列表 */}
+					<View className="flex flex-col gap-4 divide-y divide-gray-100">
+						{isActivityLoading ? (
+							<Loading />
+						) : activityList.length === 0 ? (
+							<Empty title="暂无志愿活动" />
+						) : (
+							<>
+								{activityList.map((item) => (
+									<ActivityCard
+										key={item.activityId}
+										activity={item}
+										layout="horizontal"
 									/>
-
-									{/* 右侧详细描述 */}
-									<View className="px-3 flex-1 flex flex-col gap-0.5 justify-between min-w-0">
-										<View>
-											<Text className="text-sm font-bold text-text-title line-clamp-2 flex-1">
-												{item.activityName}
-											</Text>
-										</View>
-
-										<View className="flex justify-between items-start gap-1">
-											<Text className="text-xs text-text-muted truncate block mt-1">
-												{item.address}
-											</Text>
-										</View>
-
-										<View className="flex justify-between items-center">
-											<ActivityStatusBadge value={item.status} />
-											<View className="flex items-center gap-1 text-text-muted">
-												<View className="icon-[ph--users-three-light] w-5 h-5" />
-												<Text className="text-xs">
-													已报{' '}
-													<Text className="text-primary font-bold">
-														{item.attendance}/{item.maxPeople}
-													</Text>{' '}
-													人
-												</Text>
-											</View>
-										</View>
-									</View>
-								</View>
-							))}
+								))}
+							</>
+						)}
 					</View>
 				</Cell>
+			</View>
+
+			<View className="container-x mt-2 mb-4">
+				<Heading
+					title="家门口岗位"
+					link={{ name: '更多岗位', url: '/pages/activity/index' }}
+				/>
+
+				{/* 岗位列表 */}
+				<View className="flex flex-col gap-4 divide-y divide-gray-100">
+					{isJobLoading ? (
+						<Loading />
+					) : jobList.length === 0 ? (
+						<Empty title="暂无匹配的岗位" />
+					) : (
+						<>
+							{jobList.map((item) => (
+								<JobCard key={item.id} job={item} />
+							))}
+						</>
+					)}
+				</View>
 			</View>
 		</Page>
 	);

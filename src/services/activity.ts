@@ -1,5 +1,5 @@
 import { http } from '@/utils/http';
-import { ActivityCategory, ActivityItem, MyActivityItem } from '@/types/activity';
+import { ActivityCategory, ActivityItem, ActivityRecordItem } from '@/types/activity';
 import { PageRes } from '@/types/common';
 
 /** 获取分类列表 */
@@ -9,15 +9,17 @@ export const getActivityCategoryListAPI = () =>
 /** 活动列表请求参数 */
 export interface ActivityListParams {
 	/** 页码 */
-	pageNum: number;
+	pageNum?: number;
 	/** 每页数据量 */
-	pageSize: number;
+	pageSize?: number;
 	/** 分类 id */
 	categoryId?: number;
 	/** 搜索关键词 */
 	keyword?: string;
 	/** 活动状态 */
 	status?: string;
+	/** 是否推荐 */
+	isRecommend?: boolean;
 }
 
 /** 获取活动列表 */
@@ -40,8 +42,8 @@ export const enrollActivityAPI = (activityId: number) => {
 /**
  * 获取我的志愿活动列表
  */
-export const getMyActivityListApi = (pageNum: number, pageSize: number = 10) => {
-	return http.get<PageRes<MyActivityItem>>('/volunteer/activity/web/activityList', {
+export const getActivityRecordListApi = (pageNum: number, pageSize: number = 10) => {
+	return http.get<PageRes<ActivityRecordItem>>('/volunteer/activity/web/activityList', {
 		pageNum,
 		pageSize,
 	});

@@ -1,15 +1,14 @@
 import { http } from '@/utils/http';
-import { ListRes, PageRes } from '@/types/common';
+import { ListRes, PageRes, ApprovalStatus } from '@/types/common';
 import {
 	DemandTarget,
 	DemandTag,
-	DemandOrder,
-	DemandOrderDetail,
+	DemandItem,
+	DemandDetail,
 	ServiceUser,
 	ServiceScope,
-	DemandOrderStatus,
+	DemandStatus,
 } from '@/types/demand';
-import { ApprovalStatus } from '@/types/common';
 
 /** 获取需求服务对象分类列表（不分页） */
 export const getDemandTargetListAPI = () =>
@@ -20,8 +19,8 @@ export const getDemandTagListAPI = (params?: { categoryUserId?: number | string 
 	http.get<ListRes<DemandTag>>('/demand/tag/web/tagList', params);
 
 /** 需求订单列表请求参数 */
-export interface DemandOrderListParams {
-	oderName?: string;
+export interface DemandListParams {
+	orderName?: string;
 	categoryUserId?: number | string;
 	/** 是否集体服务 */
 	serviceScope?: ServiceScope;
@@ -29,26 +28,28 @@ export interface DemandOrderListParams {
 	charge?: string;
 	demandId?: number | string;
 	status?: ApprovalStatus;
-	/** 需求订单状态 {@link DemandOrderStatus} */
-	acceptStatus?: DemandOrderStatus;
+	/** 需求订单状态 */
+	acceptStatus?: DemandStatus;
+	/** 是否推荐 */
+	isRecommend?: boolean;
 	pageNum: number;
 	pageSize: number;
 }
 
-/** 获取需求订单列表（分页）注意后端路径是 oderList */
-export const getDemandOrderListAPI = (params: DemandOrderListParams) =>
-	http.get<PageRes<DemandOrder>>('/demand/oder/web/oderList', params);
+/** 获取需求订单列表（分页）注意后端路径是 orderList */
+export const getDemandListAPI = (params: DemandListParams) =>
+	http.get<PageRes<DemandItem>>('/demand/order/web/orderList', params);
 
 /** 获取需求订单详情 */
-export const getDemandOrderDetailAPI = (oderId: number | string) =>
-	http.get<DemandOrderDetail>(`/demand/oder/web/${oderId}`);
+export const getDemandDetailAPI = (demandId: number | string) =>
+	http.get<DemandDetail>(`/demand/order/web/${demandId}`);
 
 interface GetServiceUserListParams {
-	oderId: number | string;
+	orderId: number | string;
 	pageNum: number;
 	pageSize: number;
 }
 
 /** 获取需求订单抢单用户列表（分页） */
 export const getServiceUserListAPI = (params: GetServiceUserListParams) =>
-	http.get<PageRes<ServiceUser>>('/demand/oder/web/serviceUser', params);
+	http.get<PageRes<ServiceUser>>('/demand/order/web/serviceUser', params);

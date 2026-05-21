@@ -1,10 +1,8 @@
-import Taro from '@tarojs/taro';
-import { useRouter } from '@tarojs/taro';
+import Taro, { useRouter } from '@tarojs/taro';
 import { View, Text, Image, RichText, ScrollView } from '@tarojs/components';
-import { useActivityDetail } from '@/hooks/useActivity';
-import { Badge, Button, Cell, Heading } from '@/components/ui';
+import { useActivityDetail, useEnrollActivity } from '@/hooks/useActivity';
+import { Badge, Button, Cell, Heading, Page } from '@/components/ui';
 import { EnrollStatusBadge } from '@/components/biz/BizBadge';
-import { useEnrollActivity } from '@/hooks/useActivity';
 import { useAuthStore } from '@/store/auth';
 import { runWithAuth } from '@/utils/auth';
 
@@ -72,7 +70,7 @@ export default function ActivityDetail() {
 	};
 
 	return (
-		<View className="min-h-screen bg-white pb-20">
+		<Page className="bg-white pb-24">
 			<ScrollView scrollY className="h-full">
 				{/* 活动封面 */}
 				<Image src={activity.banner} className="w-full h-56 object-cover" />
@@ -155,6 +153,6 @@ export default function ActivityDetail() {
 					{renderButtonText()}
 				</Button>
 			</View>
-		</View>
+		</Page>
 	);
 }

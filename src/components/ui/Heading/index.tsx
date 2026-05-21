@@ -5,9 +5,9 @@ import { Icon } from '../Icon';
 export type HeadingSize = 'sm' | 'md' | 'lg';
 
 const sizeMap: Record<HeadingSize, { bar: string; icon: string; text: string; margin: string }> = {
-	sm: { bar: 'w-1 h-4', icon: 'size-4', text: 'text-sm', margin: 'mb-3' },
-	md: { bar: 'w-1 h-5', icon: 'size-5', text: 'text-base', margin: 'mb-5' },
-	lg: { bar: 'w-1.5 h-6 rounded-md', icon: 'size-6', text: 'text-lg', margin: 'mb-6' },
+	sm: { bar: 'w-1 h-4', icon: 'size-4', text: 'text-sm', margin: 'mb-2' },
+	md: { bar: 'w-1 h-5', icon: 'size-5', text: 'text-base', margin: 'mb-3' },
+	lg: { bar: 'w-1.5 h-6 rounded-md', icon: 'size-6', text: 'text-lg', margin: 'mb-4' },
 };
 
 interface Props {

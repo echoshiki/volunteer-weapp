@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { View, Text, ScrollView, Image } from '@tarojs/components';
-import { Page, Empty, SearchBar, Cell } from '@/components/ui';
-import { EnrollStatusBadge } from '@/components/biz/BizBadge';
+import { View, ScrollView } from '@tarojs/components';
+import { Page, Empty, SearchBar, Loading, Divider } from '@/components/ui';
 import { useActivities } from '@/hooks/useActivity';
-import { mapsTo } from '@/utils/common';
+import { ActivityCard } from '@/components/biz';
 
 export default function ActivityList() {
 	const [keyword, setKeyword] = useState('');
@@ -47,60 +46,19 @@ export default function ActivityList() {
 				className="h-[calc(100vh-120px)]"
 				onScrollToLower={() => hasNextPage && fetchNextPage()}
 			>
-				<View className="container-x py-2 space-y-4">
-					{list.map((item) => (
-						<View
-							key={item.activityId}
-							className="bg-white rounded-card overflow-hidden"
-							onClick={() =>
-								mapsTo(`/pages/activity/detail/index?id=${item.activityId}`)
-							}
-						>
-							<Image
-								src={item.banner}
-								mode="aspectFill"
-								className="w-full h-40 object-cover"
-							/>
-							<Cell>
-								{/* 活动标题和状态 */}
-								<View className="flex justify-between items-center">
-									<Text className="text-lg font-bold text-text-title flex-1 truncate">
-										{item.activityName}
-									</Text>
-									<EnrollStatusBadge value={item.enrollStatus} />
-								</View>
-
-								{/* 活动类型和地址 */}
-								<View className="mt-2 flex items-center text-xs text-gray-500 space-x-2">
-									<Text>{item.categoryName}</Text>
-									<Text>|</Text>
-									<Text>{item.address}</Text>
-								</View>
-
-								{/* 报名人数和时间 */}
-								<View className="mt-3 pb-2 flex justify-between items-center">
-									<View className="flex items-center gap-1.5 text-text-muted">
-										<View className="icon-[ph--users-three] size-4" />
-										<Text className="text-xs">
-											已报{' '}
-											<Text className="text-primary font-bold">
-												{item.attendance} / {item.maxPeople}
-											</Text>{' '}
-											人
-										</Text>
-									</View>
-									<Text className="text-xs text-text-muted">
-										{item.startTime} 开始
-									</Text>
-								</View>
-							</Cell>
-						</View>
-					))}
-
-					{list.length === 0 && !isListLoading && <Empty title="暂无志愿活动" />}
-
-					{isFetchingNextPage && (
-						<View className="text-center py-4 text-text-muted text-xs">加载中...</View>
+				<View className="container-x py-2 flex flex-col gap-4">
+					{isListLoading ? (
+						<Loading />
+					) : list.length === 0 ? (
+						<Empty title="暂无志愿活动" />
+					) : (
+						<>
+							{list.map((item) => (
+								<ActivityCard key={item.activityId} activity={item} />
+							))}
+							{isFetchingNextPage && <Loading />}
+							{!hasNextPage && <Divider>没有更多数据了</Divider>}
+						</>
 					)}
 				</View>
 			</ScrollView>

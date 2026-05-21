@@ -3,8 +3,10 @@ import {
 	getJobCategoryListAPI,
 	getJobListAPI,
 	getJobDetailAPI,
+	getEnterpriseListAPI,
 	getEnterpriseDetailAPI,
 	JobListParams,
+	EnterpriseListParams,
 } from '@/services/job';
 
 /** 岗位分类列表 Hook */
@@ -19,14 +21,14 @@ export const useJobCategories = () => {
 };
 
 /** 岗位列表 Hook (无限滚动) */
-export const useJobs = (params: Omit<JobListParams, 'pageNum' | 'pageSize'>) => {
+export const useJobList = (params: Omit<JobListParams, 'pageNum'>) => {
 	return useInfiniteQuery({
 		queryKey: ['job', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
 			getJobListAPI({
 				...params,
 				pageNum: pageParam,
-				pageSize: 10,
+				pageSize: params.pageSize || 10,
 			}),
 		getNextPageParam: (lastPage) =>
 			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
@@ -39,6 +41,21 @@ export const useJobDetail = (id: number | string) => {
 		queryKey: ['job', 'detail', id],
 		queryFn: () => getJobDetailAPI(id),
 		enabled: !!id,
+	});
+};
+
+/** 企业列表 Hook (无限滚动) */
+export const useEnterpriseList = (params: Omit<EnterpriseListParams, 'pageNum'>) => {
+	return useInfiniteQuery({
+		queryKey: ['job', 'list', params],
+		queryFn: ({ pageParam = 1 }) =>
+			getEnterpriseListAPI({
+				...params,
+				pageNum: pageParam,
+				pageSize: params.pageSize || 10,
+			}),
+		getNextPageParam: (lastPage) =>
+			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
 	});
 };
 

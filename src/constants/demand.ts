@@ -1,11 +1,8 @@
-import { DemandOrderStatus, ServiceScope } from '@/types/demand';
+import { DemandStatus, ServiceScope } from '@/types/demand';
 import { ThemeVariant } from '@/types/common';
 
 /** 需求订单状态 UI 配置字典 */
-export const DEMAND_STATUS_MAP: Record<
-	DemandOrderStatus,
-	{ label: string; variant: ThemeVariant }
-> = {
+export const DEMAND_STATUS_MAP: Record<DemandStatus, { label: string; variant: ThemeVariant }> = {
 	dispatching: { label: '招募中', variant: 'primary' },
 	accepted: { label: '已接单', variant: 'warning' },
 	serving: { label: '服务中', variant: 'info' },

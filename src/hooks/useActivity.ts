@@ -5,7 +5,7 @@ import {
 	getActivityListAPI,
 	getActivityDetailAPI,
 	enrollActivityAPI,
-	getMyActivityListApi,
+	getActivityRecordListApi,
 	checkActivityAPI,
 	ActivityListParams,
 	CheckActivityParams,
@@ -60,7 +60,7 @@ export const useEnrollActivity = () => {
 
 			// 更新报名人数
 			queryClient.invalidateQueries({
-				queryKey: ['activityDetail', String(activityId)],
+				queryKey: ['activity', 'detail', String(activityId)],
 			});
 		},
 		onError: (err: any) => {
@@ -76,10 +76,10 @@ export const useEnrollActivity = () => {
 /**
  * 获取我的志愿活动列表 (无限滚动)
  */
-export const useMyActivities = () => {
+export const useActivityRecordList = () => {
 	return useInfiniteQuery({
-		queryKey: ['myActivities'],
-		queryFn: ({ pageParam = 1 }) => getMyActivityListApi(pageParam),
+		queryKey: ['user', 'activity'],
+		queryFn: ({ pageParam = 1 }) => getActivityRecordListApi(pageParam),
 		getNextPageParam: (lastPage) =>
 			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
 	});
@@ -95,7 +95,7 @@ export const useCheckActivity = () => {
 		mutationFn: (params: CheckActivityParams) => checkActivityAPI(params),
 		onSuccess: () => {
 			// 打卡成功后，立刻使“我的活动列表”和“活动详情”缓存失效
-			queryClient.invalidateQueries({ queryKey: ['myActivities'] });
+			queryClient.invalidateQueries({ queryKey: ['user', 'activity'] });
 			queryClient.invalidateQueries({ queryKey: ['activityDetail'] });
 		},
 	});

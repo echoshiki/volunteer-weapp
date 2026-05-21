@@ -2,10 +2,10 @@ import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import {
 	getDemandTargetListAPI,
 	getDemandTagListAPI,
-	getDemandOrderListAPI,
-	getDemandOrderDetailAPI,
+	getDemandListAPI,
+	getDemandDetailAPI,
 	getServiceUserListAPI,
-	DemandOrderListParams,
+	DemandListParams,
 } from '@/services/demand';
 
 /** 服务对象分类列表 Hook */
@@ -31,11 +31,11 @@ export const useDemandTags = (categoryUserId?: number | string) => {
 };
 
 /** 需求订单列表 Hook (无限滚动) */
-export const useDemandOrders = (params: Omit<DemandOrderListParams, 'pageNum' | 'pageSize'>) => {
+export const useDemandList = (params: Omit<DemandListParams, 'pageNum' | 'pageSize'>) => {
 	return useInfiniteQuery({
 		queryKey: ['demand', 'orders', params],
 		queryFn: ({ pageParam = 1 }) =>
-			getDemandOrderListAPI({
+			getDemandListAPI({
 				...params,
 				pageNum: pageParam,
 				pageSize: 10,
@@ -47,26 +47,26 @@ export const useDemandOrders = (params: Omit<DemandOrderListParams, 'pageNum' | 
 };
 
 /** 需求详情 Hook */
-export const useDemandDetail = (oderId: number | string) => {
+export const useDemandDetail = (orderId: number | string) => {
 	return useQuery({
-		queryKey: ['demand', 'detail', oderId],
-		queryFn: () => getDemandOrderDetailAPI(oderId),
-		enabled: !!oderId,
+		queryKey: ['demand', 'detail', orderId],
+		queryFn: () => getDemandDetailAPI(orderId),
+		enabled: !!orderId,
 	});
 };
 
 /** 抢单用户列表 Hook (支持无限滚动) */
-export const useServiceUsers = (oderId: number | string) => {
+export const useServiceUsers = (orderId: number | string) => {
 	return useInfiniteQuery({
-		queryKey: ['demand', 'serviceUsers', oderId],
+		queryKey: ['demand', 'serviceUsers', orderId],
 		queryFn: ({ pageParam = 1 }) =>
 			getServiceUserListAPI({
-				oderId,
+				orderId,
 				pageNum: pageParam,
 				pageSize: 10,
 			}),
 		getNextPageParam: (lastPage) =>
 			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
-		enabled: !!oderId,
+		enabled: !!orderId,
 	});
 };

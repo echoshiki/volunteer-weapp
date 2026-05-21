@@ -51,7 +51,7 @@ export interface ActivityItem {
 	isEnrolled: boolean;
 }
 
-export interface MyActivityItem {
+export interface ActivityRecordItem {
 	/** 活动 ID */
 	activityId: number;
 	/** 活动名称 */

@@ -1,7 +1,7 @@
 import { ApprovalStatus } from './common';
 
 /** 需求订单状态 */
-export type DemandOrderStatus =
+export type DemandStatus =
 	| 'dispatching' // 派单中
 	| 'accepted' // 已接单
 	| 'serving' // 服务中
@@ -29,9 +29,9 @@ export interface DemandTag {
 }
 
 /** 需求订单实体 */
-export interface DemandOrder {
-	oderId: number;
-	oderName: string;
+export interface DemandItem {
+	orderId: number;
+	orderName: string;
 	publisher: number;
 	nickName: string;
 	description: string;
@@ -42,13 +42,13 @@ export interface DemandOrder {
 	demandId: number;
 	demandName: string;
 	status: ApprovalStatus;
-	acceptStatus: DemandOrderStatus;
+	acceptStatus: DemandStatus;
 }
 
 /** 需求订单详情 */
-export interface DemandOrderDetail {
-	oderId: number;
-	oderName: string;
+export interface DemandDetail {
+	orderId: number;
+	orderName: string;
 	publisher: number;
 	nickName: string;
 	description: string;
@@ -59,7 +59,7 @@ export interface DemandOrderDetail {
 	demandId: number;
 	demandName: string;
 	status: ApprovalStatus;
-	acceptStatus: DemandOrderStatus;
+	acceptStatus: DemandStatus;
 	auditorId: number;
 	auditorName: string;
 	userId: number; // 已接单用户ID (最终确定的)

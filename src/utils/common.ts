@@ -89,7 +89,7 @@ export const handleCopy = (text: string) => {
  */
 export const formatSales = (num: number | string): string => {
 	const n = Number(num);
-	if (isNaN(n)) return '0';
+	if (Number.isNaN(n)) return '0';
 	if (n >= 10000) {
 		const wan = n / 10000;
 		// 去掉末尾多余的 0，如 1.50 → 1.5，1.00 → 1
@@ -103,7 +103,7 @@ export const formatSales = (num: number | string): string => {
  * @param minutes 分钟数
  */
 export const formatDuration = (minutes: number): string => {
-	if (!minutes || isNaN(minutes)) return '0';
+	if (!minutes || Number.isNaN(minutes)) return '0';
 	if (minutes < 60) return `${minutes}分钟`;
 	const hours = (minutes / 60).toFixed(1);
 	return `${parseFloat(hours)}小时`;
