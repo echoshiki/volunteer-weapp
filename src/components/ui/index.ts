@@ -16,3 +16,4 @@ export { Feedback } from './Feedback';
 export { Alert } from './Alert';
 export { Description } from './Description';
 export { RegionPicker } from './RegionPicker';
+export { DatePicker } from './DatePicker';

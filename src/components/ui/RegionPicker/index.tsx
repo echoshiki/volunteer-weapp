@@ -30,9 +30,9 @@ export interface Props {
  * 省市区级联组件
  * 调用小程序原生 RegionPicker 组件，实现省、市、区三级联动
  * 调用：
- *   <RegionPicker onChange={(res) => console.log(res)}>
- *       选择地区
- *   </RegionPicker>
+ * <RegionPicker onChange={(res) => console.log(res)}>
+ *     选择地区
+ * </RegionPicker>
  */
 export const RegionPicker = ({
 	value = ['321000', '321100', '321102'],
