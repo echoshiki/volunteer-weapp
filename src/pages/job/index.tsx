@@ -28,7 +28,7 @@ export default function JobPage() {
 	return (
 		<Page hasTabBar>
 			{/* 顶部岗位分类筛选 */}
-			<Cell className="sticky top-0 z-10 border-b border-gray-100">
+			<Cell className="sticky top-0 z-10 border-b border-gray-100" rounded={false}>
 				<View className="flex flex-wrap gap-2">
 					<Badge
 						variant={activeJobId === '' ? 'primary' : 'secondary'}

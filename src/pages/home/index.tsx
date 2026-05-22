@@ -1,5 +1,14 @@
 import { View, Text } from '@tarojs/components';
-import { Page, Heading, Carousel, GridNav, Empty, Cell, Divider } from '@/components/ui';
+import {
+	Page,
+	Heading,
+	Carousel,
+	GridNav,
+	Empty,
+	Cell,
+	Divider,
+	RegionPicker,
+} from '@/components/ui';
 import { useActivities } from '@/hooks/useActivity';
 import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';

@@ -41,7 +41,7 @@ export const JobCard = ({ job, className }: Props) => {
 			<View className="flex items-center gap-2 border-t border-gray-50 pt-3 text-xs text-text-muted">
 				<View className="icon-[ph--buildings] w-4 h-4 shrink-0" />
 				<Text className="truncate flex-1">{job.enterprisesName}</Text>
-				<Text className="text-primary font-bold shrink-0">查看详情 &gt;</Text>
+				<Text className="text-primary shrink-0">查看详情 &gt;</Text>
 			</View>
 		</View>
 	);
