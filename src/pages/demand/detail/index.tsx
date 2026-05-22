@@ -4,7 +4,7 @@ import { View, Text, ScrollView, Image } from '@tarojs/components';
 import { useDemandDetail, useServiceUsers } from '@/hooks/useDemand';
 import { DemandStatusBadge } from '@/components/biz/BizBadge';
 import { Button } from '@/components/ui/Button';
-import { Cell, Empty, Heading, Loading, Page } from '@/components/ui';
+import { Cell, Description, Empty, Heading, Loading, Page } from '@/components/ui';
 
 export default function DemandDetailPage() {
 	const { params } = useRouter();
@@ -24,7 +24,7 @@ export default function DemandDetailPage() {
 		<Page hasTabBar>
 			<ScrollView scrollY className="h-full">
 				{/* 头部核心信息 */}
-				<Cell className="border-b border-gray-100">
+				<Cell className="border-b border-gray-100 py-6" rounded={false}>
 					<View className="flex items-center gap-2 mb-3">
 						<DemandStatusBadge value={detail.acceptStatus} />
 						<Text className="text-xs text-text-muted">ID: {detail.orderId}</Text>
@@ -45,7 +45,8 @@ export default function DemandDetailPage() {
 				</Cell>
 
 				{/* 服务需求描述 */}
-				<Cell className="mt-3">
+
+				<Cell className="mt-3" rounded={false}>
 					<Heading title="需求描述" size="md" />
 					<Text className="text-sm text-text-body leading-relaxed">
 						{detail.description}
@@ -53,94 +54,76 @@ export default function DemandDetailPage() {
 				</Cell>
 
 				{/* 服务明细卡片 */}
-				<Cell className="mt-3">
+				<Cell className="mt-3" rounded={false}>
 					<Heading title="服务信息" size="md" />
-
-					<Cell className="bg-main-bg flex flex-col gap-2">
-						<View className="flex justify-between items-center text-xs">
-							<Text className="text-text-muted">服务对象</Text>
-							<Text className="text-text-title">{detail.categoryUserName}</Text>
-						</View>
-						<View className="flex justify-between items-center text-xs">
-							<Text className="text-text-muted">服务范围</Text>
-							<Text className="text-text-title">
-								{detail.serviceScope === 'group' ? '集体服务' : '个人服务'}
-							</Text>
-						</View>
-						<View className="flex justify-between items-center text-xs">
-							<Text className="text-text-muted">收费性质</Text>
-							<Text className={detail.charge ? 'text-green-600' : 'text-orange-500'}>
-								{detail.charge ? '公益免费' : '付费服务'}
-							</Text>
-						</View>
-					</Cell>
+					<View className="flex flex-col gap-3 bg-main-bg p-4 rounded-card">
+						<Description label="服务对象" value={detail.categoryUserName} />
+						<Description
+							label="服务范围"
+							value={detail.serviceScope === 'group' ? '集体服务' : '个人服务'}
+						/>
+						<Description
+							label="收费性质"
+							valueTextClass={detail.charge ? 'text-green-500' : 'text-red-500'}
+							value={detail.charge ? '公益免费' : '付费服务'}
+						/>
+					</View>
 				</Cell>
 
 				{/* 费用明细 (仅在非免费时显示) */}
-				{!detail.charge && (
-					<Cell className="mt-3 ">
+				{detail.charge && (
+					<Cell className="mt-3" rounded={false}>
 						<Heading title="费用预估" size="md" />
-						<Cell className="bg-main-bg flex flex-col gap-2">
-							<View className="flex justify-between text-xs">
-								<Text className="text-text-muted">
-									服务单价 ({detail.categoryPaidName})
-								</Text>
-								<Text className="text-text-title font-bold">￥{detail.money}</Text>
-							</View>
-							<View className="flex justify-between text-xs">
-								<Text className="text-text-muted">服务规模 (人数/数量)</Text>
-								<Text className="text-text-title">
-									{detail.serviceManpower}人 / {detail.serviceQuantity}次
-								</Text>
-							</View>
-							<View className="h-px bg-gray-200 my-1" />
-							<View className="flex justify-between items-center">
-								<Text className="text-sm font-bold text-text-title">预估总额</Text>
-								<Text className="text-lg font-bold text-primary">
-									￥{detail.orderTotal}
-								</Text>
-							</View>
-						</Cell>
+						<View className="flex flex-col gap-3 bg-main-bg p-4 rounded-card">
+							<Description
+								label="服务单价"
+								value={`￥${detail.money}`}
+								variant="between"
+							/>
+							<Description
+								label="服务规模 (人数/数量)"
+								value={`${detail.serviceManpower}人 / ${detail.serviceQuantity}次`}
+								variant="between"
+							/>
+							<Description
+								label="预估总额"
+								value={`￥${detail.orderTotal}`}
+								variant="between"
+								valueTextClass="text-primary font-bold"
+							/>
+						</View>
 					</Cell>
 				)}
 
 				{/* 待接单名单（仅在招募中） */}
-				{detail.acceptStatus === 'dispatching' && serviceUsers.length > 0 && (
-					<Cell className="mt-3">
-						<View className="flex items-center gap-2 mb-4">
-							<View className="w-1 h-4 bg-primary rounded-full" />
-							<Text className="font-bold text-text-title">
-								已申请的服务方 ({serviceUsers.length})
-							</Text>
-						</View>
-						<View className="space-y-4">
-							{serviceUsers.map((user) => (
-								<View
-									key={user.userId}
-									className="flex items-center justify-between"
-								>
-									<View className="flex items-center gap-3">
-										<Image
-											src={user.avatar}
-											className="w-10 h-10 rounded-full bg-gray-100"
-										/>
-										<View>
-											<Text className="text-sm font-bold text-text-title block">
-												{user.userName}
-											</Text>
-											<Text className="text-xs text-text-muted">
-												报价单价: ￥{user.money}
-											</Text>
-										</View>
-									</View>
-									<View className="px-3 py-1 border border-primary text-primary text-xs rounded-full">
-										查看详情
+				{/* {detail.acceptStatus === 'dispatching' && serviceUsers.length > 0 && ( */}
+				<Cell className="mt-3">
+					<Heading title={`已申请的服务方 (${serviceUsers.length})`} size="md" />
+					<View className="flex flex-col gap-4">
+						{serviceUsers.map((user) => (
+							<View key={user.userId} className="flex items-center justify-between">
+								<View className="flex items-center gap-3">
+									<Image
+										src={user.avatar}
+										className="w-10 h-10 rounded-full bg-gray-100"
+									/>
+									<View>
+										<Text className="text-sm font-bold text-text-title block">
+											{user.userName}
+										</Text>
+										<Text className="text-xs text-text-muted">
+											报价单价: ￥{user.money}
+										</Text>
 									</View>
 								</View>
-							))}
-						</View>
-					</Cell>
-				)}
+								<View className="px-3 py-1 border border-primary text-primary text-xs rounded-full">
+									查看详情
+								</View>
+							</View>
+						))}
+					</View>
+				</Cell>
+				{/* )} */}
 			</ScrollView>
 
 			{/* 底部操作栏 */}

@@ -14,3 +14,4 @@ export { SearchBar } from './SearchBar';
 export { Loading } from './Loading';
 export { Feedback } from './Feedback';
 export { Alert } from './Alert';
+export { Description } from './Description';

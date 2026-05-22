@@ -1,7 +1,7 @@
 import Taro, { useRouter } from '@tarojs/taro';
 import { View, Text, Image, RichText, ScrollView } from '@tarojs/components';
 import { useActivityDetail, useEnrollActivity } from '@/hooks/useActivity';
-import { Badge, Button, Cell, Heading, Page } from '@/components/ui';
+import { Badge, Button, Cell, Description, Heading, Page } from '@/components/ui';
 import { EnrollStatusBadge } from '@/components/biz/BizBadge';
 import { useAuthStore } from '@/store/auth';
 import { runWithAuth } from '@/utils/auth';
@@ -75,7 +75,7 @@ export default function ActivityDetail() {
 				{/* 活动封面 */}
 				<Image src={activity.banner} className="w-full h-56 object-cover" />
 
-				<View className="p-5">
+				<View className="container-x py-4">
 					{/* 活动状态 */}
 					<View className="flex items-center space-x-2">
 						<EnrollStatusBadge value={activity.enrollStatus} />
@@ -88,32 +88,22 @@ export default function ActivityDetail() {
 					</Text>
 
 					{/* 活动信息 */}
-					<View className="mt-6 space-y-4 bg-gray-50 p-4 rounded-card">
-						<View className="flex items-start text-sm">
-							<Text className="text-text-muted text-sm w-20">活动时间</Text>
-							<Text className="text-title flex-1">
-								{activity.startTime} 至 {activity.endTime}
-							</Text>
-						</View>
-						<View className="flex items-start text-sm">
-							<Text className="text-text-muted w-20">活动地点</Text>
-							<Text className="text-title flex-1">{activity.address}</Text>
-						</View>
-						<View className="flex items-start text-sm">
-							<Text className="text-text-muted text-sm w-20">主办单位</Text>
-							<Text className="text-title flex-1">{activity.organizer}</Text>
-						</View>
-						<View className="flex items-start text-sm">
-							<Text className="text-text-muted text-sm w-20">招募人数</Text>
-							<Text className="text-title flex-1">
-								已招募 {activity.attendance} 人 / 限额 {activity.maxPeople} 人
-							</Text>
-						</View>
+					<View className="mt-6 flex flex-col gap-4 bg-gray-50 p-4 rounded-card">
+						<Description
+							label="活动时间"
+							value={`${activity.startTime} 至 ${activity.endTime}`}
+						/>
+						<Description label="活动地点" value={activity.address} />
+						<Description label="主办单位" value={activity.organizer} />
+						<Description
+							label="招募人数"
+							value={`已招募 ${activity.attendance} 人 / 限额 ${activity.maxPeople} 人`}
+						/>
 					</View>
 
 					{/* 活动详情 */}
 					<View className="mt-8">
-						<Heading title="活动详情" />
+						<Heading title="活动详情" size="md" />
 						<View className="mt-4 text-gray-700 leading-relaxed text-sm">
 							<RichText nodes={activity.content} />
 						</View>
@@ -121,8 +111,8 @@ export default function ActivityDetail() {
 
 					{/* 报名规则 */}
 					<View className="mt-8">
-						<Heading title="报名规则" />
-						<Text className="mt-4 text-gray-600 text-sm block bg-orange-50 p-4 rounded-xl">
+						<Heading title="报名规则" size="md" />
+						<Text className="mt-4 text-gray-600 text-sm block bg-orange-50 p-4 rounded-card">
 							{activity.rules}
 						</Text>
 					</View>

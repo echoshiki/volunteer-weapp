@@ -22,8 +22,9 @@ export interface DemandTarget {
 /** 需求标签 (如：助老陪诊、家电维修) */
 export interface DemandTag {
 	demandId: number;
-	categoryUserId: number;
 	demandName: string;
+	/** 归属到的服务对象分类（一老一小/通用） */
+	categoryUserId: number;
 	description: string;
 	img?: string;
 }
@@ -81,12 +82,9 @@ export interface ServiceUser {
 	userId: number;
 	userName: string;
 	avatar: string;
-	categoryServiceId: string;
-	demandId: number;
-	demandName: string;
-	categoryUserId: number;
-	categoryUserName: string;
-	categoryPaidId: number;
-	categoryPaidName: string;
+	/** 服务标签 */
+	demandTags: DemandTag[];
+	/** 服务单总数 */
+	serviceCount: number;
 	money: number;
 }
