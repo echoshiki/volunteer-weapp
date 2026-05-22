@@ -1,5 +1,5 @@
 import { View, Text, Image } from '@tarojs/components';
-import { Cell, Divider } from '@/components/ui';
+import { Divider } from '@/components/ui';
 import { ActivityStatusBadge, EnrollStatusBadge } from '@/components/biz/BizBadge'; // 确保路径正确
 import { mapsTo } from '@/utils/common';
 import { ActivityItem } from '@/types/activity';
@@ -29,10 +29,7 @@ export const ActivityCard = ({
 	// ==========================================
 	if (layout === 'horizontal') {
 		return (
-			<View
-				className={`bg-white overflow-hidden flex pt-4 pb-4 active:scale-[0.98] transition-transform ${className}`}
-				onClick={handleClick}
-			>
+			<View className={`flex ${className}`} onClick={handleClick}>
 				{/* 左侧活动封面 */}
 				<Image
 					src={activity.banner}
@@ -76,12 +73,9 @@ export const ActivityCard = ({
 	// 形态 B：竖向布局 (常用于活动频道主列表)
 	// ==========================================
 	return (
-		<View
-			className={`bg-white rounded-card overflow-hidden active:scale-[0.98] transition-transform ${className}`}
-			onClick={handleClick}
-		>
+		<View className={`${className}`} onClick={handleClick}>
 			<Image src={activity.banner} mode="aspectFill" className="w-full h-40 object-cover" />
-			<Cell>
+			<View className="p-4">
 				{/* 活动标题和状态 */}
 				<View className="flex justify-between items-center">
 					<Text className="text-lg font-bold text-text-title flex-1 truncate pr-2">
@@ -113,7 +107,7 @@ export const ActivityCard = ({
 						<Text className="text-xs text-text-muted">{activity.startTime} 开始</Text>
 					)}
 				</View>
-			</Cell>
+			</View>
 		</View>
 	);
 };

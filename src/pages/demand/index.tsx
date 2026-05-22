@@ -102,7 +102,9 @@ export default function DemandPage() {
 					) : (
 						<>
 							{orders.map((item) => (
-								<DemandCard key={item.orderId} demand={item} />
+								<Cell>
+									<DemandCard key={item.orderId} demand={item} />
+								</Cell>
 							))}
 							{isFetchingNextPage && <Loading />}
 							{!hasNextPage && <Divider>没有更多需求了</Divider>}

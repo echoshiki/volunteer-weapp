@@ -1,8 +1,7 @@
 import { View, Text } from '@tarojs/components';
-import { DemandStatusBadge } from '@/components/biz'; // 确保路径正确
+import { DemandStatusBadge } from '@/components/biz';
 import { mapsTo } from '@/utils/common';
 import { DemandItem } from '@/types/demand';
-import { Cell } from '@/components/ui';
 
 export interface DemandCardProps {
 	demand: DemandItem;
@@ -15,7 +14,7 @@ export interface DemandCardProps {
  */
 export const DemandCard = ({ demand, className = '' }: DemandCardProps) => {
 	return (
-		<Cell
+		<View
 			className={`${className}`}
 			onClick={() => mapsTo(`/pages/demand/detail/index?id=${demand.orderId}`)}
 		>
@@ -68,6 +67,6 @@ export const DemandCard = ({ demand, className = '' }: DemandCardProps) => {
 					</View>
 				)}
 			</View>
-		</Cell>
+		</View>
 	);
 };

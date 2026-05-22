@@ -66,7 +66,9 @@ export default function JobPage() {
 					) : (
 						<>
 							{jobList.map((item) => (
-								<JobCard key={item.id} job={item} />
+								<Cell>
+									<JobCard key={item.id} job={item} />
+								</Cell>
 							))}
 							{isFetchingNextPage && <Loading />}
 							{!hasNextPage && <Divider>没有更多岗位了</Divider>}

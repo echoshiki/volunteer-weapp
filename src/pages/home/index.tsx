@@ -146,19 +146,20 @@ export default function HomePage() {
 					/>
 
 					{/* 志愿活动列表 */}
-					<View className="flex flex-col gap-4 divide-y divide-gray-100">
+					<View className="flex flex-col gap-2">
 						{isActivityLoading ? (
 							<Loading />
 						) : activityList.length === 0 ? (
 							<Empty title="暂无志愿活动" />
 						) : (
 							<>
-								{activityList.map((item) => (
-									<ActivityCard
-										key={item.activityId}
-										activity={item}
-										layout="horizontal"
-									/>
+								{activityList.map((item, index) => (
+									<View key={item.activityId}>
+										<ActivityCard activity={item} layout="horizontal" />
+										{index < activityList.length - 1 && (
+											<Divider className="mt-4" />
+										)}
+									</View>
 								))}
 							</>
 						)}
@@ -181,7 +182,9 @@ export default function HomePage() {
 					) : (
 						<>
 							{jobList.map((item) => (
-								<JobCard key={item.id} job={item} />
+								<Cell>
+									<JobCard key={item.id} job={item} />
+								</Cell>
 							))}
 						</>
 					)}

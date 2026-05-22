@@ -1,5 +1,5 @@
 import { View, Text, Image } from '@tarojs/components';
-import { Cell, Button } from '@/components/ui';
+import { Button } from '@/components/ui';
 import { AuditStatusBadge } from '@/components/biz/BizBadge';
 import { mapsTo } from '@/utils/common';
 import { ActivityRecordItem } from '@/types/activity';
@@ -16,10 +16,9 @@ export interface Props {
  */
 export const ActivityRecordCard = ({ record, className = '' }: Props) => {
 	return (
-		<Cell
+		<View
 			onClick={() => mapsTo(`/pages/activity/detail/index?id=${record.activityId}`)}
 			className={`${className}`}
-			clickable
 		>
 			<View className="flex gap-3">
 				<Image
@@ -115,6 +114,6 @@ export const ActivityRecordCard = ({ record, className = '' }: Props) => {
 					</Text>
 				)}
 			</View>
-		</Cell>
+		</View>
 	);
 };

@@ -1,5 +1,4 @@
 import { View, Text } from '@tarojs/components';
-import { Cell } from '@/components/ui';
 import { mapsTo } from '@/utils/common';
 import { JobItem } from '@/types/job';
 
@@ -15,7 +14,7 @@ interface Props {
  */
 export const JobCard = ({ job, className }: Props) => {
 	return (
-		<Cell className={className} onClick={() => mapsTo(`/pages/job/detail/index?id=${job.id}`)}>
+		<View className={className} onClick={() => mapsTo(`/pages/job/detail/index?id=${job.id}`)}>
 			{/* 头部：标题与薪资 */}
 			<View className="flex justify-between items-start mb-2">
 				<Text className="text-text-title font-bold text-base line-clamp-1 flex-1 pr-2">
@@ -44,6 +43,6 @@ export const JobCard = ({ job, className }: Props) => {
 				<Text className="truncate flex-1">{job.enterprisesName}</Text>
 				<Text className="text-primary font-bold shrink-0">查看详情 &gt;</Text>
 			</View>
-		</Cell>
+		</View>
 	);
 };

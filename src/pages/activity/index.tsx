@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, ScrollView } from '@tarojs/components';
-import { Page, Empty, SearchBar, Loading, Divider } from '@/components/ui';
+import { Page, Empty, SearchBar, Loading, Divider, Cell } from '@/components/ui';
 import { useActivities } from '@/hooks/useActivity';
 import { ActivityCard } from '@/components/biz';
 
@@ -54,7 +54,9 @@ export default function ActivityList() {
 					) : (
 						<>
 							{list.map((item) => (
-								<ActivityCard key={item.activityId} activity={item} />
+								<Cell>
+									<ActivityCard key={item.activityId} activity={item} />
+								</Cell>
 							))}
 							{isFetchingNextPage && <Loading />}
 							{!hasNextPage && <Divider>没有更多数据了</Divider>}

@@ -1,6 +1,6 @@
 import { View, ScrollView } from '@tarojs/components';
 import { useActivityRecordList } from '@/hooks/useActivity';
-import { Page, Empty, Loading, Divider } from '@/components/ui';
+import { Page, Empty, Loading, Divider, Cell } from '@/components/ui';
 import { ActivityRecordCard } from '@/components/biz';
 
 export default function UserActivityPage() {
@@ -26,7 +26,9 @@ export default function UserActivityPage() {
 					) : (
 						<>
 							{list.map((item) => (
-								<ActivityRecordCard key={item.activityId} record={item} />
+								<Cell>
+									<ActivityRecordCard key={item.activityId} record={item} />
+								</Cell>
 							))}
 							{isFetchingNextPage && <Loading />}
 							{!hasNextPage && <Divider>没有更多数据了</Divider>}
