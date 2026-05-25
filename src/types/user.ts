@@ -34,7 +34,6 @@ export interface UserInfo {
 	birthday?: string;
 	/** 邮箱 */
 	email?: string;
-
 	/** 身份标识 user: 普通用户 | volunteer: 志愿者 | institution: 机构 */
 	identity?: UserIdentity;
 	/** 用户总积分 */
@@ -43,27 +42,22 @@ export interface UserInfo {
 	duration: number;
 	/** 审核信息ID (用于关联实名或资质审核记录) */
 	reviewId: number;
-
 	/** 省行政编码 */
 	provinceCode?: number;
 	/** 省名称 */
 	provinceName?: string;
-
 	/** 市行政编码 */
 	cityCode?: number;
 	/** 市名称 */
 	cityName?: string;
-
 	/** 区行政编码 */
 	districtCode?: number;
 	/** 区名称 */
 	districtName?: string;
-
 	/** 区域坐标父级ID（大区ID，用于关联志愿者协会大区） */
 	parentId?: number;
 	/** 区域坐标父级名称 */
 	parentName?: string;
-
 	/** 区域坐标ID（具体小区/社区坐标） */
 	regionId?: number;
 	/** 小区/社区名称 */

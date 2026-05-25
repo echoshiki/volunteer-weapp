@@ -10,6 +10,7 @@ import {
 	ActivityListParams,
 	CheckActivityParams,
 } from '@/services/activity';
+import { getTenantId } from '@/utils/tenant';
 
 /** 分类列表 Hook */
 export const useActivityCategories = () => {
@@ -25,7 +26,7 @@ export const useActivityCategories = () => {
  */
 export const useActivities = (params: Partial<Omit<ActivityListParams, 'pageNum'>>) => {
 	return useInfiniteQuery({
-		queryKey: ['activity', 'list', params],
+		queryKey: ['tenant', getTenantId(), 'activity', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
 			getActivityListAPI({
 				...params,
@@ -40,7 +41,7 @@ export const useActivities = (params: Partial<Omit<ActivityListParams, 'pageNum'
 /** 活动详情 Hook */
 export const useActivityDetail = (id: string | number) => {
 	return useQuery({
-		queryKey: ['activity', 'detail', id],
+		queryKey: ['tenant', getTenantId(), 'activity', 'detail', id],
 		queryFn: () => getActivityDetailAPI(id),
 		enabled: !!id,
 	});

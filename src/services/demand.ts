@@ -45,7 +45,7 @@ export const getDemandDetailAPI = (demandId: number | string) =>
 	http.get<DemandDetail>(`/demand/order/web/${demandId}`);
 
 interface GetServiceUserListParams {
-	orderId: number | string;
+	demandId: number | string;
 	pageNum: number;
 	pageSize: number;
 }

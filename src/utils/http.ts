@@ -2,6 +2,7 @@ import Taro from '@tarojs/taro';
 import { useAuthStore } from '@/store/auth';
 import { BaseResponse } from '@/types/common';
 import { getCurrentPageUrl } from './common';
+import { getTenantId } from './tenant';
 
 /**
  * 扩展请求配置
@@ -37,6 +38,7 @@ class HttpRequest {
 
 	public async request<T = any>(config: RequestConfig): Promise<T> {
 		const authStore = useAuthStore.getState();
+		const tenantId = getTenantId();
 
 		// 处理请求路径前缀
 		let options: RequestConfig = {
@@ -45,6 +47,7 @@ class HttpRequest {
 			header: {
 				'Content-Type': 'application/json',
 				[this.TOKEN_NAME]: authStore.token ? `Bearer ${authStore.token}` : '',
+				...(tenantId ? { 'X-Tenant-Id': tenantId } : {}),
 				...config.header,
 			},
 		};

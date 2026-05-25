@@ -8,6 +8,7 @@ import {
 	JobListParams,
 	EnterpriseListParams,
 } from '@/services/job';
+import { getTenantId } from '@/utils/tenant';
 
 /** 岗位分类列表 Hook */
 export const useJobCategories = () => {
@@ -23,7 +24,7 @@ export const useJobCategories = () => {
 /** 岗位列表 Hook (无限滚动) */
 export const useJobList = (params: Omit<JobListParams, 'pageNum'>) => {
 	return useInfiniteQuery({
-		queryKey: ['job', 'list', params],
+		queryKey: ['tenant', getTenantId(), 'job', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
 			getJobListAPI({
 				...params,
@@ -38,7 +39,7 @@ export const useJobList = (params: Omit<JobListParams, 'pageNum'>) => {
 /** 岗位详情 Hook */
 export const useJobDetail = (id: number | string) => {
 	return useQuery({
-		queryKey: ['job', 'detail', id],
+		queryKey: ['tenant', getTenantId(), 'job', 'detail', id],
 		queryFn: () => getJobDetailAPI(id),
 		enabled: !!id,
 	});
@@ -47,7 +48,7 @@ export const useJobDetail = (id: number | string) => {
 /** 企业列表 Hook (无限滚动) */
 export const useEnterpriseList = (params: Omit<EnterpriseListParams, 'pageNum'>) => {
 	return useInfiniteQuery({
-		queryKey: ['job', 'list', params],
+		queryKey: ['enterprise', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
 			getEnterpriseListAPI({
 				...params,
