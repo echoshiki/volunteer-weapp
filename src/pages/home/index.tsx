@@ -1,22 +1,11 @@
 import { View, Text } from '@tarojs/components';
-import {
-	Page,
-	Heading,
-	Carousel,
-	GridNav,
-	Empty,
-	Cell,
-	Divider,
-	RegionPicker,
-	DatePicker,
-} from '@/components/ui';
+import { Page, Heading, Carousel, GridNav, Empty, Cell, Divider } from '@/components/ui';
 import { useActivities } from '@/hooks/useActivity';
 import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';
 import { useHomeDashboard } from '@/hooks/useHome';
 import { useJobList, useEnterpriseList } from '@/hooks/useJob';
 import { ActivityCard, JobCard } from '@/components/biz';
-import { useState } from 'react';
 
 export default function HomePage() {
 	// 数据：首页轮播图、概览数据

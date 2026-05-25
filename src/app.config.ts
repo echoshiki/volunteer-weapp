@@ -12,6 +12,7 @@ export default defineAppConfig({
 		'pages/user/index',
 		'pages/user/activity/index',
 		'pages/login/index',
+		'pages/onboarding/index',
 	],
 	window: {
 		backgroundTextStyle: 'light',

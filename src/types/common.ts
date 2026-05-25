@@ -39,3 +39,11 @@ export type ApprovalStatus = 'pending' | 'approved' | 'rejected';
 export type ThemeVariant = 'primary' | 'success' | 'secondary' | 'warning' | 'danger' | 'info';
 
 export type SizeVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+
+/** 自定义区域项 */
+export interface TenantItem {
+	id: number;
+	name: string;
+	longitude: number;
+	latitude: number;
+}
