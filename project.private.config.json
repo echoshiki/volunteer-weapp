@@ -22,11 +22,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "登录页",
+          "pathName": "pages/login/index",
+          "query": "",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "活动详情",
           "pathName": "pages/activity/detail/index",
           "query": "id=7",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "服务详情",

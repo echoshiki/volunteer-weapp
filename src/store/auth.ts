@@ -16,13 +16,12 @@ import { AuthStage, UserInfo } from '@/types/user';
  * @param setLogout 退出登录，清空状态并重置存储
  */
 interface AuthState {
-	uid: string | number | null;
 	token: string | null;
 	uuid: string | null;
 	userInfo: UserInfo | null;
 	authStage: AuthStage;
 
-	setLoginSuccess: (token: string, userInfo?: UserInfo) => void;
+	setLoginSuccess: (token: string) => void;
 	setNeedBind: (uuid: string) => void;
 	updateUserInfo: (info: UserInfo) => void;
 	setLogout: () => void;
@@ -31,7 +30,6 @@ interface AuthState {
 export const useAuthStore = create<AuthState>()(
 	persist(
 		(set) => ({
-			uid: null,
 			token: null,
 			uuid: null,
 			userInfo: null,
@@ -51,29 +49,22 @@ export const useAuthStore = create<AuthState>()(
 					uuid: uuid,
 					authStage: 'NEED_BIND_PHONE',
 					token: null,
-					uid: null,
 					userInfo: null,
 				}),
 
-			updateUserInfo: (userInfo) =>
-				set({
-					uid: userInfo.userId,
-					userInfo: userInfo,
-				}),
+			updateUserInfo: (userInfo) => set({ userInfo }),
 
 			setLogout: () => {
 				set({
 					token: null,
-					uid: null,
 					uuid: null,
 					userInfo: null,
-					authStage: 'UNLOGIN',
+					authStage: 'UNLOGIN' as AuthStage,
 				});
-				Taro.removeStorageSync('auth-storage');
 			},
 		}),
 		{
-			name: 'auth-storage',
+			name: 'auth_store',
 			storage: createJSONStorage(() => ({
 				getItem: Taro.getStorageSync,
 				setItem: Taro.setStorageSync,

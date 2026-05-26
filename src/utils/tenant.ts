@@ -1,9 +1,9 @@
 import Taro from '@tarojs/taro';
 import { mapsTo, serializeParams } from './common';
 
-// 统一管理 Storage Key，防止拼写错误
-const TENANT_KEY = 'global_tenant_id';
-const TENANT_NAME_KEY = 'global_tenant_name';
+// 统一管理 Storage Key
+const TENANT_KEY = 'tenant_id';
+const TENANT_NAME_KEY = 'tenant_name';
 
 /**
  * 获取当前选中的租户 ID

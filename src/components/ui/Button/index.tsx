@@ -52,8 +52,8 @@ export const Button = ({
 		xs: 'h-7 px-3 text-xs gap-1',
 		sm: 'h-9 px-4 text-xs gap-1',
 		md: 'h-11 px-6 text-sm gap-1.5',
-		lg: 'h-13 px-8 text-base gap-2',
-		xl: 'h-15 px-10 text-lg gap-2',
+		lg: 'h-13 px-15 text-base gap-2',
+		xl: 'h-13 w-full text-base gap-2',
 	};
 
 	// 尺寸对应的图标大小 (w-h)
