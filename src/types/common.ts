@@ -47,3 +47,31 @@ export interface TenantItem {
 	longitude: number;
 	latitude: number;
 }
+
+/**
+ * 全局系统配置
+ */
+export interface WeappConfig {
+	/** 平台名称 */
+	appName: string;
+	/** 平台全局 Logo URL */
+	appLogo?: string;
+	/** 平台描述 */
+	appDescription?: string;
+	/** 全局客服热线 */
+	servicePhone?: string;
+	/** 全局客服热线 */
+	serviceEmail?: string;
+	/** 用户协议 URL */
+	agreementUrl?: string;
+	/** 用户协议摘要 */
+	agreementExpert?: string;
+	/** 隐私条款 URL */
+	policyUrl?: string;
+	/** 隐私条款摘要 */
+	policyExpert?: string;
+	/** 版权信息 */
+	copyright?: string;
+	/** 备案号 */
+	icp?: string;
+}
