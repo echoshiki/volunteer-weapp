@@ -1,14 +1,27 @@
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
-import { getUserInfoAPI, updateUserInfoAPI, type UpdatesUserInfoRequest } from '@/services/user';
+import {
+	getUserInfoAPI,
+	updateUserInfoAPI,
+	submitApplyReviewAPI,
+	type UpdatesUserInfoRequest,
+	type ApplyVolunteerRequest,
+	type ApplyInstitutionRequest,
+} from '@/services/user';
 import { useAuthStore } from '@/store/auth';
 import Taro from '@tarojs/taro';
 import { useState, useEffect, useMemo } from 'react';
 import { uploadImageAPI } from '@/services/upload';
-import { formatUserInfo, getUserProfileFields } from '@/utils/user';
+import {
+	formatUserInfo,
+	getInstitutionFormFields,
+	getUserProfileFields,
+	getVolunteerFormFields,
+} from '@/utils/user';
 
 /**
- * 用户信息状态同步 Hook
- * @description 利用 React Query 的 staleTime 机制进行数据保鲜，并在后台默默同步给 Zustand
+ * ============================================================================
+ * 获取用户信息 Hook
+ * ============================================================================
  */
 export const useUser = () => {
 	const { updateUserInfo, authStage } = useAuthStore();
@@ -29,7 +42,9 @@ export const useUser = () => {
 };
 
 /**
- * 更新用户信息
+ * ============================================================================
+ * 更新用户信息 Hook
+ * ============================================================================
  */
 export const useUpdateUser = () => {
 	const queryClient = useQueryClient();
@@ -92,5 +107,156 @@ export const useUpdateUser = () => {
 		onChooseAvatar,
 		handleSave,
 		isSaving: mutation.isLoading,
+	};
+};
+
+/**
+ * ============================================================================
+ * 志愿者申请认证 Hook
+ * ============================================================================
+ */
+export const useVolunteerApply = (initialData: any = null) => {
+	const queryClient = useQueryClient();
+
+	// 状态：表单数据
+	const [form, setForm] = useState<ApplyVolunteerRequest>(() =>
+		getVolunteerFormFields(initialData),
+	);
+
+	// 执行：统一更新表单普通字段
+	const updateField = <K extends keyof ApplyVolunteerRequest>(
+		field: K,
+		value: ApplyVolunteerRequest[K],
+	) => {
+		setForm((prev) => ({ ...prev, [field]: value }));
+	};
+
+	// 执行：身份证正反面图片上传
+	const onUploadIdCard = async (field: 'idCardFront' | 'idCardBack') => {
+		try {
+			const res = await Taro.chooseImage({ count: 1 });
+			const tempFilePath = res.tempFilePaths[0];
+
+			Taro.showLoading({ title: '上传中...', mask: true });
+			const data = await uploadImageAPI(tempFilePath);
+
+			if (data.list && data.list.length > 0) {
+				updateField(field, data.list[0].filePath);
+				Taro.showToast({ title: '上传成功', icon: 'success' });
+			}
+		} catch (error) {
+			console.error('身份证上传失败', error);
+		} finally {
+			Taro.hideLoading();
+		}
+	};
+
+	// Mutation：提交请求
+	const mutation = useMutation({
+		mutationFn: submitApplyReviewAPI,
+		onSuccess: () => {
+			Taro.showToast({ title: '申请提交成功', icon: 'success' });
+			// 使认证状态及明细接口缓存失效
+			queryClient.invalidateQueries({ queryKey: ['apply', 'detail'] });
+			queryClient.invalidateQueries({ queryKey: ['apply', 'history'] });
+			setTimeout(() => Taro.navigateBack(), 1500);
+		},
+	});
+
+	// 执行：提交前表单校验
+	const handleSave = () => {
+		if (!form.realName?.trim())
+			return Taro.showToast({ title: '请输入真实姓名', icon: 'none' });
+		if (!form.idCard?.trim()) return Taro.showToast({ title: '请输入身份证号', icon: 'none' });
+		if (!form.phone?.trim()) return Taro.showToast({ title: '请输入联系电话', icon: 'none' });
+		if (!form.provinceCode) return Taro.showToast({ title: '请选择常住地区', icon: 'none' });
+		if (!form.idCardFront) return Taro.showToast({ title: '请上传身份证人像面', icon: 'none' });
+		if (!form.idCardBack) return Taro.showToast({ title: '请上传身份证国徽面', icon: 'none' });
+
+		// 严格类型保护，最终提交
+		mutation.mutate(form);
+	};
+
+	return {
+		form,
+		updateField,
+		onUploadIdCard,
+		handleSave,
+		isSubmitting: mutation.isLoading,
+	};
+};
+
+/**
+ * ============================================================================
+ * 服务机构入驻认证 Hook
+ * ============================================================================
+ */
+export const useInstitutionApply = (initialData: any = null) => {
+	const queryClient = useQueryClient();
+
+	// 状态：表单数据
+	const [form, setForm] = useState<ApplyInstitutionRequest>(() =>
+		getInstitutionFormFields(initialData),
+	);
+
+	const updateField = <K extends keyof ApplyInstitutionRequest>(
+		field: K,
+		value: ApplyInstitutionRequest[K],
+	) => {
+		setForm((prev) => ({ ...prev, [field]: value }));
+	};
+
+	// 执行：机构资质/营业执照上传
+	const onUploadCert = async () => {
+		try {
+			const res = await Taro.chooseImage({ count: 1 });
+			const tempFilePath = res.tempFilePaths[0];
+
+			Taro.showLoading({ title: '上传中...', mask: true });
+			const data = await uploadImageAPI(tempFilePath);
+
+			if (data.list && data.list.length > 0) {
+				updateField('orgCodeCertUrl', data.list[0].filePath);
+				Taro.showToast({ title: '证书上传成功', icon: 'success' });
+			}
+		} catch (error) {
+			console.error('机构资质上传失败', error);
+		} finally {
+			Taro.hideLoading();
+		}
+	};
+
+	const mutation = useMutation({
+		mutationFn: submitApplyReviewAPI,
+		onSuccess: () => {
+			Taro.showToast({ title: '申请提交成功', icon: 'success' });
+			queryClient.invalidateQueries({ queryKey: ['apply', 'detail'] });
+			queryClient.invalidateQueries({ queryKey: ['apply', 'history'] });
+			setTimeout(() => Taro.navigateBack(), 1500);
+		},
+	});
+
+	const handleSave = () => {
+		if (!form.institutionName?.trim())
+			return Taro.showToast({ title: '请输入机构名称', icon: 'none' });
+		if (!form.orgCode?.trim())
+			return Taro.showToast({ title: '请输入信用代码或注册号', icon: 'none' });
+		if (!form.legalPerson?.trim())
+			return Taro.showToast({ title: '请输入法人姓名', icon: 'none' });
+		if (!form.phone?.trim())
+			return Taro.showToast({ title: '请输入机构联系电话', icon: 'none' });
+		if (!form.provinceCode) return Taro.showToast({ title: '请选择机构所在地', icon: 'none' });
+		if (!form.orgCodeCertUrl)
+			return Taro.showToast({ title: '请上传机构资质凭证', icon: 'none' });
+
+		mutation.mutate(form);
+	};
+
+	return {
+		form,
+		updateField,
+		onUploadCert,
+		handleSave,
+		isSubmitting: mutation.isLoading,
 	};
 };

@@ -65,3 +65,32 @@ export interface UserInfo {
 	/** 地址 */
 	address?: string;
 }
+
+export interface ApplyReview {
+	id?: number;
+	/** 审核类型 1=机构审核 2=志愿者审核 */
+	reviewType: 1 | 2;
+	provinceCode: number;
+	cityCode: number;
+	districtCode: number;
+	address: string;
+	phone: string;
+	/** 真实姓名 */
+	realName?: string;
+	/** 身份证号 */
+	idCard?: string;
+	/** 身份证正面 */
+	idCardFront?: string;
+	/** 身份证反面 */
+	idCardBack?: string;
+	/** 机构名称 */
+	institutionName?: string;
+	/** 法人姓名 */
+	legalPerson?: string;
+	/** 法人手机号 */
+	legalPersonPhone?: string;
+	/** 组织机构代码 */
+	orgCode?: string;
+	/** 组织机构代码证 */
+	orgCodeCertUrl?: string;
+}

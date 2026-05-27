@@ -22,11 +22,32 @@
     "miniprogram": {
       "list": [
         {
-          "name": "个人资料",
-          "pathName": "pages/user/profile/index",
+          "name": "机构入驻申请表单",
+          "pathName": "pages/apply/institution/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "志愿者认证表单",
+          "pathName": "pages/apply/volunteer/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "实名认证入口",
+          "pathName": "pages/apply/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
+          "name": "个人资料",
+          "pathName": "pages/user/profile/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "登录页",

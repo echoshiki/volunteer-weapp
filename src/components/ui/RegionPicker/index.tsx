@@ -15,7 +15,7 @@ export interface RegionChangeResult {
 	rawNames: string[];
 }
 
-export interface Props {
+interface Props {
 	/** 初始省市区，['130000', '130100', '130102'] 自动回显汉字 */
 	value?: string[];
 	/** 选择完成后的回调函数，抛出 code 数组和 name 数组 */

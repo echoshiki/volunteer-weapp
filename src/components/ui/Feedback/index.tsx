@@ -4,7 +4,7 @@ import { ReactNode } from 'react';
 // 定义支持的基础变体状态
 export type FeedbackVariant = 'success' | 'error' | 'warning' | 'info' | 'loading';
 
-export interface Props {
+interface Props {
 	/** 页面风格 */
 	variant?: FeedbackVariant;
 	/** Iconify 图标名称 */

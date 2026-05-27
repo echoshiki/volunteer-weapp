@@ -121,7 +121,7 @@ export default function UserPage() {
 							icon="icon-[ph--shield-warning-light]"
 							label="实名认证"
 							extra={userInfo?.reviewId ? '已认证' : '未认证'}
-							onClick={() => mapsTo('/pages/user/auth/index')}
+							onClick={() => mapsTo('/pages/apply/index')}
 						/>
 						<ColumnNav icon="icon-[ph--question]" label="帮助与反馈" />
 					</View>

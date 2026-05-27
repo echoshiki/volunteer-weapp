@@ -1,7 +1,7 @@
 import { View } from '@tarojs/components';
 import React from 'react';
 
-export interface Props {
+interface Props {
 	/** 分割线方向 */
 	orientation?: 'horizontal' | 'vertical';
 	/** 是否为虚线 */
