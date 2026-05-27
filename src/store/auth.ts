@@ -3,27 +3,23 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 import Taro from '@tarojs/taro';
 import { AuthStage, UserInfo } from '@/types/user';
 
-/**
- * 认证状态
- * @param uid 用户ID
- * @param token 用户 token
- * @param uuid 临时通行证，用于绑定手机号
- * @param userInfo 用户信息
- * @param authStage 登陆阶段状态机：UNLOGIN-未登录, NEED_BIND_PHONE-需绑定手机, LOGGED_IN-已登录
- * @param setLoginSuccess 状态设置：登录成功
- * @param setNeedBind 状态设置：需要绑定手机号
- * @param updateUserInfo 更新用户信息
- * @param setLogout 退出登录，清空状态并重置存储
- */
 interface AuthState {
+	/** 登录成功后的 Token 值 */
 	token: string | null;
+	/** 临时的 UUID 值，用于用户注册时绑定手机号 */
 	uuid: string | null;
+	/** 用户信息 */
 	userInfo: UserInfo | null;
+	/** 登陆阶段状态机：UNLOGIN-未登录, NEED_BIND_PHONE-需绑定手机, LOGGED_IN-已登录 */
 	authStage: AuthStage;
 
+	/** 状态设置：登录成功 */
 	setLoginSuccess: (token: string) => void;
+	/** 状态设置：需要绑定手机号 */
 	setNeedBind: (uuid: string) => void;
+	/** 更新用户信息 */
 	updateUserInfo: (info: UserInfo) => void;
+	/** 退出登录，清空状态并重置存储 */
 	setLogout: () => void;
 }
 

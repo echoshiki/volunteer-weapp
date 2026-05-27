@@ -7,3 +7,8 @@ export const USER_IDENTITY_MAP: Record<UserIdentity, { label: string; variant: T
 	volunteer: { label: '志愿者', variant: 'success' },
 	institution: { label: '机构人员', variant: 'warning' },
 };
+
+export const SEX_OPTIONS = [
+	{ label: '男', value: '1' },
+	{ label: '女', value: '2' },
+];

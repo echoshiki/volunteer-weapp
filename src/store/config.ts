@@ -25,10 +25,8 @@ export const useConfigStore = create<ConfigState>()(
 			fetchConfig: async () => {
 				try {
 					const data = await getWeappConfigAPI();
-					console.log('获取系统全局配置成功', data);
 					set({ config: data, isLoaded: true });
 				} catch (error) {
-					console.error('获取系统全局配置失败', error);
 					set({ isLoaded: true });
 				}
 			},

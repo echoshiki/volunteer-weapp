@@ -17,3 +17,5 @@ export { Alert } from './Alert';
 export { Description } from './Description';
 export { RegionPicker } from './RegionPicker';
 export { DatePicker } from './DatePicker';
+export { ImageUploader } from './ImageUploader';
+export { FormItem } from './FormItem';

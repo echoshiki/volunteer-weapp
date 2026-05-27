@@ -10,6 +10,7 @@ export default defineAppConfig({
 		'pages/job/detail/index',
 		'pages/job/enterprise/index',
 		'pages/user/index',
+		'pages/user/profile/index',
 		'pages/user/activity/index',
 		'pages/login/index',
 		'pages/onboarding/index',

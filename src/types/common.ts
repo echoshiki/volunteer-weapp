@@ -75,3 +75,10 @@ export interface WeappConfig {
 	/** 备案号 */
 	icp?: string;
 }
+
+export interface UploadFileItem {
+	fileName: string;
+	filePath: string;
+	fileSize: number;
+	fileType: string;
+}

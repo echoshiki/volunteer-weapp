@@ -74,7 +74,7 @@ export const Button = ({
 		warning: 'bg-amber-500 text-white border-none active:bg-amber-600',
 		info: 'bg-blue-500 text-white border-none active:bg-blue-600',
 		outline: 'bg-transparent text-primary border border-primary active:bg-red-50',
-		ghost: 'bg-transparent text-text-muted border-none active:bg-gray-100',
+		ghost: 'bg-transparent text-text-muted border-none active:bg-gray-100 after:border-none',
 	};
 
 	// 基础类名构建

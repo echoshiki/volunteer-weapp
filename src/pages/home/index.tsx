@@ -5,9 +5,34 @@ import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';
 import { useHomeDashboard } from '@/hooks/useHome';
 import { useJobList, useEnterpriseList } from '@/hooks/useJob';
-import { ActivityCard, JobCard } from '@/components/biz';
+import { ActivityCard, JobCard, TenantPicker } from '@/components/biz';
+import { getTenantName, setTenant, getTenantId } from '@/utils/tenant';
+import { useState, useCallback } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
+import Taro from '@tarojs/taro';
 
 export default function HomePage() {
+	// 状态：当前 Tenant
+	const [currentName, setCurrentName] = useState(getTenantName() || '请选择街道');
+
+	// 执行：切换 Tenant
+	const queryClient = useQueryClient();
+	const handleTenantChange = useCallback(
+		(code: string | number, name: string) => {
+			const oldTenantId = getTenantId();
+			if (oldTenantId === code.toString()) return;
+
+			// 更新本地缓存和当前状态
+			setTenant(code.toString(), name);
+			setCurrentName(name);
+			Taro.showToast({ title: '切换成功', icon: 'success' });
+
+			// 刷新 Tanent 全局缓存
+			queryClient.invalidateQueries({ queryKey: ['tenant'] });
+		},
+		[queryClient],
+	);
+
 	// 数据：首页轮播图、概览数据
 	const { data: dashboard, isLoading: isDashboardLoading } = useHomeDashboard();
 
@@ -47,13 +72,20 @@ export default function HomePage() {
 	return (
 		<Page hasTabBar>
 			<View className="container-x">
-				{/* 顶部自定义定位与欢迎语 */}
 				<View className="py-3 flex items-center justify-between">
-					<View className="flex items-center gap-1.5">
-						<View className="icon-[ph--map-pin-bold] w-4 h-4 text-primary" />
-						<Text className="text-sm font-bold text-text-title">扬州·东关街道</Text>
-						<View className="icon-[ph--caret-down-bold] w-3 h-3 text-text-muted" />
-					</View>
+					{/* Tenant 切换器 */}
+					<TenantPicker onChange={handleTenantChange}>
+						<View className="flex items-center gap-1.5 active:opacity-60 transition-opacity p-1 -ml-1">
+							<View className="icon-[ph--map-pin-bold] w-4 h-4 text-primary" />
+							{/* 动态展示当前街道名 */}
+							<Text className="text-sm font-bold text-text-title truncate max-w-36">
+								{currentName}
+							</Text>
+							<View className="icon-[ph--caret-down-bold] w-3 h-3 text-text-muted" />
+						</View>
+					</TenantPicker>
+
+					{/* 右上角用户菜单 */}
 					<View
 						className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
 						onClick={() => mapsTo('/pages/user/index')}

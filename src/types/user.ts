@@ -62,4 +62,6 @@ export interface UserInfo {
 	regionId?: number;
 	/** 小区/社区名称 */
 	regionName?: string;
+	/** 地址 */
+	address?: string;
 }

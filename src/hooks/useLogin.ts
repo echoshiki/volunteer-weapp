@@ -3,6 +3,7 @@ import { useAuthStore } from '@/store/auth';
 import { loginAPI, bindPhoneAPI, logoutAPI } from '@/services/auth';
 import { getUserInfoAPI } from '@/services/user';
 import { mapsTo } from '@/utils/common';
+import { formatUserInfo } from '@/utils/user';
 
 export const useLogin = () => {
 	const { authStage, uuid, setLoginSuccess, setNeedBind, updateUserInfo, setLogout } =
@@ -17,8 +18,12 @@ export const useLogin = () => {
 		setLoginSuccess(token);
 		try {
 			// 获取包含身份标识 (identity) 的完整用户信息
-			const info = await getUserInfoAPI();
-			updateUserInfo(info);
+			const raw = await getUserInfoAPI();
+
+			// 将格式化后的用户信息保存到全局状态中
+			updateUserInfo(formatUserInfo(raw));
+
+			// 跳转回跳页面
 			if (shouldJump) {
 				const instance = Taro.getCurrentInstance();
 				const backUrl = instance.router?.params.back_url;

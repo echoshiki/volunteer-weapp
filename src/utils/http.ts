@@ -18,6 +18,16 @@ type RequestConfig = Taro.request.Option & {
 };
 
 /**
+ * 上传配置项
+ */
+type UploadConfig = Omit<RequestConfig, 'url' | 'data' | 'method'> & {
+	/** 文件对应的 key，默认 'file' */
+	name?: string;
+	/** 额外的表单数据 */
+	formData?: Record<string, any>;
+};
+
+/**
  * 请求类
  */
 class HttpRequest {
@@ -36,20 +46,28 @@ class HttpRequest {
 		if (HttpRequest.loadingCount === 0) Taro.hideLoading();
 	}
 
-	public async request<T = any>(config: RequestConfig): Promise<T> {
+	// 获取通用请求头
+	private getBaseHeader(header: any = {}) {
 		const authStore = useAuthStore.getState();
 		const tenantId = getTenantId();
 
-		// 处理请求路径前缀
+		return {
+			'Content-Type': 'application/json',
+			[this.TOKEN_NAME]: authStore.token ? `Bearer ${authStore.token}` : '',
+			...(tenantId ? { 'X-Tenant-Id': tenantId } : {}),
+			...header,
+		};
+	}
+
+	// ==========================================
+	// 通用接口请求函数
+	// ==========================================
+	public async request<T = any>(config: RequestConfig): Promise<T> {
+		// 拼装请求配置
 		let options: RequestConfig = {
 			timeout: 15000,
 			...config,
-			header: {
-				'Content-Type': 'application/json',
-				[this.TOKEN_NAME]: authStore.token ? `Bearer ${authStore.token}` : '',
-				...(tenantId ? { 'X-Tenant-Id': tenantId } : {}),
-				...config.header,
-			},
+			header: this.getBaseHeader(config.header),
 		};
 
 		// 拼接路径
@@ -65,33 +83,9 @@ class HttpRequest {
 		return new Promise((resolve, reject) => {
 			Taro.request({
 				...options,
-				success: (res) => {
-					if (res.statusCode === 200) {
-						const { code, msg, data } = res.data as BaseResponse<T>;
-
-						if (code === 200) {
-							const finalData = options.interceptors?.response
-								? options.interceptors.response(data)
-								: data;
-							resolve(finalData as T);
-						} else if ([410000, 410001, 410002, 401, 402].includes(code)) {
-							// 登录失效
-							this.handleAuthError();
-							reject(res.data);
-						} else {
-							Taro.showToast({ title: msg || '服务器繁忙', icon: 'none' });
-							reject(res.data);
-						}
-					} else {
-						const error = this.handleError(res);
-						Taro.showToast({ title: error.msg, icon: 'none' });
-						reject(error);
-					}
-				},
-				fail: (err) => {
-					Taro.showToast({ title: '网络异常，请检查网络', icon: 'none' });
-					reject(err);
-				},
+				success: (res) =>
+					this.handleSuccess<T>(res.statusCode, res.data, options, resolve, reject),
+				fail: (err) => this.handleNetworkFail(err, reject),
 				complete: () => {
 					if (options.showLoading) this.hideLoading();
 				},
@@ -99,16 +93,88 @@ class HttpRequest {
 		});
 	}
 
-	// 统一错误处理
-	private handleError(res: Taro.request.SuccessCallbackResult<any>) {
-		return {
-			code: res.statusCode,
-			msg: res.data?.msg || res.data?.message || `网络请求错误(${res.statusCode})`,
-			data: res.data,
-		};
+	// ==========================================
+	// 上传接口请求函数
+	// ==========================================
+	public async upload<T = any>(url: string, filePath: string, config?: UploadConfig): Promise<T> {
+		// 构建请求参数
+		let fullUrl = url.startsWith('http') ? url : `${this.baseUrl}${url}`;
+		const header = this.getBaseHeader(config?.header);
+		// 上传请求不能用 application/json
+		delete header['Content-Type'];
+
+		if (config?.showLoading) this.showLoading();
+
+		return new Promise((resolve, reject) => {
+			Taro.uploadFile({
+				url: fullUrl,
+				filePath: filePath,
+				name: config?.name || 'file',
+				formData: config?.formData,
+				header,
+				success: (res) => {
+					let parsedData;
+					try {
+						parsedData = JSON.parse(res.data);
+					} catch (e) {
+						Taro.showToast({ title: '返回数据解析失败', icon: 'none' });
+						reject(new Error('JSON parse error'));
+						return;
+					}
+
+					this.handleSuccess<T>(
+						res.statusCode,
+						parsedData,
+						config || {},
+						resolve,
+						reject,
+					);
+				},
+				fail: (err) => this.handleNetworkFail(err, reject),
+				complete: () => {
+					if (config?.showLoading) this.hideLoading();
+				},
+			});
+		});
 	}
 
-	// 鉴权失败处理
+	// 处理请求成功
+	private handleSuccess<T>(
+		statusCode: number,
+		responseData: any,
+		options: RequestConfig | UploadConfig,
+		resolve: Function,
+		reject: Function,
+	) {
+		if (statusCode === 200) {
+			const { code, msg, data } = responseData as BaseResponse<T>;
+
+			if (code === 200) {
+				const finalData = options.interceptors?.response
+					? options.interceptors.response(data)
+					: data;
+				resolve(finalData as T);
+			} else if ([410000, 410001, 410002, 401, 402].includes(code)) {
+				this.handleAuthError();
+				reject(responseData);
+			} else {
+				Taro.showToast({ title: msg || '服务器繁忙', icon: 'none' });
+				reject(responseData);
+			}
+		} else {
+			const msg = responseData?.msg || responseData?.message || `网络请求错误(${statusCode})`;
+			Taro.showToast({ title: msg, icon: 'none' });
+			reject({ code: statusCode, msg, data: responseData });
+		}
+	}
+
+	// 处理请求失败
+	private handleNetworkFail(err: any, reject: Function) {
+		Taro.showToast({ title: '网络异常，请检查网络', icon: 'none' });
+		reject(err);
+	}
+
+	// 处理鉴权失败
 	private handleAuthError() {
 		// 防止并发情况下的重复跳转
 		if (HttpRequest.isRedirecting) return;

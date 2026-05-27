@@ -22,11 +22,18 @@
     "miniprogram": {
       "list": [
         {
-          "name": "登录页",
-          "pathName": "pages/login/index",
+          "name": "个人资料",
+          "pathName": "pages/user/profile/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "登录页",
+          "pathName": "pages/login/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "活动详情",
