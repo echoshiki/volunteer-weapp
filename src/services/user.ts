@@ -1,5 +1,6 @@
 import { http } from '@/utils/http';
-import { ApplyReview, UserInfo } from '@/types/user';
+import { ApplyHistoryItem, ApplyReview, ReviewStatus, UserInfo } from '@/types/user';
+import { ListRes, PageRes } from '@/types/common';
 
 /**
  * 获取用户信息接口
@@ -46,3 +47,17 @@ export type ApplyInstitutionRequest = ApplyReview;
 
 /** 提交实名认证申请 */
 export const submitApplyReviewAPI = (data: ApplyReview) => http.post('/volunteer/review/add', data);
+
+/** 岗位列表请求参数 */
+export interface ApplyHistoryRequest {
+	status?: ReviewStatus;
+	pageNum?: number;
+	pageSize?: number;
+}
+
+/**
+ * 获取申请历史记录列表
+ * @param params 可选的 status 过滤
+ */
+export const getApplyHistoryListAPI = (params: ApplyHistoryRequest) =>
+	http.post<PageRes<ApplyHistoryItem>>('/volunteer/review/userList', params);

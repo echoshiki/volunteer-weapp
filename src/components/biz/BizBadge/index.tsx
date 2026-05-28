@@ -2,6 +2,7 @@ import { Badge } from '@/components/ui/Badge';
 import { USER_IDENTITY_MAP } from '@/constants/user';
 import { DEMAND_STATUS_MAP } from '@/constants/demand';
 import { ACTIVITY_STATUS_MAP, ENROLL_STATUS_MAP, AUDIT_STATUS_MAP } from '@/constants/activity';
+import { APPLY_STATUS_MAP, TYPE_MAP } from '@/constants/apply';
 import { ThemeVariant } from '@/types/common';
 
 /**
@@ -39,3 +40,6 @@ export const EnrollStatusBadge = createBizBadge(ENROLL_STATUS_MAP, 'pending');
 
 /** 用户报名审核状态 */
 export const AuditStatusBadge = createBizBadge(AUDIT_STATUS_MAP, 'pending');
+
+/** 志愿申请审核状态 */
+export const ApplyStatusBadge = createBizBadge(APPLY_STATUS_MAP, 'pending');

@@ -94,3 +94,27 @@ export interface ApplyReview {
 	/** 组织机构代码证 */
 	orgCodeCertUrl?: string;
 }
+
+export type ReviewStatus = 'pending' | 'approved' | 'rejected';
+
+/**
+ * 申请历史记录单条数据项
+ */
+export interface ApplyHistoryItem {
+	/** 审核信息id */
+	reviewId: number;
+	/** 志愿者协会名称 (reviewType=1 时有效) */
+	volunteerName: string;
+	/** 机构名称 (reviewType=2 时有效) */
+	institutionName: string;
+	/** 审核认证类型: 1：志愿者；2：服务机构 */
+	reviewType: 1 | 2;
+	/** 审核状态 */
+	status: ReviewStatus;
+	/** 创建时间 */
+	createTime: string;
+	/** 审核通过/失败时间 */
+	updateTime: string;
+	/** 审核描述 (如驳回原因) */
+	remark: string;
+}

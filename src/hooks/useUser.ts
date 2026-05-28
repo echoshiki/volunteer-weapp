@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
+import { useQuery, useQueryClient, useMutation, useInfiniteQuery } from '@tanstack/react-query';
 import {
 	getUserInfoAPI,
 	updateUserInfoAPI,
@@ -6,6 +6,8 @@ import {
 	type UpdatesUserInfoRequest,
 	type ApplyVolunteerRequest,
 	type ApplyInstitutionRequest,
+	getApplyHistoryListAPI,
+	ApplyHistoryRequest,
 } from '@/services/user';
 import { useAuthStore } from '@/store/auth';
 import Taro from '@tarojs/taro';
@@ -225,4 +227,18 @@ export const useInstitutionApply = (initialData: any = null) => {
 		handleSave,
 		isSubmitting: mutation.isLoading,
 	};
+};
+
+export const useApplyHistory = (params: Omit<ApplyHistoryRequest, 'pageNum' | 'pageSize'>) => {
+	return useInfiniteQuery({
+		queryKey: ['apply', 'history', 'list', params],
+		queryFn: ({ pageParam = 1 }) =>
+			getApplyHistoryListAPI({
+				...params,
+				pageNum: pageParam,
+				pageSize: 10,
+			}),
+		getNextPageParam: (lastPage) =>
+			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+	});
 };

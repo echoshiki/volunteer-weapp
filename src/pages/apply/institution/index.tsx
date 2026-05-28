@@ -67,7 +67,7 @@ export default function ApplyInstitutionPage() {
 							className="w-full text-right text-sm text-text-title h-full"
 							placeholder="请输入机构常用联系电话"
 							value={form.legalPersonPhone}
-							onInput={(e) => updateField('phone', e.detail.value)}
+							onInput={(e) => updateField('legalPersonPhone', e.detail.value)}
 						/>
 					</FormItem>
 

@@ -22,11 +22,18 @@
     "miniprogram": {
       "list": [
         {
-          "name": "机构入驻申请表单",
-          "pathName": "pages/apply/institution/index",
+          "name": "申请历史页",
+          "pathName": "pages/apply/history/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "机构入驻申请表单",
+          "pathName": "pages/apply/institution/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "志愿者认证表单",
