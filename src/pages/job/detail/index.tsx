@@ -45,7 +45,7 @@ export default function JobDetail() {
 					onClick={() => mapsTo(`/pages/job/enterprise/index?id=${detail.enterprisesId}`)}
 				>
 					<View className="flex items-center gap-3">
-						<View className="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+						<View className="w-12 h-12 bg-gray-100 rounded-card flex items-center justify-center">
 							<View className="icon-[ph--buildings] w-6 h-6 text-text-muted" />
 						</View>
 						<View>

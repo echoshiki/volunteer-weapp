@@ -1,8 +1,8 @@
-import { AuthReview, UserInfo } from '@/types/user';
+import { ApplyReview, UserInfo } from '@/types/user';
 import {
 	UpdatesUserInfoRequest,
-	VolunteerAuthRequest,
-	InstitutionAuthRequest,
+	ApplyVolunteerRequest,
+	ApplyInstitutionRequest,
 } from '@/services/user';
 
 /**
@@ -55,7 +55,7 @@ export const getUserProfileFields = (data: UserInfo | null): UpdatesUserInfoRequ
 /**
  * 志愿者申请表单初始数据
  */
-export const EMPTY_VOLUNTEER_FORM: VolunteerAuthRequest = {
+export const EMPTY_VOLUNTEER_FORM: ApplyVolunteerRequest = {
 	reviewType: 1,
 	realName: '',
 	idCard: '',
@@ -71,7 +71,7 @@ export const EMPTY_VOLUNTEER_FORM: VolunteerAuthRequest = {
 /**
  * 志愿者表单字段提取器
  */
-export const getVolunteerFormFields = (data: AuthReview | null): VolunteerAuthRequest => {
+export const getVolunteerFormFields = (data: ApplyReview | null): ApplyVolunteerRequest => {
 	if (!data) return EMPTY_VOLUNTEER_FORM;
 	return {
 		...EMPTY_VOLUNTEER_FORM,
@@ -90,11 +90,15 @@ export const getVolunteerFormFields = (data: AuthReview | null): VolunteerAuthRe
 /**
  * 机构表单初始默认信息
  */
-export const EMPTY_INSTITUTION_FORM: InstitutionAuthRequest = {
+export const EMPTY_INSTITUTION_FORM: ApplyInstitutionRequest = {
 	reviewType: 2,
 	institutionName: '',
 	legalPerson: '',
 	legalPersonPhone: '',
+	realName: '',
+	idCard: '',
+	idCardFront: '',
+	idCardBack: '',
 	orgCode: '',
 	orgCodeCertUrl: '',
 	phone: '',
@@ -107,13 +111,17 @@ export const EMPTY_INSTITUTION_FORM: InstitutionAuthRequest = {
 /**
  * 机构表单字段提取器
  */
-export const getInstitutionFormFields = (data: AuthReview | null): InstitutionAuthRequest => {
+export const getInstitutionFormFields = (data: ApplyReview | null): ApplyInstitutionRequest => {
 	if (!data) return EMPTY_INSTITUTION_FORM;
 	return {
 		...EMPTY_INSTITUTION_FORM,
 		institutionName: data.institutionName ?? EMPTY_INSTITUTION_FORM.institutionName,
 		legalPerson: data.legalPerson ?? EMPTY_INSTITUTION_FORM.legalPerson,
 		legalPersonPhone: data.legalPersonPhone ?? EMPTY_INSTITUTION_FORM.legalPersonPhone,
+		realName: data.realName ?? EMPTY_INSTITUTION_FORM.realName,
+		idCard: data.idCard ?? EMPTY_INSTITUTION_FORM.idCard,
+		idCardFront: data.idCardFront ?? EMPTY_INSTITUTION_FORM.idCardFront,
+		idCardBack: data.idCardBack ?? EMPTY_INSTITUTION_FORM.idCardBack,
 		orgCode: data.orgCode ?? EMPTY_INSTITUTION_FORM.orgCode,
 		orgCodeCertUrl: data.orgCodeCertUrl ?? EMPTY_INSTITUTION_FORM.orgCodeCertUrl,
 		phone: data.phone ?? EMPTY_INSTITUTION_FORM.phone,

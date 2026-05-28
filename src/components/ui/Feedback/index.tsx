@@ -4,20 +4,6 @@ import { ReactNode } from 'react';
 // 定义支持的基础变体状态
 export type FeedbackVariant = 'success' | 'error' | 'warning' | 'info' | 'loading';
 
-interface Props {
-	/** 页面风格 */
-	variant?: FeedbackVariant;
-	/** Iconify 图标名称 */
-	icon?: string;
-	title?: string | ReactNode;
-	subtitle?: string | ReactNode;
-	/** 底部操作区 */
-	extra?: ReactNode;
-	/** 中间插槽 */
-	children?: ReactNode;
-	className?: string;
-}
-
 // 变体映射字典
 const variantMap: Record<
 	FeedbackVariant,
@@ -50,6 +36,23 @@ const variantMap: Record<
 	},
 };
 
+export interface FeedbackProps {
+	/** 页面风格 */
+	variant?: FeedbackVariant;
+	/** Iconify 图标名称 */
+	icon?: string;
+	title?: string | ReactNode;
+	subtitle?: string | ReactNode;
+	/** 底部操作区 */
+	extra?: ReactNode;
+	/** 中间插槽 */
+	children?: ReactNode;
+	className?: string;
+}
+
+/**
+ * 落地反馈组件
+ */
 export const Feedback = ({
 	variant = 'info',
 	icon,
@@ -58,11 +61,9 @@ export const Feedback = ({
 	extra,
 	children,
 	className = '',
-}: Props) => {
+}: FeedbackProps) => {
 	const config = variantMap[variant];
 	const finalIcon = icon || config.defaultIcon;
-
-	// 如果是 loading，加上旋转动画，并且不需要深色背景底
 	const isLoading = variant === 'loading';
 
 	return (

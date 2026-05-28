@@ -5,15 +5,21 @@ import {
 	FormItem,
 	RegionPicker,
 	Button,
-	Heading,
 	Alert,
-	UploadBox,
+	ImageUploader,
+	Heading,
 } from '@/components/ui';
 import { useInstitutionApply } from '@/hooks/useUser';
 import { useState } from 'react';
+import { useUpload } from '@/hooks/useUpload';
 
 export default function ApplyInstitutionPage() {
-	const { form, updateField, onUploadCert, handleSave, isSubmitting } = useInstitutionApply();
+	const { form, updateField, handleSave, isSubmitting } = useInstitutionApply();
+
+	// Hook：证件上传
+	const { triggerUpload: uploadFront, isUploading: isUploadingFront } = useUpload();
+	const { triggerUpload: uploadBack, isUploading: isUploadingBack } = useUpload();
+	const { triggerUpload: uploadOrg, isUploading: isUploadingOrg } = useUpload();
 
 	// 状态：回显表单里的地区
 	const [regionLabel, setRegionLabel] = useState('');
@@ -43,7 +49,7 @@ export default function ApplyInstitutionPage() {
 					</FormItem>
 				</Cell>
 
-				{/* 区域二：法人与联系方式 */}
+				{/* 区域二：法人与机构联系方式 */}
 				<Cell>
 					<FormItem label="法人姓名">
 						<Input
@@ -60,14 +66,11 @@ export default function ApplyInstitutionPage() {
 							maxlength={11}
 							className="w-full text-right text-sm text-text-title h-full"
 							placeholder="请输入机构常用联系电话"
-							value={form.phone}
+							value={form.legalPersonPhone}
 							onInput={(e) => updateField('phone', e.detail.value)}
 						/>
 					</FormItem>
-				</Cell>
 
-				{/* 区域三：机构地址 */}
-				<Cell>
 					<FormItem label="机构所在地">
 						<RegionPicker
 							value={[
@@ -105,25 +108,78 @@ export default function ApplyInstitutionPage() {
 					</FormItem>
 				</Cell>
 
-				{/* 区域四：资质凭证上传 */}
-				<Cell className="flex flex-col gap-4 py-8">
-					<Heading title="上传资质凭证" size="sm" />
-
-					<View className="w-full mt-2 mb-1">
-						{/* 机构资质（通常为单张宽幅证件） */}
-						<UploadBox
-							className="w-full"
-							value={form.orgCodeCertUrl}
-							onClick={onUploadCert}
+				{/* 区域三：机构凭证上传 */}
+				<Cell>
+					<Heading title="上传营业执照" size="sm" />
+					<View className="flex flex-col gap-2 py-2">
+						<ImageUploader
+							value={form.orgCodeCertUrl ? [form.orgCodeCertUrl] : []}
+							onChange={(urls) => updateField('orgCodeCertUrl', urls[0])}
+							onUpload={(files) => uploadOrg(files)}
+							isUploading={isUploadingOrg}
 							icon="icon-[ph--certificate-duotone]"
 							label="上传营业执照 / 登记证书副本"
 						/>
-					</View>
 
-					<Alert variant="info">请确保凭证边缘完整、公章清晰，格式支持 JPG、PNG</Alert>
+						<Alert variant="info">
+							请确保凭证边缘完整、公章清晰，格式支持 JPG、PNG
+						</Alert>
+					</View>
 				</Cell>
 
-				{/* 区域五：底部控制区域 */}
+				{/* 区域四：负责人信息 */}
+				<Cell>
+					<FormItem label="负责人姓名">
+						<Input
+							className="w-full text-right text-sm text-text-title h-full"
+							placeholder="请输入负责人姓名"
+							value={form.legalPerson}
+							onInput={(e) => updateField('realName', e.detail.value)}
+						/>
+					</FormItem>
+
+					<FormItem label="负责人电话" border={false}>
+						<Input
+							type="number"
+							maxlength={11}
+							className="w-full text-right text-sm text-text-title h-full"
+							placeholder="请输入负责人电话"
+							value={form.phone}
+							onInput={(e) => updateField('phone', e.detail.value)}
+						/>
+					</FormItem>
+				</Cell>
+
+				{/* 区域五：负责人证件上传 */}
+				<Cell>
+					<Heading title="上传负责人的身份证" size="sm" />
+					<View className="flex flex-col gap-2 py-2">
+						<View className="flex justify-between gap-4">
+							{/* 身份证正面 (人像面) */}
+							<ImageUploader
+								value={form.idCardFront ? [form.idCardFront] : []}
+								onChange={(urls) => updateField('idCardFront', urls[0])}
+								onUpload={(files) => uploadFront(files)}
+								isUploading={isUploadingFront}
+								icon="icon-[ph--cardholder-duotone]"
+								label="上传人像面"
+							/>
+
+							{/* 身份证反面 (国徽面) */}
+							<ImageUploader
+								value={form.idCardBack ? [form.idCardBack] : []}
+								onChange={(urls) => updateField('idCardBack', urls[0])}
+								onUpload={(files) => uploadFront(files)}
+								isUploading={isUploadingBack}
+								icon="icon-[ph--shield-check-duotone]"
+								label="上传人像面"
+							/>
+						</View>
+						<Alert variant="info">请确保照片边缘完整、字迹清晰、无明显反光与遮挡</Alert>
+					</View>
+				</Cell>
+
+				{/* 区域六：底部控制区域 */}
 				<View className="mt-6 px-1">
 					<Button
 						size="xl"

@@ -18,6 +18,9 @@ export interface FormItemProps {
 	className?: string;
 }
 
+/**
+ * 表单项组件
+ */
 export const FormItem = ({
 	label,
 	children,

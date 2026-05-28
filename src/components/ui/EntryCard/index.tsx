@@ -39,6 +39,9 @@ export interface EntryCardProps {
 	disabled?: boolean;
 }
 
+/**
+ * 玄关入口卡片
+ */
 export const EntryCard = ({
 	title,
 	desc,
@@ -49,18 +52,13 @@ export const EntryCard = ({
 }: EntryCardProps) => {
 	const activeTheme = THEME_MAP[theme];
 
-	const handleClick = () => {
-		if (disabled) return;
-		mapsTo(url);
-	};
-
 	return (
 		<Cell
 			clickable={!disabled}
 			className={`p-6 relative overflow-hidden border ${activeTheme.bg} ${
 				disabled ? 'opacity-50 grayscale pointer-events-none' : ''
 			}`}
-			onClick={handleClick}
+			onClick={() => !disabled && mapsTo(url)}
 		>
 			{/* 左侧主体内容区 */}
 			<View className="relative z-10 flex flex-col gap-2.5 w-2/3">

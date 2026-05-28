@@ -1,6 +1,6 @@
 import { View, ViewProps } from '@tarojs/components';
 
-interface Props extends ViewProps {
+export interface CellProps extends ViewProps {
 	/** 取消内部边距 (用于包含全宽图片的卡片) */
 	noPadding?: boolean;
 	/** 开启圆角 (用于列表项) */
@@ -10,6 +10,9 @@ interface Props extends ViewProps {
 	children: React.ReactNode;
 }
 
+/**
+ * 卡片级布局组件
+ */
 export const Cell = ({
 	noPadding = false,
 	rounded = true,
@@ -17,7 +20,7 @@ export const Cell = ({
 	className = '',
 	children,
 	...props
-}: Props) => {
+}: CellProps) => {
 	// 统一的白底、圆角、阴影、间距
 	const baseClasses = `
 		bg-white overflow-hidden

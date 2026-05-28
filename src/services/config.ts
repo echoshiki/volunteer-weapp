@@ -6,5 +6,5 @@ import { WeappConfig } from '@/types/common';
  * 无鉴权的公开接口
  */
 export const getWeappConfigAPI = () => {
-	return http.get<WeappConfig>('/volunteer/config');
+	return http.get<WeappConfig>('/volunteer/config/web/list');
 };

@@ -2,7 +2,7 @@ import { View, Text } from '@tarojs/components';
 import { mapsTo } from '@/utils/common';
 import { JobItem } from '@/types/job';
 
-interface Props {
+export interface JobCardProps {
 	/** 岗位数据对象 */
 	job: JobItem;
 	/** 自定义类名（比如控制下边距） */
@@ -12,7 +12,7 @@ interface Props {
 /**
  * 岗位列表项卡片
  */
-export const JobCard = ({ job, className }: Props) => {
+export const JobCard = ({ job, className }: JobCardProps) => {
 	return (
 		<View className={className} onClick={() => mapsTo(`/pages/job/detail/index?id=${job.id}`)}>
 			{/* 头部：标题与薪资 */}

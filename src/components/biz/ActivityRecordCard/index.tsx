@@ -5,7 +5,7 @@ import { mapsTo } from '@/utils/common';
 import { ActivityRecordItem } from '@/types/activity';
 import { doGlobalScan } from '@/utils/scan';
 
-export interface Props {
+export interface ActivityRecordCardProps {
 	record: ActivityRecordItem;
 	/** 外部追加的容器样式 */
 	className?: string;
@@ -14,7 +14,7 @@ export interface Props {
 /**
  * 用户活动报名记录卡片
  */
-export const ActivityRecordCard = ({ record, className = '' }: Props) => {
+export const ActivityRecordCard = ({ record, className = '' }: ActivityRecordCardProps) => {
 	return (
 		<View
 			onClick={() => mapsTo(`/pages/activity/detail/index?id=${record.activityId}`)}

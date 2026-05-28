@@ -42,10 +42,7 @@ export type ApplyVolunteerRequest = Omit<
 /**
  * 机构审核信息
  */
-export type ApplyInstitutionRequest = Omit<
-	ApplyReview,
-	'realName' | 'idCard' | 'idCardFront' | 'idCardBack'
->;
+export type ApplyInstitutionRequest = ApplyReview;
 
 /** 提交实名认证申请 */
 export const submitApplyReviewAPI = (data: ApplyReview) => http.post('/volunteer/review/add', data);

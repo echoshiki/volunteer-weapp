@@ -15,7 +15,7 @@ export interface RegionChangeResult {
 	rawNames: string[];
 }
 
-interface Props {
+export interface RegionPickerProps {
 	/** 初始省市区，['130000', '130100', '130102'] 自动回显汉字 */
 	value?: string[];
 	/** 选择完成后的回调函数，抛出 code 数组和 name 数组 */
@@ -39,7 +39,7 @@ export const RegionPicker = ({
 	onChange,
 	children,
 	disabled = false,
-}: Props) => {
+}: RegionPickerProps) => {
 	// 拦截原生事件，转换为我们规范的数据结构抛出
 	const handleChange: PickerRegionProps['onChange'] = (e) => {
 		const names = e.detail.value;

@@ -17,6 +17,7 @@ import {
 	getUserProfileFields,
 	getVolunteerFormFields,
 } from '@/utils/user';
+import { useUpload } from './useUpload';
 
 /**
  * ============================================================================
@@ -118,6 +119,8 @@ export const useUpdateUser = () => {
 export const useVolunteerApply = (initialData: any = null) => {
 	const queryClient = useQueryClient();
 
+	const { triggerUpload, isUploading } = useUpload();
+
 	// 状态：表单数据
 	const [form, setForm] = useState<ApplyVolunteerRequest>(() =>
 		getVolunteerFormFields(initialData),
@@ -129,26 +132,6 @@ export const useVolunteerApply = (initialData: any = null) => {
 		value: ApplyVolunteerRequest[K],
 	) => {
 		setForm((prev) => ({ ...prev, [field]: value }));
-	};
-
-	// 执行：身份证正反面图片上传
-	const onUploadIdCard = async (field: 'idCardFront' | 'idCardBack') => {
-		try {
-			const res = await Taro.chooseImage({ count: 1 });
-			const tempFilePath = res.tempFilePaths[0];
-
-			Taro.showLoading({ title: '上传中...', mask: true });
-			const data = await uploadImageAPI(tempFilePath);
-
-			if (data.list && data.list.length > 0) {
-				updateField(field, data.list[0].filePath);
-				Taro.showToast({ title: '上传成功', icon: 'success' });
-			}
-		} catch (error) {
-			console.error('身份证上传失败', error);
-		} finally {
-			Taro.hideLoading();
-		}
 	};
 
 	// Mutation：提交请求
@@ -180,7 +163,6 @@ export const useVolunteerApply = (initialData: any = null) => {
 	return {
 		form,
 		updateField,
-		onUploadIdCard,
 		handleSave,
 		isSubmitting: mutation.isLoading,
 	};
@@ -206,26 +188,6 @@ export const useInstitutionApply = (initialData: any = null) => {
 		setForm((prev) => ({ ...prev, [field]: value }));
 	};
 
-	// 执行：机构资质/营业执照上传
-	const onUploadCert = async () => {
-		try {
-			const res = await Taro.chooseImage({ count: 1 });
-			const tempFilePath = res.tempFilePaths[0];
-
-			Taro.showLoading({ title: '上传中...', mask: true });
-			const data = await uploadImageAPI(tempFilePath);
-
-			if (data.list && data.list.length > 0) {
-				updateField('orgCodeCertUrl', data.list[0].filePath);
-				Taro.showToast({ title: '证书上传成功', icon: 'success' });
-			}
-		} catch (error) {
-			console.error('机构资质上传失败', error);
-		} finally {
-			Taro.hideLoading();
-		}
-	};
-
 	const mutation = useMutation({
 		mutationFn: submitApplyReviewAPI,
 		onSuccess: () => {
@@ -247,15 +209,19 @@ export const useInstitutionApply = (initialData: any = null) => {
 			return Taro.showToast({ title: '请输入机构联系电话', icon: 'none' });
 		if (!form.provinceCode) return Taro.showToast({ title: '请选择机构所在地', icon: 'none' });
 		if (!form.orgCodeCertUrl)
-			return Taro.showToast({ title: '请上传机构资质凭证', icon: 'none' });
-
+			return Taro.showToast({ title: '请上传机构营业执照', icon: 'none' });
+		if (!form.realName) return Taro.showToast({ title: '请输入负责人姓名', icon: 'none' });
+		if (!form.idCard) return Taro.showToast({ title: '请输入负责人身份证号码', icon: 'none' });
+		if (!form.idCardFront)
+			return Taro.showToast({ title: '请上传负责人身份证正面', icon: 'none' });
+		if (!form.idCardBack)
+			return Taro.showToast({ title: '请上传负责人身份证反面', icon: 'none' });
 		mutation.mutate(form);
 	};
 
 	return {
 		form,
 		updateField,
-		onUploadCert,
 		handleSave,
 		isSubmitting: mutation.isLoading,
 	};

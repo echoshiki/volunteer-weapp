@@ -2,15 +2,15 @@ import { View, Swiper, SwiperItem, Image } from '@tarojs/components';
 import { mapsTo } from '@/utils/common';
 
 /** 轮播图单项 */
-export interface SwiperItemData {
+export interface CarouselItem {
 	id?: number | string;
 	pic: string;
 	url?: string;
 }
 
-interface Props {
-	/** 轮播图数据 */
-	list: SwiperItemData[];
+export interface CarouselProps {
+	/** 轮播图数据项 */
+	list: CarouselItem[];
 	/** 是否为全宽度展示 */
 	isFull?: boolean;
 }
@@ -19,7 +19,7 @@ interface Props {
  * 轮播图组件
  * 用于展示一系列图片，支持自动轮播和点击跳转
  */
-export const Carousel = ({ list = [], isFull = false }: Props) => {
+export const Carousel = ({ list = [], isFull = false }: CarouselProps) => {
 	if (!list.length) return <View className="swiper-placeholder" />;
 
 	return (

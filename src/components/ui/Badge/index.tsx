@@ -4,7 +4,22 @@ export type BadgeVariant = 'primary' | 'success' | 'secondary' | 'warning' | 'da
 
 export type BadgeSize = 'xs' | 'sm' | 'md';
 
-interface BadgeProps {
+const VARIANT_MAP: Record<BadgeVariant, string> = {
+	primary: 'bg-primary/10 text-primary',
+	success: 'bg-emerald-500/10 text-emerald-600',
+	secondary: 'bg-gray-500/10 text-gray-600',
+	warning: 'bg-amber-500/10 text-amber-600',
+	danger: 'bg-rose-500/10 text-rose-600',
+	info: 'bg-blue-500/10 text-blue-600',
+};
+
+const SIZE_MAP: Record<BadgeSize, string> = {
+	xs: 'text-[20rpx] px-1.5 py-0.5',
+	sm: 'text-xs px-2 py-0.5',
+	md: 'text-sm px-2.5 py-1',
+};
+
+export interface BadgeProps {
 	/** 视觉变体，默认 secondary */
 	variant?: BadgeVariant;
 	/** 尺寸，默认 sm */
@@ -31,29 +46,14 @@ export const Badge = ({
 	className = '',
 	onClick,
 }: BadgeProps) => {
-	const variantMap: Record<BadgeVariant, string> = {
-		primary: 'bg-primary/10 text-primary',
-		success: 'bg-emerald-500/10 text-emerald-600',
-		secondary: 'bg-gray-500/10 text-gray-600',
-		warning: 'bg-amber-500/10 text-amber-600',
-		danger: 'bg-rose-500/10 text-rose-600',
-		info: 'bg-blue-500/10 text-blue-600',
-	};
-
-	const sizeMap: Record<BadgeSize, string> = {
-		xs: 'text-[20rpx] px-1.5 py-0.5',
-		sm: 'text-xs px-2 py-0.5',
-		md: 'text-sm px-2.5 py-1',
-	};
-
 	return (
 		<View
 			onClick={onClick}
 			className={`
 				inline-flex items-center justify-center tracking-wider
 				${pill ? 'rounded-full' : 'rounded'} 
-				${variantMap[variant]} 
-				${sizeMap[size]} 
+				${VARIANT_MAP[variant]} 
+				${SIZE_MAP[size]} 
 				${className}
 			`}
 		>

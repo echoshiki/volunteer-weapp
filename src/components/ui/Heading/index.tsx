@@ -2,15 +2,15 @@ import { View, Text } from '@tarojs/components';
 import { mapsTo } from '@/utils/common';
 import { Icon } from '../Icon';
 
-export type HeadingSize = 'sm' | 'md' | 'lg';
+type HeadingSize = 'sm' | 'md' | 'lg';
 
 const sizeMap: Record<HeadingSize, { bar: string; icon: string; text: string; margin: string }> = {
-	sm: { bar: 'w-1 h-4', icon: 'size-4', text: 'text-sm', margin: 'mb-2' },
+	sm: { bar: 'w-1 h-4', icon: 'size-4', text: 'text-sm', margin: 'mb-3' },
 	md: { bar: 'w-1 h-5', icon: 'size-5', text: 'text-base', margin: 'mb-3' },
 	lg: { bar: 'w-1.5 h-6 rounded-md', icon: 'size-6', text: 'text-lg', margin: 'mb-4' },
 };
 
-interface Props {
+export interface HeadingProps {
 	/** 标题文字 */
 	title: string;
 	/** 主题色，TailwindCSS 文本色值 */
@@ -20,10 +20,7 @@ interface Props {
 	/** Iconify 图标类名（传入后将替代左侧的竖条） */
 	icon?: string;
 	/** 右侧“查看更多”链接配置 */
-	link?: {
-		name: string;
-		url: string;
-	};
+	link?: { name: string; url: string };
 	/** 右侧扩展区（传入此项会覆盖 link）*/
 	extra?: React.ReactNode;
 	className?: string;
@@ -40,7 +37,7 @@ export const Heading = ({
 	link,
 	extra,
 	className,
-}: Props) => {
+}: HeadingProps) => {
 	const sizeConfig = sizeMap[size];
 
 	return (

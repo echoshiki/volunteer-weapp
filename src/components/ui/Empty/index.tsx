@@ -1,6 +1,6 @@
 import { View, Text, Button } from '@tarojs/components';
 
-interface Props {
+export interface EmptyProps {
 	/** 状态提示标题 */
 	title?: string;
 	/** 状态提示副标题 */
@@ -22,7 +22,7 @@ export const Empty = ({
 	buttonText,
 	icon = 'icon-[ph--mailbox]',
 	onButtonClick,
-}: Props) => {
+}: EmptyProps) => {
 	return (
 		<View className="size-full py-20 flex flex-col gap-5 items-center animate-fade-in">
 			{/* 图片部分 */}

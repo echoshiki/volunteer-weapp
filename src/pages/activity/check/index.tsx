@@ -108,7 +108,7 @@ export default function ActivityCheckPage() {
 					>
 						{/* 优雅地将时长卡片注入到 children 中 */}
 						{resultData.actionType === 'checkOut' && resultData.duration !== null && (
-							<View className="bg-primary/10 rounded-xl p-4 w-full flex flex-col items-center border border-primary/20">
+							<View className="bg-primary/10 rounded-card p-4 w-full flex flex-col items-center border border-primary/20">
 								<Text className="text-xs text-primary mb-1">本次志愿服务时长</Text>
 								<View className="flex items-baseline gap-1 text-primary">
 									<Text className="text-4xl font-black">

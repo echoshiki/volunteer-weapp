@@ -1,6 +1,6 @@
 import { View, Text, Input } from '@tarojs/components';
 
-interface Props {
+export interface SearchBarProps {
 	/** 是否只读模式（点击跳转） */
 	readonly?: boolean;
 	/** 输入框的值 */
@@ -40,7 +40,7 @@ export const SearchBar = ({
 	showBtn = false,
 	showBorder = false,
 	focus = false,
-}: Props) => {
+}: SearchBarProps) => {
 	return (
 		<View className="flex w-full items-center gap-2">
 			<View

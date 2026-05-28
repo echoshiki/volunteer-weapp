@@ -1,7 +1,7 @@
 import { View } from '@tarojs/components';
 import React from 'react';
 
-interface Props {
+export interface DividerProps {
 	/** 分割线方向 */
 	orientation?: 'horizontal' | 'vertical';
 	/** 是否为虚线 */
@@ -12,12 +12,16 @@ interface Props {
 	className?: string;
 }
 
+/**
+ * 分割线组件
+ * 支持水平、垂直方向，可设置是否为虚线，可设置中间的文本或节点
+ */
 export const Divider = ({
 	orientation = 'horizontal',
 	dashed = false,
 	children,
 	className = '',
-}: Props) => {
+}: DividerProps) => {
 	if (orientation === 'vertical') {
 		const verticalClasses = `
             inline-block w-[1px] min-h-[1em] mx-2 align-middle self-center shrink-0

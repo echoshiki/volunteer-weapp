@@ -1,15 +1,20 @@
 import { View, Text } from '@tarojs/components';
 
-interface Props {
+export interface LoadingProps {
+	/** 加载说明文字 */
 	title?: string;
+	/** 是否显示加载说明文字 */
 	showTitle?: boolean;
 }
 
-export const Loading = ({ title, showTitle = true }: Props) => {
+/**
+ * 加载状态组件
+ */
+export const Loading = ({ title, showTitle = true }: LoadingProps) => {
 	return (
-		<View className="size-full flex flex-col gap-5 items-center justify-center py-20">
-			<View className="size-10 rounded-full border-4 border-zinc-300 border-t-transparent animate-spin" />
-			{showTitle && <Text className="text-xs text-zinc-500">{title || '加载中'}</Text>}
+		<View className="size-full flex flex-col gap-2 items-center justify-center ">
+			<View className="size-8 icon-[ph--arrow-clockwise-light] animate-spin text-zinc-500" />
+			{showTitle && <Text className="text-xs text-zinc-500 ">{title || '加载中'}</Text>}
 		</View>
 	);
 };

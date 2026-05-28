@@ -4,19 +4,8 @@ import { ReactNode } from 'react';
 // 定义支持的提示类型
 export type AlertVariant = 'warning' | 'info' | 'success' | 'error';
 
-export interface AlertProps {
-	/** 主题色调 */
-	variant?: AlertVariant;
-	/** 自定义图标（覆盖默认图标） */
-	icon?: string;
-	/** 提示文案，支持纯文本或复杂的 ReactNode */
-	children: ReactNode;
-	/** 外层容器的追加样式 */
-	className?: string;
-}
-
 // 样式字典配置
-const variantMap: Record<
+const VARIANT_MAP: Record<
 	AlertVariant,
 	{ defaultIcon: string; bgClass: string; iconClass: string; textClass: string }
 > = {
@@ -46,8 +35,19 @@ const variantMap: Record<
 	},
 };
 
+export interface AlertProps {
+	/** 主题色调 */
+	variant?: AlertVariant;
+	/** 自定义图标（覆盖默认图标） */
+	icon?: string;
+	/** 提示文案，支持纯文本或复杂的 ReactNode */
+	children: ReactNode;
+	/** 外层容器的追加样式 */
+	className?: string;
+}
+
 export const Alert = ({ variant = 'warning', icon, children, className = '' }: AlertProps) => {
-	const config = variantMap[variant];
+	const config = VARIANT_MAP[variant];
 	const finalIcon = icon || config.defaultIcon;
 
 	return (

@@ -1,7 +1,7 @@
 import { View, Text } from '@tarojs/components';
 import { ReactNode } from 'react';
 
-interface Props {
+export interface DescriptionProps {
 	/** 标签文字 */
 	label: string;
 	/** 内容（可以是字符串或 React 节点） */
@@ -33,7 +33,7 @@ export const Description = ({
 	valueTextClass = 'text-text-title',
 	labelTextClass = 'text-text-muted',
 	className = '',
-}: Props) => {
+}: DescriptionProps) => {
 	// 组装容器样式类
 	const flexJustityClass = variant === 'between' ? 'justify-between' : 'justify-start';
 	const flexAlignClass = align === 'start' ? 'items-start' : 'items-end';

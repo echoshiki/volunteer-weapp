@@ -14,10 +14,40 @@ type ButtonVariant =
 	| 'outline'
 	| 'ghost';
 
-interface Props extends Omit<TaroButtonProps, 'size' | 'type'> {
-	/** 尺寸，默认 md {@link ButtonSize} */
+// 尺寸样式映射 (高度、内边距、字体、图标大小)
+const SIZE_MAP: Record<ButtonSize, string> = {
+	xs: 'h-7 px-3 text-xs gap-1',
+	sm: 'h-9 px-4 text-xs gap-1',
+	md: 'h-11 px-6 text-sm gap-1.5',
+	lg: 'h-13 px-15 text-base gap-2',
+	xl: 'h-13 w-full text-base gap-2',
+};
+
+// 尺寸对应的图标大小 (w-h)
+const ICON_SIZE_MAP: Record<ButtonSize, string> = {
+	xs: 'w-3.5 h-3.5',
+	sm: 'w-4 h-4',
+	md: 'w-5 h-5',
+	lg: 'w-6 h-6',
+	xl: 'w-7 h-7',
+};
+
+// 变体颜色映射 (利用 theme 变量)
+const VARIANT_MAP: Record<ButtonVariant, string> = {
+	primary: 'bg-primary text-white border-none active:opacity-90',
+	success: 'bg-emerald-500 text-white border-none active:bg-emerald-600',
+	secondary: 'bg-gray-100 text-text-body border-none active:bg-gray-200',
+	danger: 'bg-red-500 text-white border-none active:bg-red-600',
+	warning: 'bg-amber-500 text-white border-none active:bg-amber-600',
+	info: 'bg-blue-500 text-white border-none active:bg-blue-600',
+	outline: 'bg-transparent text-primary border border-primary active:bg-red-50',
+	ghost: 'bg-transparent text-text-muted border-none active:bg-gray-100 after:border-none',
+};
+
+export interface ButtonProps extends Omit<TaroButtonProps, 'size' | 'type'> {
+	/** 尺寸，默认 md */
 	size?: ButtonSize;
-	/** 变体，默认 primary {@link ButtonVariant} */
+	/** 变体，默认 primary */
 	variant?: ButtonVariant;
 	/** 图标名，使用 Iconify 图标类名 */
 	icon?: string;
@@ -46,45 +76,15 @@ export const Button = ({
 	children,
 	disabled,
 	...props
-}: Props) => {
-	// 尺寸样式映射 (高度、内边距、字体、图标大小)
-	const sizeMap: Record<ButtonSize, string> = {
-		xs: 'h-7 px-3 text-xs gap-1',
-		sm: 'h-9 px-4 text-xs gap-1',
-		md: 'h-11 px-6 text-sm gap-1.5',
-		lg: 'h-13 px-15 text-base gap-2',
-		xl: 'h-13 w-full text-base gap-2',
-	};
-
-	// 尺寸对应的图标大小 (w-h)
-	const iconSizeMap: Record<ButtonSize, string> = {
-		xs: 'w-3.5 h-3.5',
-		sm: 'w-4 h-4',
-		md: 'w-5 h-5',
-		lg: 'w-6 h-6',
-		xl: 'w-7 h-7',
-	};
-
-	// 变体颜色映射 (利用 theme 变量)
-	const variantMap: Record<ButtonVariant, string> = {
-		primary: 'bg-primary text-white border-none active:opacity-90',
-		success: 'bg-emerald-500 text-white border-none active:bg-emerald-600',
-		secondary: 'bg-gray-100 text-text-body border-none active:bg-gray-200',
-		danger: 'bg-red-500 text-white border-none active:bg-red-600',
-		warning: 'bg-amber-500 text-white border-none active:bg-amber-600',
-		info: 'bg-blue-500 text-white border-none active:bg-blue-600',
-		outline: 'bg-transparent text-primary border border-primary active:bg-red-50',
-		ghost: 'bg-transparent text-text-muted border-none active:bg-gray-100 after:border-none',
-	};
-
+}: ButtonProps) => {
 	// 基础类名构建
 	const baseClasses = `
         flex items-center justify-center font-bold transition-all overflow-hidden
         ${block ? 'w-full' : 'inline-flex w-fit'}
         ${rounded ? 'rounded-full' : 'rounded-card'}
         ${disabled || loading ? 'opacity-50 grayscale pointer-events-none' : ''}
-        ${sizeMap[size]}
-        ${variantMap[variant]}
+        ${SIZE_MAP[size]}
+        ${VARIANT_MAP[variant]}
         ${className}
     `
 		.replace(/\s+/g, ' ')
@@ -97,7 +97,7 @@ export const Button = ({
 				<View
 					className={`
                         ${loading ? 'icon-[ph--spinner-gap-bold] animate-spin' : icon} 
-                        ${iconSizeMap[size]}
+                        ${ICON_SIZE_MAP[size]}
                     `}
 				/>
 			)}
