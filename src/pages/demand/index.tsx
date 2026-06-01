@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
-import { useDemandTargets, useDemandTags, useDemandList } from '@/hooks/useDemand';
+import { useDemandCategoryList, useDemandTags, useDemandList } from '@/hooks/useDemand';
 import { mapsTo } from '@/utils/common';
 import { DemandCard } from '@/components/biz';
 import { Badge, Cell, Divider, Empty, Loading, Page } from '@/components/ui';
@@ -11,7 +11,7 @@ export default function DemandPage() {
 	const [activeTagId, setActiveTagId] = useState<number | string>('');
 
 	// 获取远程数据
-	const { data: targets, isLoading: targetsLoading } = useDemandTargets();
+	const { data: targets, isLoading: targetsLoading } = useDemandCategoryList();
 
 	// 标签请求：传入当前选中的分类ID，实现级联
 	const { data: tags, isLoading: tagsLoading } = useDemandTags(activeCategoryId || undefined);
@@ -53,14 +53,14 @@ export default function DemandPage() {
 						</Badge>
 						{targets?.map((target) => (
 							<Badge
-								key={target.categoryUserId}
-								variant={`${activeCategoryId === target.categoryUserId ? 'info' : 'secondary'}`}
+								key={target.categoryId}
+								variant={`${activeCategoryId === target.categoryId ? 'info' : 'secondary'}`}
 								onClick={() => {
-									setActiveCategoryId(target.categoryUserId);
+									setActiveCategoryId(target.categoryId);
 									setActiveTagId('');
 								}}
 							>
-								{target.categoryUserName}
+								{target.categoryName}
 							</Badge>
 						))}
 					</View>
@@ -77,11 +77,11 @@ export default function DemandPage() {
 						</Badge>
 						{tags?.map((tag) => (
 							<Badge
-								key={tag.demandId}
-								variant={`${activeTagId === tag.demandId ? 'primary' : 'secondary'}`}
-								onClick={() => setActiveTagId(tag.demandId)}
+								key={tag.tagId}
+								variant={`${activeTagId === tag.tagId ? 'primary' : 'secondary'}`}
+								onClick={() => setActiveTagId(tag.tagId)}
 							>
-								{tag.demandName}
+								{tag.tagName}
 							</Badge>
 						))}
 					</View>

@@ -1,6 +1,6 @@
 import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
 import {
-	getDemandTargetListAPI,
+	getDemandCategoryListAPI,
 	getDemandTagListAPI,
 	getDemandListAPI,
 	getDemandDetailAPI,
@@ -10,12 +10,12 @@ import {
 import { getTenantId } from '@/utils/tenant';
 
 /** 服务对象分类列表 Hook */
-export const useDemandTargets = () => {
+export const useDemandCategoryList = () => {
 	return useQuery({
 		queryKey: ['demand', 'targets'],
 		queryFn: async () => {
-			const res = await getDemandTargetListAPI();
-			return res.list; // 直接提取 list 数组
+			const res = await getDemandCategoryListAPI();
+			return res.list;
 		},
 	});
 };

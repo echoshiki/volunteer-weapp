@@ -8,83 +8,84 @@ export type DemandStatus =
 	| 'completed' // 已完成
 	| 'cancelled'; // 已取消
 
-/** 需求订单服务范围（服务多人、服务单人） */
-export type ServiceScope = 'group' | 'individual';
-
 /** 需求服务对象分类 (如：一老一小、通用) */
-export interface DemandTarget {
-	categoryUserId: number;
-	categoryUserName: string;
+export interface DemandCategory {
+	categoryId: number;
+	categoryName: string;
 	description: string;
 	img?: string;
 }
 
 /** 需求标签 (如：助老陪诊、家电维修) */
 export interface DemandTag {
-	demandId: number;
-	demandName: string;
-	/** 归属到的服务对象分类（一老一小/通用） */
-	categoryUserId: number;
+	tagId: number;
+	tagName: string;
 	description: string;
 	img?: string;
 }
 
 /** 需求订单实体 */
 export interface DemandItem {
+	/** 需求单 ID */
 	orderId: number;
+	/** 需求单标题 */
 	orderName: string;
-	publisher: number;
-	nickName: string;
-	description: string;
-	categoryUserId: number;
-	categoryUserName: string;
-	serviceScope: ServiceScope; // group代表集体，individual代表个人
-	charge: boolean; // true代表免费，false代表收费
-	demandId: number;
-	demandName: string;
+	/** 需求单分类 ID */
+	categoryId: number;
+	/** 需求单分类名称 */
+	categoryName: string;
+	/** 需求单标签 */
+	tags: string[];
+	/** 需求单详情描述 */
+	content: string;
+	provinceCode: number;
+	provinceName: string;
+	cityCode: number;
+	cityName: string;
+	districtCode: number;
+	districtName: string;
+	tenantId: number;
+	tenantName: string;
+	/** 需求单详细地址 */
+	address: string;
+	/** 联系人 */
+	name: string;
+	/** 联系电话 */
+	phone: string;
+	/** 应急电话 */
+	emergencyCall: string;
+	/** true 代表免费，false 代表收费 */
+	charge: boolean;
+	/** 最低预算 */
+	minMoney: number;
+	/** 最高预算 */
+	maxMoney: number;
+	/** 需求单状态 pending/approved/rejected */
 	status: ApprovalStatus;
-	acceptStatus: DemandStatus;
+	/** 是否推荐 */
+	isRecommend: boolean;
+	/** 发布时间 */
+	createTime: string;
 }
 
 /** 需求订单详情 */
-export interface DemandDetail {
-	orderId: number;
-	orderName: string;
-	publisher: number;
-	nickName: string;
-	description: string;
-	categoryUserId: number;
-	categoryUserName: string;
-	serviceScope: ServiceScope; // group代表集体，individual代表个人
-	charge: boolean; // true代表免费，false代表收费
-	demandId: number;
-	demandName: string;
-	status: ApprovalStatus;
-	acceptStatus: DemandStatus;
-	auditorId: number;
-	auditorName: string;
-	userId: number; // 已接单用户ID (最终确定的)
-	userName: string; // 已接单用户名称
-	categoryServiceId: number;
-	categoryPaidId: number;
-	categoryPaidName: string; // 收费类型：按小时/天等
-	money: number; // 单价
-	serviceQuantity: number; // 数量
-	serviceManpower: number; // 人数
-	servicePrice: number; // 服务总额
-	orderTotal: number; // 订单最终总额
-	rating: number; // 评价分
-	comment: string; // 评价内容
-}
+export interface DemandDetail extends DemandItem {}
 
 /** 抢单/申请列表中的服务方用户 */
 export interface ServiceUser {
 	userId: number;
+	/** 服务方名称 */
 	userName: string;
+	/** 服务方头像 */
 	avatar: string;
-	/** 服务标签 */
-	demandTags: DemandTag[];
+	/** 服务方电话 */
+	phone: string;
 	/** 服务单总数 */
 	serviceCount: number;
+	/** 报价金额 */
 	money: number;
+	/** 报价描述 */
+	description: string;
+	/** 报价时间 */
+	createTime: string;
 }
