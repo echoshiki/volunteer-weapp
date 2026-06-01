@@ -98,7 +98,7 @@ export default function DemandPage() {
 					{ordersLoading ? (
 						<Loading />
 					) : orders.length === 0 ? (
-						<Empty title="暂无暂无匹配的需求，换个条件试试吧数据" />
+						<Empty title="暂无匹配的需求" />
 					) : (
 						<>
 							{orders.map((item) => (

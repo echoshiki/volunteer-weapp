@@ -64,8 +64,8 @@ export default function ActivityList() {
 
 	return (
 		<Page hasTabBar>
-			<View className="sticky top-0 z-20 shrink-0 bg-white border-b border-gray-100 shadow-sm">
-				{/* 操作面板 (横向排列) */}
+			<View className="sticky top-0 z-20 shrink-0 bg-white border-b border-gray-100">
+				{/* 顶部操作面板 (横向排列) */}
 				<View className="container-x h-12 flex items-center justify-between">
 					<View className="flex items-center gap-6">
 						{/* 筛选项：活动分类 */}
@@ -137,18 +137,6 @@ export default function ActivityList() {
 					</View>
 				)}
 			</View>
-
-			{/* 顶部搜索栏 */}
-			{/* <View className="container-x py-3 sticky top-0 z-10">
-				<SearchBar
-					value={keyword}
-					placeholder="搜索感兴趣的活动"
-					onInput={setKeyword}
-					onConfirm={handleSearch}
-					onSearch={handleSearch}
-					showBtn
-				/>
-			</View> */}
 
 			{/* 活动列表 */}
 			<ScrollView
