@@ -24,7 +24,7 @@ export const useActivityCategories = () => {
  * 活动列表 Hook (支持无限滚动)
  * @param params - 使用 Partial 和 Omit，剔除 pageNum，并将剩余参数设为可选
  */
-export const useActivities = (params: Partial<Omit<ActivityListParams, 'pageNum'>>) => {
+export const useActivityList = (params: Partial<Omit<ActivityListParams, 'pageNum'>>) => {
 	return useInfiniteQuery({
 		queryKey: ['tenant', getTenantId(), 'activity', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>

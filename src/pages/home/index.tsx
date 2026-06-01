@@ -1,6 +1,6 @@
 import { View, Text } from '@tarojs/components';
 import { Page, Heading, Carousel, GridNav, Empty, Cell, Divider } from '@/components/ui';
-import { useActivities } from '@/hooks/useActivity';
+import { useActivityList } from '@/hooks/useActivity';
 import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';
 import { useHomeDashboard } from '@/hooks/useHome';
@@ -47,7 +47,7 @@ export default function HomePage() {
 	const banners = dashboard?.banners || [];
 
 	// 数据：推荐的志愿活动
-	const { data: activityData, isLoading: isActivityLoading } = useActivities({
+	const { data: activityData, isLoading: isActivityLoading } = useActivityList({
 		isRecommend: true,
 		pageSize: 5,
 	});

@@ -1,10 +1,10 @@
 import { http } from '@/utils/http';
 import { ActivityCategory, ActivityItem, ActivityRecordItem } from '@/types/activity';
-import { PageRes } from '@/types/common';
+import { ListRes, PageRes } from '@/types/common';
 
 /** 获取分类列表 */
 export const getActivityCategoryListAPI = () =>
-	http.get<ActivityCategory[]>('/volunteer/category/web/list');
+	http.get<ListRes<ActivityCategory>>('/volunteer/category/web/list');
 
 /** 活动列表请求参数 */
 export interface ActivityListParams {
