@@ -12,7 +12,7 @@ import { getTenantId } from '@/utils/tenant';
 /** 服务对象分类列表 Hook */
 export const useDemandCategoryList = () => {
 	return useQuery({
-		queryKey: ['demand', 'targets'],
+		queryKey: ['demand', 'categories'],
 		queryFn: async () => {
 			const res = await getDemandCategoryListAPI();
 			return res.list;
@@ -21,11 +21,11 @@ export const useDemandCategoryList = () => {
 };
 
 /** 需求标签列表 Hook (支持级联筛选) */
-export const useDemandTags = (categoryUserId?: number | string) => {
+export const useDemandTags = () => {
 	return useQuery({
-		queryKey: ['demand', 'tags', categoryUserId],
+		queryKey: ['demand', 'tags'],
 		queryFn: async () => {
-			const res = await getDemandTagListAPI(categoryUserId ? { categoryUserId } : undefined);
+			const res = await getDemandTagListAPI();
 			return res.list;
 		},
 	});
@@ -48,7 +48,7 @@ export const useDemandList = (params: Omit<DemandListParams, 'pageNum' | 'pageSi
 };
 
 /** 需求单详情 Hook */
-export const useDemandDetail = (demandId: number | string) => {
+export const useDemandDetail = (demandId: number) => {
 	return useQuery({
 		queryKey: ['tenant', getTenantId(), 'demand', 'detail', demandId],
 		queryFn: () => getDemandDetailAPI(demandId),
@@ -57,7 +57,7 @@ export const useDemandDetail = (demandId: number | string) => {
 };
 
 /** 抢单用户列表 Hook (支持无限滚动) */
-export const useServiceUsers = (demandId: number | string) => {
+export const useServiceUsers = (demandId: number) => {
 	return useInfiniteQuery({
 		queryKey: ['tenant', getTenantId(), 'demand', 'serviceUsers', demandId],
 		queryFn: ({ pageParam = 1 }) =>

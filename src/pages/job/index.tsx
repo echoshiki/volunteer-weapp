@@ -22,11 +22,11 @@ export default function JobPage() {
 
 	// 状态：搜索框内容、即时输入的内容
 	const [keyword, setKeyword] = useState('');
-	const [searchValue, setSearchValue] = useState('');
+	const [inputValue, setInputValue] = useState('');
 
 	// 状态：最终确认的岗位、即时点选的岗位
-	const [appliedJobIds, setAppliedJobIds] = useState<(number | string)[]>([]);
-	const [draftJobIds, setDraftJobIds] = useState<(number | string)[]>([]);
+	const [appliedJobIds, setAppliedJobIds] = useState<number[]>([]);
+	const [draftJobIds, setDraftJobIds] = useState<number[]>([]);
 
 	// 数据：岗位分类
 	const { data: categoryList } = useJobCategories();
@@ -39,8 +39,8 @@ export default function JobPage() {
 		hasNextPage,
 		isFetchingNextPage,
 	} = useJobList({
+		keyword,
 		jobIds: appliedJobIds || undefined,
-		keyword: searchValue || undefined,
 	});
 
 	const jobList = useMemo(() => {
@@ -48,7 +48,7 @@ export default function JobPage() {
 	}, [jobsData]);
 
 	// 执行：搜索
-	const handleSearch = () => setSearchValue(keyword);
+	const handleSearch = () => setKeyword(inputValue);
 
 	// 执行：打开抽屉
 	const handleOpenFilter = () => {
@@ -66,21 +66,10 @@ export default function JobPage() {
 	};
 
 	// 执行：选中/取消选中岗位
-	const toggleDraftJobId = (id: number | string) => {
-		if (id === '') {
-			// 点击“全部”，清空已选数组
-			setDraftJobIds([]);
-			return;
-		}
-
-		setDraftJobIds((prev) => {
-			// 如果已经选中，则剔除；如果未选中，则加入数组
-			if (prev.includes(id)) {
-				return prev.filter((item) => item !== id);
-			} else {
-				return [...prev, id];
-			}
-		});
+	const toggleDraftJobId = (id: number) => {
+		setDraftJobIds((prev) =>
+			prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id],
+		);
 	};
 
 	// 计算：是否有选中的筛选条件
@@ -99,7 +88,7 @@ export default function JobPage() {
 						<Text
 							className={`text-xs ${hasActiveFilter ? 'text-primary' : 'text-text-title'}`}
 						>
-							岗位筛选
+							高级筛选
 						</Text>
 						<View
 							className={`size-4 ${hasActiveFilter ? 'icon-[ph--funnel-fill] text-primary' : 'icon-[ph--funnel-duotone] text-gray-500'}`}
@@ -108,14 +97,14 @@ export default function JobPage() {
 
 					{/* 右侧：搜索唤醒按钮 */}
 					<View
-						className="flex items-center gap-2 border-l border-gray-100 pl-4 active:opacity-70 transition-opacity"
+						className="flex items-center gap-1 border-l border-gray-100 pl-4 active:opacity-70 transition-opacity"
 						onClick={() => setIsSearchOpen(!isSearchOpen)}
 					>
 						<View
 							className={`size-4 ${isSearchOpen ? 'icon-[ph--x-bold] text-text-muted' : 'icon-[ph--magnifying-glass-bold] text-text-title'}`}
 						/>
 						<Text className="text-xs text-text-title">
-							{isSearchOpen ? '收起' : '搜索'}
+							{isSearchOpen ? '收起' : '搜索岗位'}
 						</Text>
 					</View>
 				</View>
@@ -124,9 +113,9 @@ export default function JobPage() {
 				{isSearchOpen && (
 					<View className="container-x py-2 bg-white border-t border-gray-100 animate-fade-in-down">
 						<SearchBar
-							value={keyword}
+							value={inputValue}
 							placeholder="搜索岗位、公司名称"
-							onInput={setKeyword}
+							onInput={setInputValue}
 							onConfirm={handleSearch}
 							onSearch={handleSearch}
 							showBtn
@@ -188,9 +177,8 @@ export default function JobPage() {
 						<View className="flex flex-wrap gap-2.5">
 							<Badge
 								variant={draftJobIds.length === 0 ? 'primary' : 'secondary'}
-								onClick={() => toggleDraftJobId('')}
+								onClick={() => setDraftJobIds([])}
 								size="sm"
-								className="rounded! px-4 transition-colors"
 							>
 								全部
 							</Badge>
@@ -204,7 +192,6 @@ export default function JobPage() {
 										variant={isSelected ? 'primary' : 'secondary'}
 										onClick={() => toggleDraftJobId(cat.jobId)}
 										size="sm"
-										className="rounded! px-4 transition-colors"
 									>
 										{cat.jobTitle}
 									</Badge>

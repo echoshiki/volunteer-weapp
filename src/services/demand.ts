@@ -22,17 +22,15 @@ export interface DemandListParams {
 	/** 搜索关键词 */
 	keyword?: string;
 	/** 分类 ID */
-	categoryId?: number | string;
+	categoryId?: number;
 	/** 是否收费 */
 	charge?: string;
 	/** 标签 ID */
-	tagIds?: number | string;
-	/** 需求订单状态 */
-	acceptStatus?: DemandStatus;
-	pageNum: number;
-	pageSize: number;
+	tagIds?: number[];
 	/** 是否推荐 */
 	isRecommend?: boolean;
+	pageNum: number;
+	pageSize: number;
 }
 
 /** 获取需求订单列表（分页）注意后端路径是 orderList */
@@ -40,7 +38,7 @@ export const getDemandListAPI = (params: DemandListParams) =>
 	http.get<PageRes<DemandItem>>('/demand/web/demandList', params);
 
 /** 获取需求订单详情 */
-export const getDemandDetailAPI = (demandId: number | string) =>
+export const getDemandDetailAPI = (demandId: number) =>
 	http.get<DemandDetail>(`/demand/web/${demandId}`);
 
 interface GetServiceUserListParams {

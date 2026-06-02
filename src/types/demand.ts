@@ -20,22 +20,20 @@ export interface DemandCategory {
 export interface DemandTag {
 	tagId: number;
 	tagName: string;
-	description: string;
-	img?: string;
 }
 
 /** 需求订单实体 */
 export interface DemandItem {
 	/** 需求单 ID */
-	orderId: number;
+	demandId: number;
 	/** 需求单标题 */
-	orderName: string;
+	demandName: string;
 	/** 需求单分类 ID */
 	categoryId: number;
 	/** 需求单分类名称 */
 	categoryName: string;
 	/** 需求单标签 */
-	tags: string[];
+	tags: DemandTag[];
 	/** 需求单详情描述 */
 	content: string;
 	provinceCode: number;

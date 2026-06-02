@@ -16,12 +16,12 @@ export const DemandCard = ({ demand, className = '' }: DemandCardProps) => {
 	return (
 		<View
 			className={`${className}`}
-			onClick={() => mapsTo(`/pages/demand/detail/index?id=${demand.orderId}`)}
+			onClick={() => mapsTo(`/pages/demand/detail/index?id=${demand.demandId}`)}
 		>
 			{/* 标题与状态 */}
 			<View className="flex justify-between items-center mb-2">
 				<Text className="text-text-title font-bold text-base line-clamp-1 flex-1 pr-2">
-					{demand.orderName}
+					{demand.demandName}
 				</Text>
 				{demand.charge && <Badge variant="success">公益</Badge>}
 			</View>
@@ -29,8 +29,8 @@ export const DemandCard = ({ demand, className = '' }: DemandCardProps) => {
 			{/* 核心标签区 */}
 			<View className="flex items-center flex-wrap gap-1 mb-3">
 				{demand.tags.map((tag) => (
-					<Badge key={tag} variant="primary">
-						{tag}
+					<Badge key={tag.tagId} variant="primary">
+						{tag.tagName}
 					</Badge>
 				))}
 			</View>
