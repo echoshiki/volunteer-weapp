@@ -22,11 +22,18 @@
     "miniprogram": {
       "list": [
         {
-          "name": "申请历史页",
-          "pathName": "pages/apply/history/index",
+          "name": "我的需求单",
+          "pathName": "pages/user/demand/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "申请历史页",
+          "pathName": "pages/apply/history/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "机构入驻申请表单",

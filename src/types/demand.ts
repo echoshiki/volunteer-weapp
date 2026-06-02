@@ -1,12 +1,5 @@
 import { ApprovalStatus } from './common';
-
-/** 需求订单状态 */
-export type DemandStatus =
-	| 'dispatching' // 派单中
-	| 'accepted' // 已接单
-	| 'serving' // 服务中
-	| 'completed' // 已完成
-	| 'cancelled'; // 已取消
+import { UserIdentity } from './user';
 
 /** 需求服务对象分类 (如：一老一小、通用) */
 export interface DemandCategory {
@@ -73,7 +66,9 @@ export interface DemandDetail extends DemandItem {}
 export interface ServiceUser {
 	userId: number;
 	/** 服务方名称 */
-	userName: string;
+	name: string;
+	/** 服务方身份 */
+	identity: Exclude<UserIdentity, 'user'>;
 	/** 服务方头像 */
 	avatar: string;
 	/** 服务方电话 */

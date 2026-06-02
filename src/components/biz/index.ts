@@ -5,3 +5,5 @@ export * from './DemandCard';
 export * from './ActivityRecordCard';
 export * from './ApplyRecordCard';
 export * from './TenantPicker';
+export * from './ServiceUserCard';
+export * from './DemandRecordCard';

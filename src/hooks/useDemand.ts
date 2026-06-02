@@ -5,7 +5,8 @@ import {
 	getDemandListAPI,
 	getDemandDetailAPI,
 	getServiceUserListAPI,
-	DemandListParams,
+	GetDemandListRequest,
+	getUserDemandListAPI,
 } from '@/services/demand';
 import { getTenantId } from '@/utils/tenant';
 
@@ -32,7 +33,7 @@ export const useDemandTags = () => {
 };
 
 /** 需求单列表 Hook (无限滚动) */
-export const useDemandList = (params: Omit<DemandListParams, 'pageNum' | 'pageSize'>) => {
+export const useDemandList = (params: Omit<GetDemandListRequest, 'pageNum' | 'pageSize'>) => {
 	return useInfiniteQuery({
 		queryKey: ['tenant', getTenantId(), 'demand', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
@@ -69,5 +70,20 @@ export const useServiceUsers = (demandId: number) => {
 		getNextPageParam: (lastPage) =>
 			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
 		enabled: !!demandId,
+	});
+};
+
+/** 我的需求单列表 Hook (无限滚动) */
+export const useUserDemandList = () => {
+	return useInfiniteQuery({
+		queryKey: ['user', 'demand', 'list'],
+		queryFn: ({ pageParam = 1 }) =>
+			getUserDemandListAPI({
+				pageNum: pageParam,
+				pageSize: 10,
+			}),
+		// 根据后端返回的 page 和 totalPage 控制下一页
+		getNextPageParam: (lastPage) =>
+			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
 	});
 };

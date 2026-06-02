@@ -33,11 +33,13 @@ export interface ShareConfig {
 	params?: Record<string, any>;
 }
 
-/** 审核状态 */
+/** 通用审核状态 */
 export type ApprovalStatus = 'pending' | 'approved' | 'rejected';
 
+/** 通用主题变体 */
 export type ThemeVariant = 'primary' | 'success' | 'secondary' | 'warning' | 'danger' | 'info';
 
+/** 通用尺寸变体 */
 export type SizeVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 /** 自定义区域项 */

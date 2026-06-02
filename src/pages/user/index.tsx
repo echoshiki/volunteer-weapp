@@ -89,19 +89,24 @@ export default function UserPage() {
 					{/* 服务管理模块 */}
 					<View className="bg-white rounded-card overflow-hidden">
 						<ColumnNav
-							icon="icon-[ph--clipboard-text-light]"
-							label="我的服务订单"
-							onClick={() => mapsTo('/pages/demand/my/index')}
-						/>
-						<ColumnNav
 							icon="icon-[ph--star-light]"
 							label="我的志愿活动"
 							onClick={() => mapsTo('/pages/user/activity/index')}
 						/>
 						<ColumnNav
+							icon="icon-[ph--clipboard-text-light]"
+							label="我发布的需求"
+							onClick={() => mapsTo('/pages/user/demand/index')}
+						/>
+						<ColumnNav
+							icon="icon-[ph--clipboard-text-light]"
+							label="我的服务订单"
+							onClick={() => mapsTo('/pages/user/service/index')}
+						/>
+						<ColumnNav
 							icon="icon-[ph--user-focus-light]"
 							label="我的求职意向"
-							onClick={() => mapsTo('/pages/job/my/index')}
+							onClick={() => mapsTo('/pages/user/job/index')}
 						/>
 						<ColumnNav
 							icon="icon-[ph--scan-light]"

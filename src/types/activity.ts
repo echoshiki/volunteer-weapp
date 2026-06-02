@@ -1,3 +1,5 @@
+import { ApprovalStatus } from './common';
+
 /**
  * 活动状态类型
  * - pending: 待开始
@@ -13,9 +15,6 @@ export type ActivityStatus = 'pending' | 'started' | 'ended';
  * - ended: 已结束
  */
 export type EnrollStatus = 'pending' | 'started' | 'ended';
-
-/** 我的报名审核状态 */
-export type AuditStatus = 'pending' | 'approved' | 'rejected';
 
 /** 志愿活动分类 */
 export interface ActivityCategory {
@@ -69,7 +68,7 @@ export interface ActivityRecordItem {
 	/** 活动地址 */
 	address: string;
 	/** 报名审核状态 */
-	auditStatus: AuditStatus;
+	auditStatus: ApprovalStatus;
 	/** 拒绝理由 */
 	rejectReason?: string;
 	/** 签到时间 */

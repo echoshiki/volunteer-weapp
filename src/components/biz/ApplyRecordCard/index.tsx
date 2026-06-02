@@ -1,8 +1,20 @@
 import { View, Text } from '@tarojs/components';
-import { Badge } from '@/components/ui';
-import { TYPE_MAP, APPLY_STATUS_MAP } from '@/constants/apply';
 import type { ApplyHistoryItem } from '@/types/user';
-import { ApplyStatusBadge } from '../BizBadge';
+import { AuditStatusBadge } from '../BizBadge';
+
+/** 申请类型字典 */
+export const TYPE_MAP = {
+	1: {
+		title: '志愿者认证申请',
+		icon: 'icon-[ph--user-focus-duotone]',
+		color: 'text-blue-500',
+	},
+	2: {
+		title: '服务机构入驻申请',
+		icon: 'icon-[ph--buildings-duotone]',
+		color: 'text-orange-500',
+	},
+};
 
 export interface ApplyRecordCardProps {
 	item: ApplyHistoryItem;
@@ -22,7 +34,7 @@ export const ApplyRecordCard = ({ item, className = '' }: ApplyRecordCardProps) 
 					<View className={`${typeConfig.icon} size-5 ${typeConfig.color}`} />
 					<Text className="text-base font-bold text-text-title">{typeConfig.title}</Text>
 				</View>
-				<ApplyStatusBadge value={item.status} />
+				<AuditStatusBadge value={item.status} />
 			</View>
 
 			<View className="flex flex-col gap-2">

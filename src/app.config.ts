@@ -12,6 +12,7 @@ export default defineAppConfig({
 		'pages/user/index',
 		'pages/user/profile/index',
 		'pages/user/activity/index',
+		'pages/user/demand/index',
 		'pages/apply/index',
 		'pages/apply/history/index',
 		'pages/apply/volunteer/index',

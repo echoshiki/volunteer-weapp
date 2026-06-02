@@ -1,24 +1,17 @@
 import { http } from '@/utils/http';
 import { ListRes, PageRes } from '@/types/common';
-import {
-	DemandCategory,
-	DemandTag,
-	DemandItem,
-	DemandDetail,
-	ServiceUser,
-	DemandStatus,
-} from '@/types/demand';
+import { DemandCategory, DemandTag, DemandItem, DemandDetail, ServiceUser } from '@/types/demand';
 
-/** 获取需求服务对象分类列表（不分页） */
+/** 获取需求分类列表 */
 export const getDemandCategoryListAPI = () =>
 	http.get<ListRes<DemandCategory>>('/demand/target/web/targetList');
 
-/** 获取需求标签列表（不分页，可根据服务对象ID过滤） */
+/** 获取需求标签列表 */
 export const getDemandTagListAPI = (params?: { categoryUserId?: number | string }) =>
 	http.get<ListRes<DemandTag>>('/demand/tag/web/tagList', params);
 
-/** 需求订单列表请求参数 */
-export interface DemandListParams {
+/** 需求单列表请求参数 */
+export interface GetDemandListRequest {
 	/** 搜索关键词 */
 	keyword?: string;
 	/** 分类 ID */
@@ -33,20 +26,31 @@ export interface DemandListParams {
 	pageSize: number;
 }
 
-/** 获取需求订单列表（分页）注意后端路径是 orderList */
-export const getDemandListAPI = (params: DemandListParams) =>
+/** 获取需求单列表 */
+export const getDemandListAPI = (params: GetDemandListRequest) =>
 	http.get<PageRes<DemandItem>>('/demand/web/demandList', params);
 
 /** 获取需求订单详情 */
 export const getDemandDetailAPI = (demandId: number) =>
 	http.get<DemandDetail>(`/demand/web/${demandId}`);
 
+/** 需求单抢单用户列表请求参数 */
 interface GetServiceUserListParams {
 	demandId: number | string;
 	pageNum: number;
 	pageSize: number;
 }
 
-/** 获取需求订单抢单用户列表（分页） */
+/** 获取需求单抢单用户列表 */
 export const getServiceUserListAPI = (params: GetServiceUserListParams) =>
 	http.get<PageRes<ServiceUser>>('/demand/web/serviceUser', params);
+
+/** 我发布的需求单列表请求参数 */
+export interface GetUserDemandListRequest {
+	pageNum: number;
+	pageSize: number;
+}
+
+/** 获取我发布的需求单列表 */
+export const getUserDemandListAPI = (params: GetUserDemandListRequest) =>
+	http.get<PageRes<DemandItem>>('/demand/web/demandUserList', params);
