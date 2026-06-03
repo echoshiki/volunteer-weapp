@@ -81,3 +81,14 @@ export interface PublishDemandRequest {
 export const publishDemandAPI = (data: PublishDemandRequest) => {
 	return http.post('/demand/web/add', data);
 };
+
+export interface EditDemandRequest extends PublishDemandRequest {
+	demandId: number;
+}
+
+/**
+ * 编辑需求订单
+ */
+export const editDemandAPI = (data: EditDemandRequest) => {
+	return http.put('/demand/web/update', data);
+};

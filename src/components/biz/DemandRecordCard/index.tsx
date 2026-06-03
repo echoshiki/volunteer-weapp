@@ -30,7 +30,7 @@ export const DemandRecordCard = ({
 	return (
 		<View className={`flex flex-col bg-white ${className}`}>
 			<View
-				className="flex justify-between items-center mb-3"
+				className="flex justify-between items-center mb-2"
 				onClick={() => onClick?.(record)}
 			>
 				<Text className="text-text-title font-bold text-base line-clamp-1 flex-1 pr-4">
@@ -41,7 +41,7 @@ export const DemandRecordCard = ({
 
 			<View className="flex flex-col gap-2 mb-2" onClick={() => onClick?.(record)}>
 				{/* 标签与性质 */}
-				<View className="flex items-center gap-2">
+				<View className="flex items-center gap-2 mb-1">
 					<Text className="text-xs text-text-muted bg-gray-50 px-2 py-0.5 rounded">
 						{record.categoryName}
 					</Text>
@@ -53,10 +53,10 @@ export const DemandRecordCard = ({
 				</View>
 
 				{/* 时间与地址摘要 */}
-				<View className="flex flex-col gap-1 text-xs text-text-muted mt-1">
+				<View className="flex flex-col gap-1 text-sm text-text-muted">
 					{!record.charge && (record.minMoney > 0 || record.maxMoney > 0) && (
 						<View className="flex items-center gap-1">
-							<View className="icon-[ph--wallet] size-3" />
+							<View className="icon-[ph--wallet] size-4" />
 							<Text className="text-text-muted">预算金额：</Text>
 							<Text className="text-orange-500 font-bold font-num">
 								¥{record.minMoney} - ¥{record.maxMoney}
@@ -64,11 +64,11 @@ export const DemandRecordCard = ({
 						</View>
 					)}
 					<View className="flex items-center gap-1">
-						<View className="icon-[ph--clock] size-3" />
+						<View className="icon-[ph--clock] size-4" />
 						<Text>发布时间：{record.createTime}</Text>
 					</View>
 					<View className="flex items-center gap-1">
-						<View className="icon-[ph--map-pin] size-3" />
+						<View className="icon-[ph--map-pin] size-4" />
 						<Text className="line-clamp-1">
 							服务区域：{record.cityName}
 							{record.districtName}
@@ -92,14 +92,9 @@ export const DemandRecordCard = ({
 
 				{/* 右侧：动作按钮组 (根据状态动态渲染) */}
 				<View className="flex items-center gap-2 shrink-0">
-					{/* 所有状态都可以删除 */}
-					<Button variant="danger" size="xs" onClick={() => onDelete?.(record)}>
-						删除
-					</Button>
-
 					{/* 待审核 / 已驳回状态：允许编辑 */}
 					{(record.status === 'pending' || record.status === 'rejected') && (
-						<Button variant="info" size="xs" onClick={() => onEdit?.(record)}>
+						<Button variant="info" size="sm" onClick={() => onEdit?.(record)}>
 							修改需求
 						</Button>
 					)}
@@ -108,12 +103,17 @@ export const DemandRecordCard = ({
 					{record.status === 'approved' && (
 						<Button
 							variant="success"
-							size="xs"
+							size="sm"
 							onClick={() => onViewApplicants?.(record)}
 						>
 							选择服务方
 						</Button>
 					)}
+
+					{/* 所有状态都可以删除 */}
+					<Button variant="ghost" size="sm" onClick={() => onDelete?.(record)}>
+						<Text className=" text-primary underline">删除</Text>
+					</Button>
 				</View>
 			</View>
 		</View>

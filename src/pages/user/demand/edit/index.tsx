@@ -1,22 +1,53 @@
-import { View, Text, Input, Textarea, Picker as TaroPicker, Switch } from '@tarojs/components';
-import { Page, Button, Badge, Cell, Heading, FormItem } from '@/components/ui';
+import { View, Text, Input, Textarea, Picker as TaroPicker } from '@tarojs/components';
+import Taro, { useRouter } from '@tarojs/taro';
+import { Page, Button, Badge, Cell, Heading, FormItem, Loading, Empty } from '@/components/ui';
 import { TenantPicker } from '@/components/biz/TenantPicker';
 import {
 	useDemandCategoryList,
 	useDemandTags,
-	usePublishDemand,
+	useEditDemand,
+	useDemandDetail,
 	useDemandForm,
 } from '@/hooks/useDemand';
-import Taro from '@tarojs/taro';
+import { demandItemToFormData } from '@/utils/demand';
+import { DemandCategory } from '@/types/demand';
 import { PublishDemandRequest } from '@/services/demand';
 
-export default function PublishDemandPage() {
-	// ── 远程数据 ──────────────────────────────────
-	const { data: categoryList = [] } = useDemandCategoryList();
-	const { data: tagList = [] } = useDemandTags();
-	const { mutate: publishDemand, isLoading } = usePublishDemand();
+export default function EditDemandPage() {
+	const { params } = useRouter();
+	const id = Number(params.id);
 
-	// ── 表单状态和方法 ──────────────────────────────────
+	const { data: demandDetail, isLoading: isDetailLoading } = useDemandDetail(id);
+	const { data: categoryList = [], isLoading: isCategoryLoading } = useDemandCategoryList();
+
+	// 在数据完全准备好之前，展示 Loading，防止闪烁和 Hook 初始化失败
+	if (isDetailLoading || isCategoryLoading) return <Loading />;
+	if (!demandDetail) return <Empty title="未找到该需求单信息" />;
+
+	// 渲染真正的表单内容组件，此时数据 100% 存在
+	return (
+		<EditDemandFormContent
+			initialData={demandItemToFormData(demandDetail)}
+			demandId={demandDetail.demandId}
+			categoryList={categoryList}
+		/>
+	);
+}
+
+interface EditDemandFormContentProps {
+	initialData: ReturnType<typeof demandItemToFormData>;
+	demandId: number;
+	categoryList: DemandCategory[];
+}
+
+function EditDemandFormContent({
+	initialData,
+	demandId,
+	categoryList,
+}: EditDemandFormContentProps) {
+	const { data: tagList = [] } = useDemandTags();
+	const { mutate: editDemand, isLoading } = useEditDemand();
+
 	const {
 		formData,
 		validate,
@@ -26,24 +57,23 @@ export default function PublishDemandPage() {
 		regionLabel,
 		toggleTag,
 		handleTenantChange,
-	} = useDemandForm();
+	} = useDemandForm(initialData, categoryList);
 
-	// ── 提交表单 ──────────────────────────────────
 	const handleSubmit = () => {
 		const error = validate();
 		if (error) return Taro.showToast({ title: error, icon: 'none' });
 
-		publishDemand({
+		editDemand({
 			...(formData as PublishDemandRequest),
+			demandId,
 			minMoney: formData.charge ? 0 : Number(formData.minMoney),
 			maxMoney: formData.charge ? 0 : Number(formData.maxMoney),
-		});
+		} as any);
 	};
 
 	return (
 		<Page hasTabBar>
 			<View className="container-x py-4 space-y-4">
-				{/* 基础信息模块 */}
 				<Cell>
 					<Heading title="基础信息" size="md" />
 
@@ -182,7 +212,7 @@ export default function PublishDemandPage() {
 				</Cell>
 			</View>
 
-			{/* 底部吸底提交按钮 */}
+			{/* 底部吸底按钮 */}
 			<View className="fixed bottom-0 left-0 w-full p-4 bg-white border-t border-gray-100 pb-safe z-50">
 				<Button
 					variant="primary"
@@ -190,7 +220,7 @@ export default function PublishDemandPage() {
 					onClick={handleSubmit}
 					loading={isLoading}
 				>
-					确认发布
+					保存修改
 				</Button>
 			</View>
 		</Page>
