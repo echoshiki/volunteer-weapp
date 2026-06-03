@@ -54,3 +54,30 @@ export interface GetUserDemandListRequest {
 /** 获取我发布的需求单列表 */
 export const getUserDemandListAPI = (params: GetUserDemandListRequest) =>
 	http.get<PageRes<DemandItem>>('/demand/web/demandUserList', params);
+
+/** 发布/编辑需求单的入参 */
+export interface PublishDemandRequest {
+	demandName: string;
+	categoryId: number;
+	tagIds: number[];
+	content: string;
+	provinceCode: number;
+	cityCode: number;
+	districtCode: number;
+	tenantId: number;
+	address: string;
+	name: string;
+	phone: string;
+	emergencyCall: string;
+	minMoney: number;
+	maxMoney: number;
+	charge: boolean;
+	isRecommend?: boolean;
+}
+
+/**
+ * 发布需求订单
+ */
+export const publishDemandAPI = (data: PublishDemandRequest) => {
+	return http.post('/demand/web/add', data);
+};

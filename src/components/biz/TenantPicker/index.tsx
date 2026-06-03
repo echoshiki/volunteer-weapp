@@ -5,7 +5,13 @@ import { getTenantListApi } from '@/services/tenant';
 import Taro from '@tarojs/taro';
 
 export interface TenantPickerProps {
-	onChange: (tenantId: string | number, tenantName: string) => void;
+	onChange: (
+		tenantId: number,
+		tenantName: string,
+		provinceCode: number,
+		cityCode: number,
+		districtCode: number,
+	) => void;
 	children: React.ReactNode;
 	disabled?: boolean;
 }
@@ -119,13 +125,16 @@ export const TenantPicker = ({ onChange, children, disabled = false }: TenantPic
 	// 确认事件：用户点击右上方“确定”时触发
 	// ==========================================
 	const handleChange: PickerMultiSelectorProps['onChange'] = (e) => {
-		const [, , , tIdx] = e.detail.value;
-		const { tenants } = dataRef.current;
+		const [pIdx, cIdx, aIdx, tIdx] = e.detail.value;
+		const { provs, cities, areas, tenants } = dataRef.current;
 
 		const selectedTenant = tenants[tIdx];
 
 		if (selectedTenant) {
-			onChange(selectedTenant.id, selectedTenant.name);
+			const pCode = Number(provs[pIdx].code);
+			const cCode = Number(cities[cIdx].code);
+			const aCode = Number(areas[aIdx].code);
+			onChange(selectedTenant.id, selectedTenant.name, pCode, cCode, aCode);
 		} else {
 			// 做了兜底拦截，防止用户选了“暂无街道”还点确定
 			Taro.showToast({ title: '当前地区暂无可用街道', icon: 'none' });

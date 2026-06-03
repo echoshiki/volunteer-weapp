@@ -39,7 +39,7 @@ export const DemandRecordCard = ({
 				<AuditStatusBadge value={record.status} />
 			</View>
 
-			<View className="flex flex-col gap-2 mb-4" onClick={() => onClick?.(record)}>
+			<View className="flex flex-col gap-2 mb-2" onClick={() => onClick?.(record)}>
 				{/* 标签与性质 */}
 				<View className="flex items-center gap-2">
 					<Text className="text-xs text-text-muted bg-gray-50 px-2 py-0.5 rounded">
@@ -80,7 +80,7 @@ export const DemandRecordCard = ({
 
 			<Divider className="my-0" />
 
-			<View className="flex justify-between items-center pt-3">
+			<View className="flex justify-between items-center">
 				{/* 左侧：可以放一些提示，比如驳回原因，或者收到的抢单数 */}
 				<View className="flex-1">
 					{record.status === 'rejected' && (

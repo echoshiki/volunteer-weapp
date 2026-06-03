@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import {
 	getDemandCategoryListAPI,
 	getDemandTagListAPI,
@@ -7,8 +7,12 @@ import {
 	getServiceUserListAPI,
 	GetDemandListRequest,
 	getUserDemandListAPI,
+	publishDemandAPI,
+	PublishDemandRequest,
 } from '@/services/demand';
 import { getTenantId } from '@/utils/tenant';
+import Taro from '@tarojs/taro';
+import { useState } from 'react';
 
 /** 服务对象分类列表 Hook */
 export const useDemandCategoryList = () => {
@@ -85,5 +89,25 @@ export const useUserDemandList = () => {
 		// 根据后端返回的 page 和 totalPage 控制下一页
 		getNextPageParam: (lastPage) =>
 			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+	});
+};
+
+/** 发布需求单 Hook */
+export const usePublishDemand = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: publishDemandAPI,
+		onSuccess: () => {
+			Taro.showToast({ title: '发布成功', icon: 'success' });
+			queryClient.invalidateQueries({ queryKey: ['demand', 'list'] });
+
+			setTimeout(() => {
+				Taro.navigateBack();
+			}, 1500);
+		},
+		onError: (err: any) => {
+			Taro.showToast({ title: err?.message || '发布失败', icon: 'none' });
+		},
 	});
 };

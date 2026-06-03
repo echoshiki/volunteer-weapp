@@ -22,11 +22,18 @@
     "miniprogram": {
       "list": [
         {
-          "name": "我的需求单",
-          "pathName": "pages/user/demand/index",
+          "name": "需求发布",
+          "pathName": "pages/demand/publish/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "我的需求单",
+          "pathName": "pages/user/demand/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "申请历史页",
