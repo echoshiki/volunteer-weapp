@@ -5,14 +5,13 @@ import { AuditStatusBadge } from '../BizBadge';
 
 export interface DemandRecordCardProps {
 	record: DemandItem;
-	/** 点击卡片本体跳转详情 */
 	onClick?: (demand: DemandItem) => void;
-	/** 动作：去编辑 */
 	onEdit?: (demand: DemandItem) => void;
-	/** 动作：删除 */
 	onDelete?: (demand: DemandItem) => void;
-	/** 动作：查看抢单/接单人员 */
+	/** 查看抢单/接单人员 */
 	onViewApplicants?: (demand: DemandItem) => void;
+	/** 查看关联的服务订单 */
+	onViewOrder?: (demand: DemandItem) => void;
 	className?: string;
 }
 
@@ -25,10 +24,16 @@ export const DemandRecordCard = ({
 	onEdit,
 	onDelete,
 	onViewApplicants,
+	onViewOrder,
 	className = '',
 }: DemandRecordCardProps) => {
+	// 提取需求单状态
+	const canEdit = ['pending', 'rejected', 'approved'].includes(record.status);
+	const isApproved = record.status === 'approved';
+	const isCompleted = record.status === 'completed';
+
 	return (
-		<View className={`flex flex-col bg-white ${className}`}>
+		<View className={`flex flex-col ${className}`}>
 			<View
 				className="flex justify-between items-center mb-2"
 				onClick={() => onClick?.(record)}
@@ -92,15 +97,15 @@ export const DemandRecordCard = ({
 
 				{/* 右侧：动作按钮组 (根据状态动态渲染) */}
 				<View className="flex items-center gap-2 shrink-0">
-					{/* 待审核 / 已驳回状态：允许编辑 */}
-					{(record.status === 'pending' || record.status === 'rejected') && (
+					{/* 待审核 / 已驳回 / 已通过状态：允许编辑 */}
+					{canEdit && (
 						<Button variant="info" size="sm" onClick={() => onEdit?.(record)}>
 							修改需求
 						</Button>
 					)}
 
 					{/* 已通过状态：允许查看抢单人员 */}
-					{record.status === 'approved' && (
+					{isApproved && (
 						<Button
 							variant="success"
 							size="sm"
@@ -110,10 +115,19 @@ export const DemandRecordCard = ({
 						</Button>
 					)}
 
-					{/* 所有状态都可以删除 */}
-					<Button variant="ghost" size="sm" onClick={() => onDelete?.(record)}>
-						<Text className=" text-primary underline">删除</Text>
-					</Button>
+					{/* 已完成状态：允许查看订单 */}
+					{isCompleted && (
+						<Button variant="primary" size="sm" onClick={() => onViewOrder?.(record)}>
+							查看订单
+						</Button>
+					)}
+
+					{/* 已完成状态：无法删除 */}
+					{!isCompleted && (
+						<Button variant="ghost" size="sm" onClick={() => onDelete?.(record)}>
+							<Text className=" text-primary underline">删除</Text>
+						</Button>
+					)}
 				</View>
 			</View>
 		</View>

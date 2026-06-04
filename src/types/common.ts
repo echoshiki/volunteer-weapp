@@ -34,7 +34,7 @@ export interface ShareConfig {
 }
 
 /** 通用审核状态 */
-export type ApprovalStatus = 'pending' | 'approved' | 'rejected';
+export type AuditStatus = 'pending' | 'approved' | 'rejected' | 'completed';
 
 /** 通用主题变体 */
 export type ThemeVariant = 'primary' | 'success' | 'secondary' | 'warning' | 'danger' | 'info';

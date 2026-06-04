@@ -4,17 +4,28 @@ import { Page, Empty, Loading, Divider, Cell } from '@/components/ui';
 import { DemandRecordCard } from '@/components/biz';
 import { mapsTo } from '@/utils/common';
 import { DemandItem } from '@/types/demand';
+import Taro from '@tarojs/taro';
 
 export default function UserDemandPage() {
 	// 数据：用户活动报名记录列表
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useUserDemandList();
-
-	// 执行：扁平化分页数据
 	const list = data?.pages.flatMap((page) => page.list) || [];
 
 	// 执行：跳转到需求编辑页
 	const handleEdit = (demand: DemandItem) => {
-		mapsTo(`/pages/user/demand/edit/index?id=${demand.demandId}`);
+		if (demand.status === 'approved') {
+			Taro.showModal({
+				title: '温馨提示',
+				content: '修改需求需要重新提交审核，且当前所有的抢单记录将被失效，是否继续？',
+				success: function (res) {
+					if (res.confirm) {
+						mapsTo(`/pages/demand/edit/index?id=${demand.demandId}`);
+					}
+				},
+			});
+		} else {
+			mapsTo(`/pages/user/demand/edit/index?id=${demand.demandId}`);
+		}
 	};
 
 	// 执行：跳转到选择服务方（抢单列表）页

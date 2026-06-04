@@ -1,4 +1,4 @@
-import { ApprovalStatus } from './common';
+import { AuditStatus } from './common';
 
 /**
  * 活动状态类型
@@ -68,7 +68,7 @@ export interface ActivityRecordItem {
 	/** 活动地址 */
 	address: string;
 	/** 报名审核状态 */
-	auditStatus: ApprovalStatus;
+	auditStatus: AuditStatus;
 	/** 拒绝理由 */
 	rejectReason?: string;
 	/** 签到时间 */

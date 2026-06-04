@@ -1,4 +1,4 @@
-import { ApprovalStatus } from './common';
+import { AuditStatus } from './common';
 import { UserIdentity } from './user';
 
 /** 需求服务对象分类 (如：一老一小、通用) */
@@ -51,8 +51,8 @@ export interface DemandItem {
 	minMoney: number;
 	/** 最高预算 */
 	maxMoney: number;
-	/** 需求单状态 pending/approved/rejected */
-	status: ApprovalStatus;
+	/** 需求单状态 pending/approved/rejected/completed */
+	status: AuditStatus;
 	/** 是否推荐 */
 	isRecommend: boolean;
 	/** 发布时间 */
