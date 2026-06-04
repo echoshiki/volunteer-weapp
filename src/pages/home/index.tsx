@@ -5,7 +5,7 @@ import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';
 import { useHomeDashboard } from '@/hooks/useHome';
 import { useJobList, useEnterpriseList } from '@/hooks/useJob';
-import { ActivityCard, JobCard, TenantPicker } from '@/components/biz';
+import { ActivityCard, TenantChangeEventProps, JobCard, TenantPicker } from '@/components/biz';
 import { getTenantName, setTenant, getTenantId } from '@/utils/tenant';
 import { useState, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -18,13 +18,13 @@ export default function HomePage() {
 	// 执行：切换 Tenant
 	const queryClient = useQueryClient();
 	const handleTenantChange = useCallback(
-		(code: string | number, name: string) => {
+		({ tenantId, tenantName }: TenantChangeEventProps) => {
 			const oldTenantId = getTenantId();
-			if (oldTenantId === code.toString()) return;
+			if (oldTenantId === tenantId.toString()) return;
 
 			// 更新本地缓存和当前状态
-			setTenant(code.toString(), name);
-			setCurrentName(name);
+			setTenant(tenantId.toString(), tenantName);
+			setCurrentName(tenantName);
 			Taro.showToast({ title: '切换成功', icon: 'success' });
 
 			// 刷新 Tanent 全局缓存

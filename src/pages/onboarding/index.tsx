@@ -1,6 +1,6 @@
 import { View, Text, Image } from '@tarojs/components';
 import Taro, { useRouter, useLoad } from '@tarojs/taro';
-import { TenantPicker } from '@/components/biz';
+import { TenantChangeEventProps, TenantPicker } from '@/components/biz';
 import { setTenant } from '@/utils/tenant';
 import { mapsTo } from '@/utils/common';
 import { useConfigStore } from '@/store/config';
@@ -15,7 +15,7 @@ export default function OnboardingPage() {
 	const { config } = useConfigStore();
 
 	// 执行：选择自定义级区域后的逻辑
-	const handleSelectTenant = (tenantId: string | number, tenantName: string) => {
+	const handleSelectTenant = ({ tenantId, tenantName }: TenantChangeEventProps) => {
 		// 更新进小程序本地缓存
 		setTenant(tenantId.toString(), tenantName);
 		Taro.showToast({ title: '入驻成功', icon: 'success' });

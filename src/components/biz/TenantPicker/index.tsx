@@ -4,14 +4,23 @@ import pcaData from '@/assets/data/pca-code.json';
 import { getTenantListApi } from '@/services/tenant';
 import Taro from '@tarojs/taro';
 
+/** 回调方法属性类型 */
+export interface TenantChangeEventProps {
+	/** 选择的区域 ID */
+	tenantId: number;
+	/** 选择的区域名称 */
+	tenantName: string;
+	/** 选择的省份 */
+	provinceCode: number;
+	/** 选择的城市 */
+	cityCode: number;
+	/** 选择的区县 */
+	districtCode: number;
+}
+
 export interface TenantPickerProps {
-	onChange: (
-		tenantId: number,
-		tenantName: string,
-		provinceCode: number,
-		cityCode: number,
-		districtCode: number,
-	) => void;
+	/** 选择回调 */
+	onChange: (params: TenantChangeEventProps) => void;
 	children: React.ReactNode;
 	disabled?: boolean;
 }
@@ -134,7 +143,13 @@ export const TenantPicker = ({ onChange, children, disabled = false }: TenantPic
 			const pCode = Number(provs[pIdx].code);
 			const cCode = Number(cities[cIdx].code);
 			const aCode = Number(areas[aIdx].code);
-			onChange(selectedTenant.id, selectedTenant.name, pCode, cCode, aCode);
+			onChange({
+				tenantId: selectedTenant.id,
+				tenantName: selectedTenant.name,
+				provinceCode: pCode,
+				cityCode: cCode,
+				districtCode: aCode,
+			});
 		} else {
 			// 做了兜底拦截，防止用户选了“暂无街道”还点确定
 			Taro.showToast({ title: '当前地区暂无可用街道', icon: 'none' });

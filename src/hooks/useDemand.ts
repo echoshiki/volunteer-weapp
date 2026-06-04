@@ -14,7 +14,8 @@ import {
 import { getTenantId } from '@/utils/tenant';
 import Taro from '@tarojs/taro';
 import { useState } from 'react';
-import { DemandCategory } from '@/types/demand';
+import { DemandCategory, DemandItem } from '@/types/demand';
+import { TenantChangeEventProps } from '@/components/biz/TenantPicker';
 
 /** 服务对象分类列表 Hook */
 export const useDemandCategoryList = () => {
@@ -94,10 +95,8 @@ export const useUserDemandList = () => {
 	});
 };
 
-export const useDemandForm = (
-	initial?: Partial<PublishDemandRequest> & { tenantName?: string },
-	categoryList: DemandCategory[] = [],
-) => {
+export const useDemandForm = (initial?: DemandItem, categoryList: DemandCategory[] = []) => {
+	// 详情数据作为初始数据需要进行结构转换才能用于提交
 	const [formData, setFormData] = useState<Partial<PublishDemandRequest>>({
 		demandName: '',
 		content: '',
@@ -108,24 +107,21 @@ export const useDemandForm = (
 		tagIds: [],
 		minMoney: 0,
 		maxMoney: 0,
-		...initial,
+		...(initial && {
+			...initial,
+			// 将详情数据转换成可提交的类型格式
+			tagIds: initial.tags.map((t) => t.tagId),
+		}),
 	});
-
-	// 动态计算初始的 categoryIndex
-	const [categoryIndex, setCategoryIndex] = useState<number | undefined>(() => {
-		if (!initial?.categoryId || !categoryList.length) return undefined;
-		const index = categoryList.findIndex((c) => c.categoryId === initial.categoryId);
-		return index >= 0 ? index : undefined;
-	});
-
-	const [regionLabel, setRegionLabel] = useState(
-		initial?.tenantName || (initial ? '已选当前区域' : ''),
-	);
 
 	const handleInput = (field: keyof PublishDemandRequest, value: any) => {
 		setFormData((prev) => ({ ...prev, [field]: value }));
 	};
 
+	// 回显服务区域信息
+	const [regionLabel, setRegionLabel] = useState(initial?.tenantName ?? '');
+
+	// 选择标签
 	const toggleTag = (id: number) => {
 		setFormData((prev) => {
 			const tags = prev.tagIds || [];
@@ -136,19 +132,19 @@ export const useDemandForm = (
 		});
 	};
 
-	const handleTenantChange = (
-		tenantId: number,
-		tenantName: string,
-		pCode: number,
-		cCode: number,
-		dCode: number,
-	) => {
+	const handleTenantChange = ({
+		tenantId,
+		tenantName,
+		provinceCode,
+		cityCode,
+		districtCode,
+	}: TenantChangeEventProps) => {
 		setFormData((prev) => ({
 			...prev,
 			tenantId,
-			provinceCode: pCode,
-			cityCode: cCode,
-			districtCode: dCode,
+			provinceCode,
+			cityCode,
+			districtCode,
 		}));
 		setRegionLabel(tenantName);
 	};
@@ -164,10 +160,7 @@ export const useDemandForm = (
 			[!formData.name || !formData.phone, '请填写联系人及电话'],
 			[!formData.content, '请输入需求描述'],
 			[
-				formData.charge === false &&
-					(!formData.minMoney ||
-						!formData.maxMoney ||
-						formData.minMoney > formData.maxMoney),
+				!formData.minMoney || !formData.maxMoney || formData.minMoney > formData.maxMoney,
 				'请填写正确的预算区间',
 			],
 		];
@@ -176,8 +169,6 @@ export const useDemandForm = (
 
 	return {
 		formData,
-		categoryIndex,
-		setCategoryIndex,
 		regionLabel,
 		handleInput,
 		toggleTag,
@@ -213,14 +204,12 @@ export const useEditDemand = () => {
 		mutationFn: editDemandAPI,
 		onSuccess: () => {
 			Taro.showToast({ title: '修改成功', icon: 'success' });
-			// 刷新列表和详情缓存
 			queryClient.invalidateQueries({
 				queryKey: ['tenant', getTenantId(), 'demand', 'list'],
 			});
 			queryClient.invalidateQueries({
 				queryKey: ['tenant', getTenantId(), 'demand', 'detail'],
 			});
-
 			setTimeout(() => Taro.navigateBack(), 1500);
 		},
 		onError: (err: any) => {
