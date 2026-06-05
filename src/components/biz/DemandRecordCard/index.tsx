@@ -9,7 +9,7 @@ export interface DemandRecordCardProps {
 	onEdit?: (demand: DemandItem) => void;
 	onDelete?: (demand: DemandItem) => void;
 	/** 查看抢单/接单人员 */
-	onViewApplicants?: (demand: DemandItem) => void;
+	onViewBid?: (demand: DemandItem) => void;
 	/** 查看关联的服务订单 */
 	onViewOrder?: (demand: DemandItem) => void;
 	className?: string;
@@ -23,7 +23,7 @@ export const DemandRecordCard = ({
 	onClick,
 	onEdit,
 	onDelete,
-	onViewApplicants,
+	onViewBid,
 	onViewOrder,
 	className = '',
 }: DemandRecordCardProps) => {
@@ -106,11 +106,7 @@ export const DemandRecordCard = ({
 
 					{/* 已通过状态：允许查看抢单人员 */}
 					{isApproved && (
-						<Button
-							variant="success"
-							size="sm"
-							onClick={() => onViewApplicants?.(record)}
-						>
+						<Button variant="success" size="sm" onClick={() => onViewBid?.(record)}>
 							选择服务方
 						</Button>
 					)}

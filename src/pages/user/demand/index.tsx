@@ -29,8 +29,8 @@ export default function UserDemandPage() {
 	};
 
 	// 执行：跳转到选择服务方（抢单列表）页
-	const handleViewApplicants = (demand: DemandItem) => {
-		mapsTo(`/pages/user/demand/applicants/index?id=${demand.demandId}`);
+	const handleViewBid = (demand: DemandItem) => {
+		mapsTo(`/pages/user/demand/bid/index?id=${demand.demandId}`);
 	};
 
 	// 执行：删除需求单
@@ -59,6 +59,7 @@ export default function UserDemandPage() {
 										key={item.demandId}
 										record={item}
 										onEdit={handleEdit}
+										onViewBid={handleViewBid}
 									/>
 								</Cell>
 							))}

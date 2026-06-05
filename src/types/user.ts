@@ -66,6 +66,7 @@ export interface UserInfo {
 	address?: string;
 }
 
+/** 认证审核资料 */
 export interface ApplyReview {
 	id?: number;
 	/** 审核类型 1=机构审核 2=志愿者审核 */
@@ -117,4 +118,33 @@ export interface ApplyHistoryItem {
 	updateTime: string;
 	/** 审核描述 (如驳回原因) */
 	remark: string;
+}
+
+/** 公开的服务资料主页 */
+export interface ServiceProviderProfile {
+	userId: number;
+	/** 志愿者/机构负责人名称 */
+	realName: string;
+	/** 头像 */
+	avatar: string;
+	/** 机构名称 */
+	institutionName: string;
+	/** 认证时间 */
+	reviewTime: string;
+	/** 身份标识 */
+	identity: UserIdentity;
+	/** 志愿活动总时长 (小时) */
+	duration: number;
+	/** 历史服务次数 */
+	serviceCount: number;
+	/** 常驻省 */
+	provinceName: string;
+	/** 常驻市 */
+	cityName: string;
+	/** 常驻区 */
+	districtName: string;
+	/** 常驻服务区域 */
+	tenantName: string;
+	/** 办公驻地/服务点详细地址 */
+	address: string;
 }

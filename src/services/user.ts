@@ -1,5 +1,11 @@
 import { http } from '@/utils/http';
-import { ApplyHistoryItem, ApplyReview, ReviewStatus, UserInfo } from '@/types/user';
+import {
+	ApplyHistoryItem,
+	ApplyReview,
+	ReviewStatus,
+	ServiceProviderProfile,
+	UserInfo,
+} from '@/types/user';
 import { ListRes, PageRes } from '@/types/common';
 
 /**
@@ -61,3 +67,11 @@ export interface ApplyHistoryRequest {
  */
 export const getApplyHistoryListAPI = (params: ApplyHistoryRequest) =>
 	http.post<PageRes<ApplyHistoryItem>>('/volunteer/review/userList', params);
+
+/**
+ * 获取服务方公开主页合规脱敏资料
+ * @param userId 目标服务方的用户ID
+ */
+export const getProviderProfileAPI = (userId: number): Promise<ServiceProviderProfile> => {
+	return http.get(`/demand/web/user/${userId}`);
+};

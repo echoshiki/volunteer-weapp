@@ -22,11 +22,25 @@
     "miniprogram": {
       "list": [
         {
+          "name": "服务方主页",
+          "pathName": "pages/provider/index",
+          "query": "id=5",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
+          "name": "选择服务方",
+          "pathName": "pages/user/demand/bid/index",
+          "query": "id=7",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "我的报价单",
           "pathName": "pages/user/bid/index",
           "query": "",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "需求报价页",

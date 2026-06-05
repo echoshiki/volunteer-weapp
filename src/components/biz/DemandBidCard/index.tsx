@@ -60,18 +60,32 @@ export const DemandBidCard = ({
 				<View className="bg-gray-50 rounded p-3 mb-3 relative">
 					{/* 小三角气泡指示器 */}
 					<View className="absolute -top-2 left-6 w-0 h-0 border-l-[6px] border-r-[6px] border-b-8 border-transparent border-b-gray-50" />
-					<Text className="text-sm text-text-body line-clamp-3 leading-relaxed">
+					<Text className="text-xs text-text-body line-clamp-3 leading-relaxed">
 						“{user.description}”
 					</Text>
 				</View>
 			)}
+
+			{/* 联系人/电话 */}
+			<View className="flex items-center gap-4 text-xs text-text-muted mb-3">
+				<View className="flex items-center gap-1">
+					<View className="icon-[ph--user] size-4" />
+					<Text>联系人：{user.name}</Text>
+				</View>
+				{user.phone && (
+					<View className="flex items-center gap-1">
+						<View className="icon-[ph--phone-incoming] size-4" />
+						<Text>联系电话：{user.phone}</Text>
+					</View>
+				)}
+			</View>
 
 			<Divider className="my-0 mb-3" />
 
 			{/* 操作按钮 */}
 			<View className="flex justify-between items-center">
 				<View
-					className="flex items-center gap-1 text-primary active:opacity-70 transition-opacity"
+					className="w-1/2 flex items-center gap-1 text-primary active:opacity-70 transition-opacity"
 					onClick={() => onViewProfile?.(user)}
 				>
 					<View className="icon-[ph--user-circle] size-4" />
@@ -80,11 +94,11 @@ export const DemandBidCard = ({
 
 				<Button
 					variant="primary"
+					className="flex-1"
 					size="sm"
-					className="px-6 shadow-sm shadow-blue-200"
 					onClick={() => onSelect?.(user)}
 				>
-					确认选 Ta
+					确认选择
 				</Button>
 			</View>
 		</View>
