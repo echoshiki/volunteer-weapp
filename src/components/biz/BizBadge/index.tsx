@@ -3,6 +3,7 @@ import { USER_IDENTITY_MAP } from '@/constants/user';
 import { ORDER_STATUS_MAP } from '@/constants/order';
 import { ACTIVITY_STATUS_MAP, ENROLL_STATUS_MAP } from '@/constants/activity';
 import { AuditStatus, ThemeVariant } from '@/types/common';
+import { BID_STATUS_MAP } from '@/constants/demand';
 
 /**
  * 生成业务徽章组件
@@ -47,3 +48,6 @@ export const AuditStatusBadge = createBizBadge(AUDIT_STATUS_MAP, 'pending');
 
 /** 服务订单状态 */
 export const OrderStatusBadge = createBizBadge(ORDER_STATUS_MAP, 'pending');
+
+/** 报价单状态 */
+export const BidStatusBadge = createBizBadge(BID_STATUS_MAP, 'pending');

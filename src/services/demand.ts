@@ -1,6 +1,13 @@
 import { http } from '@/utils/http';
 import { ListRes, PageRes } from '@/types/common';
-import { DemandCategory, DemandTag, DemandItem, DemandDetail, ServiceUser } from '@/types/demand';
+import {
+	DemandCategory,
+	DemandTag,
+	DemandItem,
+	DemandDetail,
+	DemandBidItem,
+	MyBidItem,
+} from '@/types/demand';
 
 /** 获取需求分类列表 */
 export const getDemandCategoryListAPI = () =>
@@ -35,15 +42,15 @@ export const getDemandDetailAPI = (demandId: number) =>
 	http.get<DemandDetail>(`/demand/web/${demandId}`);
 
 /** 需求单抢单用户列表请求参数 */
-interface GetServiceUserListParams {
+interface GetDemandBidListParams {
 	demandId: number | string;
 	pageNum: number;
 	pageSize: number;
 }
 
-/** 获取需求单抢单用户列表 */
-export const getServiceUserListAPI = (params: GetServiceUserListParams) =>
-	http.get<PageRes<ServiceUser>>('/demand/web/serviceUser', params);
+/** 获取需求单的报价列表 */
+export const getDemandBidListAPI = (params: GetDemandBidListParams) =>
+	http.get<PageRes<DemandBidItem>>('/demand/web/serviceUser', params);
 
 /** 我发布的需求单列表请求参数 */
 export interface GetUserDemandListRequest {
@@ -82,14 +89,14 @@ export const publishDemandAPI = (data: PublishDemandRequest) => {
 	return http.post('/demand/web/add', data);
 };
 
-export interface EditDemandRequest extends PublishDemandRequest {
+export interface UpdateDemandRequest extends PublishDemandRequest {
 	demandId: number;
 }
 
 /**
  * 编辑需求订单
  */
-export const editDemandAPI = (data: EditDemandRequest) => {
+export const updateDemandAPI = (data: UpdateDemandRequest) => {
 	return http.put('/demand/web/update', data);
 };
 
@@ -104,4 +111,22 @@ export interface BidDemandRequest {
 /** 服务方：参与抢单/提交报价 */
 export const bidDemandAPI = (data: BidDemandRequest) => {
 	return http.post('/demand/web/addOrderUser', data);
+};
+
+/** 服务方：获取我发布的报价单/抢单记录列表 */
+export const getMyBidsAPI = (params: { pageNum: number; pageSize: number }) => {
+	return http.get<PageRes<MyBidItem>>('/demand/web/orderUserList', { params });
+};
+
+/** 修改报价单的请求入参 */
+export interface UpdateBidRequest {
+	id: number;
+	money: number;
+	description: string;
+	name: string;
+	phone: string;
+}
+
+export const updateBidAPI = (data: UpdateBidRequest) => {
+	return http.put('/demand/web/updateOrderUser', data);
 };

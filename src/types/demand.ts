@@ -1,6 +1,9 @@
 import { AuditStatus } from './common';
 import { UserIdentity } from './user';
 
+/** 报价单状态 */
+export type BidStatus = 'pending' | 'selected' | 'unselected' | 'invalid';
+
 /** 需求服务对象分类 (如：一老一小、通用) */
 export interface DemandCategory {
 	categoryId: number;
@@ -62,8 +65,8 @@ export interface DemandItem {
 /** 需求订单详情 */
 export interface DemandDetail extends DemandItem {}
 
-/** 抢单/申请列表中的服务方用户 */
-export interface ServiceUser {
+/** 需求单里的报价单 */
+export interface DemandBidItem {
 	userId: number;
 	/** 服务方名称 */
 	name: string;
@@ -81,4 +84,20 @@ export interface ServiceUser {
 	description: string;
 	/** 报价时间 */
 	createTime: string;
+}
+
+/** 服务方用户中心的报价单 */
+export interface MyBidItem {
+	id: number;
+	demandId: number;
+	demandName: string;
+	userId: number;
+	name: string;
+	phone: string;
+	money: number;
+	description: string;
+	createTime: string;
+	status: BidStatus;
+	employerName: string;
+	employerPhone: string;
 }

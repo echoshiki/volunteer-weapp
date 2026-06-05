@@ -1,25 +1,25 @@
 import { View, Image, Text } from '@tarojs/components';
 import { UserIdentityBadge } from '../BizBadge';
-import { ServiceUser } from '@/types/demand';
+import { DemandBidItem } from '@/types/demand';
 import { Button, Divider } from '@/components/ui';
 
-export interface ServiceUserCardProps {
+export interface DemandBidCardProps {
 	/** 活动数据源 */
-	user: ServiceUser;
+	user: DemandBidItem;
 	/** 动作：查看资料 */
-	onViewProfile?: (user: ServiceUser) => void;
+	onViewProfile?: (user: DemandBidItem) => void;
 	/** 动作：确认选择（中标） */
-	onSelect?: (user: ServiceUser) => void;
+	onSelect?: (user: DemandBidItem) => void;
 	/** 外部追加的容器样式 */
 	className?: string;
 }
 
-export const ServiceUserCard = ({
+export const DemandBidCard = ({
 	user,
 	onViewProfile,
 	onSelect,
 	className = '',
-}: ServiceUserCardProps) => {
+}: DemandBidCardProps) => {
 	return (
 		<View className={`flex flex-col ${className}`}>
 			{/* 服务方身份信息 */}

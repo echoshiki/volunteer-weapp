@@ -7,4 +7,5 @@ export * from './DemandRecordCard';
 export * from './DemandForm';
 export * from './ApplyRecordCard';
 export * from './TenantPicker';
-export * from './ServiceUserCard';
+export * from './DemandBidCard';
+export * from './BidForm';

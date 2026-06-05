@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useRouter } from '@tarojs/taro';
 import { View, Text, ScrollView } from '@tarojs/components';
-import { useDemandDetail, useServiceUsers } from '@/hooks/useDemand';
+import { useDemandDetail, useDemandBidList } from '@/hooks/useDemand';
 import { Badge, Cell, Description, Empty, Heading, Loading, Page, Button } from '@/components/ui';
 import { mapsTo } from '@/utils/common';
 
@@ -14,16 +14,16 @@ export default function DemandDetailPage() {
 
 	// 数据：抢单用户
 	const {
-		data: userListData,
+		data: bidListData,
 		hasNextPage,
 		isFetchingNextPage,
 		fetchNextPage,
 		isLoading: userListLoading,
-	} = useServiceUsers(demandId);
+	} = useDemandBidList(demandId);
 
-	const serviceUserList = useMemo(() => {
-		return userListData?.pages.flatMap((page) => page.list) || [];
-	}, [userListData]);
+	const bidList = useMemo(() => {
+		return bidListData?.pages.flatMap((page) => page.list) || [];
+	}, [bidListData]);
 
 	if (isLoading) return <Loading />;
 	if (!detail) return <Empty title="未找到该需求" />;
@@ -82,10 +82,7 @@ export default function DemandDetailPage() {
 			{/* 底部操作栏 */}
 			<Cell className="fixed bottom-0 inset-x-0 border-t border-gray-100 flex flex-col gap-3">
 				<Text className="text-xs text-text-body">
-					已有{' '}
-					<Text className="text-primary font-bold text-base">
-						{serviceUserList.length}
-					</Text>{' '}
+					已有 <Text className="text-primary font-bold text-base">{bidList.length}</Text>{' '}
 					人发送了接单申请
 				</Text>
 

@@ -22,11 +22,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "我的报价单",
+          "pathName": "pages/user/bid/index",
+          "query": "",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "需求报价页",
           "pathName": "pages/demand/bid/index",
           "query": "id=6",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "需求单编辑",

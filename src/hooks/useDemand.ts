@@ -4,18 +4,21 @@ import {
 	getDemandTagListAPI,
 	getDemandListAPI,
 	getDemandDetailAPI,
-	getServiceUserListAPI,
+	getDemandBidListAPI,
 	GetDemandListRequest,
 	getUserDemandListAPI,
 	publishDemandAPI,
 	PublishDemandRequest,
-	editDemandAPI,
+	updateDemandAPI,
 	bidDemandAPI,
+	getMyBidsAPI,
+	updateBidAPI,
+	BidDemandRequest,
 } from '@/services/demand';
 import { getTenantId } from '@/utils/tenant';
 import Taro from '@tarojs/taro';
 import { useState } from 'react';
-import { DemandCategory, DemandItem } from '@/types/demand';
+import { DemandCategory, DemandItem, MyBidItem } from '@/types/demand';
 import { TenantChangeEventProps } from '@/components/biz/TenantPicker';
 
 /** 服务对象分类列表 Hook */
@@ -65,12 +68,12 @@ export const useDemandDetail = (demandId: number) => {
 	});
 };
 
-/** 抢单用户列表 Hook (支持无限滚动) */
-export const useServiceUsers = (demandId: number) => {
+/** 需求单报价列表 Hook (支持无限滚动) */
+export const useDemandBidList = (demandId: number) => {
 	return useInfiniteQuery({
-		queryKey: ['tenant', getTenantId(), 'demand', 'serviceUsers', demandId],
+		queryKey: ['tenant', getTenantId(), 'demand', 'bid', demandId],
 		queryFn: ({ pageParam = 1 }) =>
-			getServiceUserListAPI({
+			getDemandBidListAPI({
 				demandId,
 				pageNum: pageParam,
 				pageSize: 10,
@@ -81,7 +84,7 @@ export const useServiceUsers = (demandId: number) => {
 	});
 };
 
-/** 我的需求单列表 Hook (无限滚动) */
+/** 服务方的需求单列表 Hook (无限滚动) */
 export const useUserDemandList = () => {
 	return useInfiniteQuery({
 		queryKey: ['user', 'demand', 'list'],
@@ -203,7 +206,7 @@ export const usePublishDemand = () => {
 export const useEditDemand = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: editDemandAPI,
+		mutationFn: updateDemandAPI,
 		onSuccess: () => {
 			Taro.showToast({ title: '修改成功', icon: 'success' });
 			queryClient.invalidateQueries({
@@ -221,7 +224,7 @@ export const useEditDemand = () => {
 };
 
 /** 创建报价单 */
-export const useBidDemand = () => {
+export const useDemandBid = () => {
 	const queryClient = useQueryClient();
 
 	return useMutation({
@@ -239,4 +242,72 @@ export const useBidDemand = () => {
 			Taro.showToast({ title: err?.message || '提交失败', icon: 'none' });
 		},
 	});
+};
+
+/** 获取我的报价单列表 Hook (无限滚动) */
+export const useMyBidList = () => {
+	return useInfiniteQuery({
+		queryKey: ['user', 'bid', 'list'],
+		queryFn: ({ pageParam = 1 }) => getMyBidsAPI({ pageNum: pageParam, pageSize: 10 }),
+		getNextPageParam: (lastPage) =>
+			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+	});
+};
+
+/** 修改报价单 */
+export const useUpdateBid = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: updateBidAPI,
+		onSuccess: () => {
+			Taro.showToast({ title: '修改成功', icon: 'success' });
+			queryClient.invalidateQueries({ queryKey: ['user', 'bid', 'list'] });
+			setTimeout(() => {
+				Taro.navigateBack();
+			}, 1500);
+		},
+		onError: (err: any) => {
+			Taro.showToast({ title: err?.message || '修改失败', icon: 'none' });
+		},
+	});
+};
+
+/** 报价表单 */
+export const useBidForm = (initial?: MyBidItem, isFree: boolean = false) => {
+	const [formData, setFormData] = useState<Partial<BidDemandRequest>>({
+		name: '',
+		phone: '',
+		money: isFree ? 0 : undefined,
+		description: '',
+		...initial,
+	});
+
+	const handleInput = (field: keyof BidDemandRequest, value: any) => {
+		setFormData((prev) => ({ ...prev, [field]: value }));
+	};
+
+	const validate = (): string | null => {
+		const { name, phone, money, description } = formData;
+
+		if (!name?.trim()) return '请填写联系人姓名';
+		if (!phone?.trim()) return '请填写联系电话';
+		if (!/^1[3-9]\d{9}$/.test(phone)) return '手机号格式有误';
+
+		if (!isFree) {
+			if (money === undefined || Number(money) < 0) {
+				return '请填写合理的报价金额';
+			}
+		}
+
+		if (!description?.trim()) return '请填写服务描述与优势';
+
+		return null;
+	};
+
+	return {
+		formData,
+		handleInput,
+		validate,
+	};
 };

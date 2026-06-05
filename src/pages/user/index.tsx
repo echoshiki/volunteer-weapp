@@ -100,6 +100,11 @@ export default function UserPage() {
 						/>
 						<ColumnNav
 							icon="icon-[ph--clipboard-text-light]"
+							label="我发布的报价"
+							onClick={() => mapsTo('/pages/user/bid/index')}
+						/>
+						<ColumnNav
+							icon="icon-[ph--clipboard-text-light]"
 							label="我的服务订单"
 							onClick={() => mapsTo('/pages/user/service/index')}
 						/>
