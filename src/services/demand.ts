@@ -92,3 +92,16 @@ export interface EditDemandRequest extends PublishDemandRequest {
 export const editDemandAPI = (data: EditDemandRequest) => {
 	return http.put('/demand/web/update', data);
 };
+
+export interface BidDemandRequest {
+	demandId: number;
+	description: string;
+	money: number;
+	name: string;
+	phone: string;
+}
+
+/** 服务方：参与抢单/提交报价 */
+export const bidDemandAPI = (data: BidDemandRequest) => {
+	return http.post('/demand/web/addOrderUser', data);
+};

@@ -10,6 +10,7 @@ import {
 	publishDemandAPI,
 	PublishDemandRequest,
 	editDemandAPI,
+	bidDemandAPI,
 } from '@/services/demand';
 import { getTenantId } from '@/utils/tenant';
 import Taro from '@tarojs/taro';
@@ -95,6 +96,7 @@ export const useUserDemandList = () => {
 	});
 };
 
+/** 需求表单 */
 export const useDemandForm = (initial?: DemandItem, categoryList: DemandCategory[] = []) => {
 	// 详情数据作为初始数据需要进行结构转换才能用于提交
 	const [formData, setFormData] = useState<Partial<PublishDemandRequest>>({
@@ -214,6 +216,27 @@ export const useEditDemand = () => {
 		},
 		onError: (err: any) => {
 			Taro.showToast({ title: err?.message || '修改失败', icon: 'none' });
+		},
+	});
+};
+
+/** 创建报价单 */
+export const useBidDemand = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: bidDemandAPI,
+		onSuccess: () => {
+			Taro.showToast({ title: '报价提交成功', icon: 'success' });
+			queryClient.invalidateQueries({
+				queryKey: ['tenant', getTenantId(), 'demand'],
+			});
+			setTimeout(() => {
+				Taro.navigateBack();
+			}, 1500);
+		},
+		onError: (err: any) => {
+			Taro.showToast({ title: err?.message || '提交失败', icon: 'none' });
 		},
 	});
 };

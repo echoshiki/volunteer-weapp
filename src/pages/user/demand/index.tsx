@@ -19,7 +19,7 @@ export default function UserDemandPage() {
 				content: '修改需求需要重新提交审核，且当前所有的抢单记录将被失效，是否继续？',
 				success: function (res) {
 					if (res.confirm) {
-						mapsTo(`/pages/demand/edit/index?id=${demand.demandId}`);
+						mapsTo(`/pages/user/demand/edit/index?id=${demand.demandId}`);
 					}
 				},
 			});

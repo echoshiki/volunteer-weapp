@@ -13,6 +13,8 @@ const sizeMap: Record<HeadingSize, { bar: string; icon: string; text: string; ma
 export interface HeadingProps {
 	/** 标题文字 */
 	title: string;
+	/** 描述文字 */
+	subtitle?: string;
 	/** 主题色，TailwindCSS 文本色值 */
 	color?: string;
 	/** 标题大小 */
@@ -31,6 +33,7 @@ export interface HeadingProps {
  */
 export const Heading = ({
 	title,
+	subtitle,
 	color = 'text-primary',
 	size = 'lg',
 	icon,
@@ -45,17 +48,20 @@ export const Heading = ({
 			className={`w-full flex justify-between items-center ${sizeConfig.margin} ${className}`}
 		>
 			{/* 左侧：装饰与标题 */}
-			<View className="flex items-center gap-2">
-				<View className={`flex items-center justify-center ${color}`}>
-					{icon ? (
-						<Icon icon={icon} className={`${sizeConfig.icon} text-current`} />
-					) : (
-						<View className={`${sizeConfig.bar} bg-current rounded-full`} />
-					)}
-				</View>
+			<View>
+				<View className="flex items-center gap-2">
+					<View className={`flex items-center justify-center ${color}`}>
+						{icon ? (
+							<Icon icon={icon} className={`${sizeConfig.icon} text-current`} />
+						) : (
+							<View className={`${sizeConfig.bar} bg-current rounded-full`} />
+						)}
+					</View>
 
-				{/* 标题文本动态样式 */}
-				<Text className={`text-text-title font-bold ${sizeConfig.text}`}>{title}</Text>
+					{/* 标题文本动态样式 */}
+					<Text className={`text-text-title font-bold ${sizeConfig.text}`}>{title}</Text>
+				</View>
+				{subtitle && <Text className="text-xs text-text-muted mt-1">{subtitle}</Text>}
 			</View>
 
 			{/* 右侧：跳转链接 */}
@@ -68,7 +74,7 @@ export const Heading = ({
 								onClick={() => mapsTo(link.url)}
 							>
 								<Text className="text-text-muted text-xs">{link.name}</Text>
-								<View className="icon-[ph--caret-right] w-4 h-4 text-zinc-500" />
+								<View className="icon-[ph--caret-right] size-4 text-zinc-500" />
 							</View>
 						)}
 			</View>

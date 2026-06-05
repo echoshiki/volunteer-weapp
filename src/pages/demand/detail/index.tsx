@@ -2,18 +2,8 @@ import { useMemo } from 'react';
 import { useRouter } from '@tarojs/taro';
 import { View, Text, ScrollView } from '@tarojs/components';
 import { useDemandDetail, useServiceUsers } from '@/hooks/useDemand';
-import {
-	Badge,
-	Cell,
-	Description,
-	Divider,
-	Empty,
-	Heading,
-	Loading,
-	Page,
-	Button,
-} from '@/components/ui';
-import { ServiceUserCard } from '@/components/biz';
+import { Badge, Cell, Description, Empty, Heading, Loading, Page, Button } from '@/components/ui';
+import { mapsTo } from '@/utils/common';
 
 export default function DemandDetailPage() {
 	const { params } = useRouter();
@@ -51,11 +41,7 @@ export default function DemandDetailPage() {
 						{detail.demandName}
 					</Text>
 					<View className="flex items-center gap-4 mt-4 text-xs text-text-muted">
-						<View className="flex items-center gap-1">
-							<View className="icon-[ph--user-circle] size-4 text-primary" />
-							<Text>{detail.name}</Text>
-						</View>
-						<View className="flex items-center gap-1">
+						<View className="flex flex-wrap items-center gap-1">
 							{detail.tags.map((tag) => (
 								<View key={tag.tagId} className="flex items-center gap-1">
 									<View className="icon-[ph--tag] size-4 text-primary" />
@@ -67,7 +53,6 @@ export default function DemandDetailPage() {
 				</Cell>
 
 				{/* 服务需求描述 */}
-
 				<Cell className="mt-3" rounded={false}>
 					<Heading title="需求描述" size="md" />
 					<Text className="text-sm text-text-body leading-relaxed">{detail.content}</Text>
@@ -92,46 +77,30 @@ export default function DemandDetailPage() {
 						/>
 					</View>
 				</Cell>
-
-				<Cell className="mt-3">
-					<Heading title={`已申请的服务方 (${serviceUserList.length})`} size="md" />
-					<ScrollView
-						scrollY
-						className="h-84"
-						onScrollToLower={() => hasNextPage && fetchNextPage()}
-					>
-						<View className="flex flex-col gap-2 p-2">
-							{userListLoading ? (
-								<Loading />
-							) : serviceUserList.length === 0 ? (
-								<Empty title="暂无接单服务方" />
-							) : (
-								<>
-									{serviceUserList.map((user, index) => (
-										<View key={user.userId}>
-											<ServiceUserCard key={index} user={user} />
-											{index < serviceUserList.length - 1 && (
-												<Divider className="mt-4" />
-											)}
-										</View>
-									))}
-									{isFetchingNextPage && <Loading />}
-									{!hasNextPage && <Divider>没有更多了</Divider>}
-								</>
-							)}
-						</View>
-					</ScrollView>
-				</Cell>
 			</ScrollView>
 
 			{/* 底部操作栏 */}
-			<Cell className="fixed bottom-0 inset-x-0 border-t border-gray-100 flex gap-3">
-				<Button icon="icon-[ph--phone-call]" size="md" variant="secondary">
-					咨询发布者
-				</Button>
-				<Button icon="icon-[ph--hand-coins]" className="flex-1">
-					立即接单/报价
-				</Button>
+			<Cell className="fixed bottom-0 inset-x-0 border-t border-gray-100 flex flex-col gap-3">
+				<Text className="text-xs text-text-body">
+					已有{' '}
+					<Text className="text-primary font-bold text-base">
+						{serviceUserList.length}
+					</Text>{' '}
+					人发送了接单申请
+				</Text>
+
+				<View className="w-full flex flex-row gap-2">
+					<Button icon="icon-[ph--phone-call]" size="md" variant="info">
+						咨询发布者
+					</Button>
+					<Button
+						icon="icon-[ph--hand-coins]"
+						className="flex-1"
+						onClick={() => mapsTo(`/pages/demand/bid/index?id=${demandId}`)}
+					>
+						立即接单/报价
+					</Button>
+				</View>
 			</Cell>
 		</Page>
 	);
