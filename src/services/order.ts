@@ -28,3 +28,35 @@ export const getEmployerOrdersAPI = (params: { pageNum: number; pageSize: number
 export const getProviderOrdersAPI = (params: { pageNum: number; pageSize: number }) => {
 	return http.get<PageRes<UnifiedOrderItem>>('/demand/order/web/demandOrderList', { params });
 };
+
+/** 获取订单详情 (双端通用) */
+export const getOrderDetailAPI = (orderId: string): Promise<UnifiedOrderItem> => {
+    return http.get(`/demand/order/web/${orderId}`);
+};
+
+/** 需求方：取消订单 */
+// export const cancelOrderAPI = (orderId: string, status: string) => {
+//     return http.post(`/demand/order/status`, { orderId });
+// };
+
+/** 需求方：发起微信支付 */
+// export const getOrderPayParamsAPI = (orderId: string) => {
+//     return http.post(`/order/web/pay`, { orderId });
+// };
+
+/** 需求方：确认完工验收 */
+// export const confirmOrderCompleteAPI = (orderId: string) => {
+//     return http.post(`/order/web/confirmComplete`, { orderId });
+// };
+
+/** 服务签到打卡 */
+// export const startOrderServiceAPI = (orderId: string) => {
+//     return http.post(`/order/web/startService`, { orderId });
+// };
+
+/** 服务方：申请完工 */
+// export const finishOrderServiceAPI = (orderId: string) => {
+//     return http.post(`/order/web/finishService`, { orderId });
+// };
+
+

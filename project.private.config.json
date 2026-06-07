@@ -16,175 +16,22 @@
     "compileHotReLoad": true,
     "checkInvalidKey": true,
     "ignoreDevUnusedFiles": true,
-    "bigPackageSizeSupport": false
+    "bigPackageSizeSupport": false,
+    "useApiHostProcess": true
   },
   "condition": {
     "miniprogram": {
       "list": [
         {
-          "name": "服务方主页",
-          "pathName": "pages/provider/index",
-          "query": "id=5",
+          "name": "订单详情",
+          "pathName": "pages/order/detail/index",
+          "query": "id=29",
           "scene": null,
           "launchMode": "default"
         },
         {
-          "name": "选择服务方",
-          "pathName": "pages/user/demand/bid/index",
-          "query": "id=7",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "我的报价单",
-          "pathName": "pages/user/bid/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "需求报价页",
-          "pathName": "pages/demand/bid/index",
-          "query": "id=6",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "需求单编辑",
-          "pathName": "pages/user/demand/edit/index",
-          "query": "id=9",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "需求发布",
-          "pathName": "pages/demand/publish/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "我的需求单",
-          "pathName": "pages/user/demand/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "申请历史页",
-          "pathName": "pages/apply/history/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "机构入驻申请表单",
-          "pathName": "pages/apply/institution/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "志愿者认证表单",
-          "pathName": "pages/apply/volunteer/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "实名认证入口",
-          "pathName": "pages/apply/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "个人资料",
-          "pathName": "pages/user/profile/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "登录页",
-          "pathName": "pages/login/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "活动详情",
-          "pathName": "pages/activity/detail/index",
-          "query": "id=7",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "服务详情",
-          "pathName": "pages/demand/detail/index",
-          "query": "id=6",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "我的志愿活动",
-          "pathName": "pages/user/activity/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "企业详情",
-          "pathName": "pages/job/enterprise/index",
-          "query": "id=0",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "求职详情",
-          "pathName": "pages/job/detail/index",
-          "query": "id=9",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "打卡落地页",
-          "pathName": "pages/activity/check-result/index",
-          "query": "activityId=10023",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "已报名列表",
-          "pathName": "pages/user/activity/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "志愿活动",
-          "pathName": "pages/activity/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "个人中心",
-          "pathName": "pages/user/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "求职频道",
-          "pathName": "pages/job/index",
-          "query": "",
-          "launchMode": "default",
-          "scene": null
-        },
-        {
-          "name": "服务大厅",
-          "pathName": "pages/demand/index",
+          "name": "雇主方订单列表",
+          "pathName": "pages/order/employer/index",
           "query": "",
           "launchMode": "default",
           "scene": null

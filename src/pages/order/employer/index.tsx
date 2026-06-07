@@ -10,7 +10,6 @@ export default function EmployerOrderListPage() {
 	const list = data?.pages.flatMap((page) => page.list) || [];
 
 	const handleAction = (type: string, item: any) => {
-		// 所有核心交互动作（支付、确认完工等），为了防止逻辑外溢，统一导流去详情页收拢处理！
 		mapsTo(`/pages/order/detail/index?id=${item.orderId}&action=${type}`);
 	};
 
@@ -18,7 +17,7 @@ export default function EmployerOrderListPage() {
 		<Page>
 			<ScrollView
 				scrollY
-				className="h-screen bg-main-bg"
+				className="h-screen"
 				onScrollToLower={() => hasNextPage && !isFetchingNextPage && fetchNextPage()}
 			>
 				<View className="container-x py-3 flex flex-col gap-4">
@@ -29,10 +28,7 @@ export default function EmployerOrderListPage() {
 					) : (
 						<>
 							{list.map((order) => (
-								<Cell
-									key={order.orderId}
-									className="p-0 shadow-sm overflow-hidden rounded-xl"
-								>
+								<Cell key={order.orderId}>
 									<OrderRecordCard
 										record={order}
 										viewMode="employer"

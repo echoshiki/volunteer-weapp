@@ -80,6 +80,7 @@ export const Button = ({
 	// 基础类名构建
 	const baseClasses = `
         flex items-center justify-center font-bold transition-all overflow-hidden
+		m-0 min-h-0 min-w-0
         ${block ? 'w-full' : 'inline-flex w-fit'}
         ${rounded ? 'rounded-full' : 'rounded-card'}
         ${disabled || loading ? 'opacity-50 grayscale pointer-events-none' : ''}

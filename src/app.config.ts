@@ -24,7 +24,11 @@ export default defineAppConfig({
 		'pages/apply/history/index',
 		'pages/apply/volunteer/index',
 		'pages/apply/institution/index',
+		'pages/order/provider/index',
+		'pages/order/employer/index',
+		'pages/order/detail/index',
 		'pages/onboarding/index',
+		'pages/login/index',
 	],
 	window: {
 		backgroundTextStyle: 'light',
