@@ -50,7 +50,7 @@ export interface UpdateOrderStatusRequest {
 
 /** 需求方：确认/取消订单 */
 export const updateOrderStatusAPI = (param: UpdateOrderStatusRequest) => {
-	return http.post(`/demand/order/status`, param);
+	return http.put(`/demand/order/status`, param);
 };
 
 export interface AddTrajectoryRequest {
@@ -123,6 +123,7 @@ export interface WechatPayQueryRes {
 	trade_state_desc?: string;
 }
 
+/** 轮询支付状态 */
 export const queryOrderPayStatusAPI = (orderId: string): Promise<WechatPayQueryRes> => {
 	return http.get(`/demand/order/payment/query/${orderId}`);
 };
