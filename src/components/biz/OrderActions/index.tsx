@@ -1,5 +1,4 @@
-import { View, Text } from '@tarojs/components';
-import Taro from '@tarojs/taro';
+import { View } from '@tarojs/components';
 import { Button } from '@/components/ui';
 import { UnifiedOrderItem } from '@/types/order';
 import { useOrderActions } from '@/hooks/useOrder';
@@ -12,7 +11,6 @@ interface OrderActionProps {
 /** 需求方专用的履约动作树 */
 export const EmployerActions = ({ order }: OrderActionProps) => {
 	const { updateStatus, runWechatPay, isActionLoading } = useOrderActions(order);
-	console.log('OrderStatus', order.status);
 
 	if (order.status === 'pending') {
 		return (

@@ -35,22 +35,11 @@ export default function OrderDetailPage() {
 		refetch: refetchTrajectory,
 	} = useOrderTrajectoryList(orderId);
 
-	const {
-		needArrivePunch,
-		needCompletePunch,
-		submitTrajectory,
-		updateStatus,
-		runWechatPay,
-		isActionLoading,
-	} = useOrderActions(order);
+	const { needArrivePunch, needCompletePunch, submitTrajectory, isActionLoading } =
+		useOrderActions(order);
 
 	const { triggerUpload, isUploading } = useUpload();
 	const { userInfo } = useAuthStore();
-
-	// 触发支付
-	Taro.useReady(() => {
-		if (initialAction === 'pay') runWechatPay.mutate();
-	});
 
 	if (isDetailLoading || isTrajectoryLoading) return <Loading />;
 	if (!order) return <Empty title="未找到相关服务订单" />;
