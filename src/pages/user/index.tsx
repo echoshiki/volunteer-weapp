@@ -3,10 +3,11 @@ import { View, Text } from '@tarojs/components';
 import { useAuthStore } from '@/store/auth';
 import { useLogin } from '@/hooks/useLogin';
 import { useUser } from '@/hooks/useUser';
-import { Avatar, Asset, ColumnNav, Page } from '@/components/ui';
-import { mapsTo } from '@/utils/common';
-import { UserIdentityBadge } from '@/components/biz/BizBadge';
+import { Avatar, Asset, ColumnNav, Page, Cell } from '@/components/ui';
+import { UserIdentityBadge, OrderNavItem } from '@/components/biz';
 import { doGlobalScan } from '@/utils/scan';
+import { mapsTo } from '@/utils/common';
+import { ORDER_NAV_ITEMS } from '@/constants/order';
 
 export default function UserPage() {
 	const { userInfo } = useAuthStore();
@@ -74,7 +75,7 @@ export default function UserPage() {
 			</View>
 
 			<View className="px-4 -mt-10 flex flex-col gap-4">
-				<View className="bg-white rounded-lg px-4 py-6 shadow-sm flex items-center">
+				<Cell className="flex items-center">
 					<Asset label="我的积分" value={userInfo?.points || 0} />
 					<View className="w-px h-8 bg-slate-100" />
 					<Asset
@@ -82,64 +83,65 @@ export default function UserPage() {
 						value={userInfo?.duration || 0}
 						onClick={() => mapsTo('/pages/user/coupons/index')}
 					/>
-				</View>
+				</Cell>
+
+				<Cell className="grid grid-cols-5">
+					{ORDER_NAV_ITEMS.map((item) => (
+						<OrderNavItem key={item.value} nav={item} viewMode="employer" />
+					))}
+				</Cell>
 
 				{/* 功能列表区域 */}
-				<View className="space-y-4 pb-10">
+				<Cell className="px-2 py-1">
 					{/* 服务管理模块 */}
-					<View className="bg-white rounded-card overflow-hidden">
-						<ColumnNav
-							icon="icon-[ph--star-light]"
-							label="我的志愿活动"
-							onClick={() => mapsTo('/pages/user/activity/index')}
-						/>
-						<ColumnNav
-							icon="icon-[ph--clipboard-text-light]"
-							label="我发布的需求"
-							onClick={() => mapsTo('/pages/user/demand/index')}
-						/>
-						<ColumnNav
-							icon="icon-[ph--clipboard-text-light]"
-							label="我发布的报价"
-							onClick={() => mapsTo('/pages/user/bid/index')}
-						/>
-						<ColumnNav
-							icon="icon-[ph--clipboard-text-light]"
-							label="我的服务订单"
-							onClick={() => mapsTo('/pages/order/employer/index')}
-						/>
-						<ColumnNav
-							icon="icon-[ph--user-focus-light]"
-							label="我的求职意向"
-							onClick={() => mapsTo('/pages/user/job/index')}
-						/>
-						<ColumnNav
-							icon="icon-[ph--scan-light]"
-							label="现场扫码打卡"
-							onClick={doGlobalScan}
-						/>
-					</View>
+					<ColumnNav
+						icon="icon-[ph--star-light]"
+						label="我报名的活动"
+						onClick={() => mapsTo('/pages/user/activity/index')}
+					/>
+					<ColumnNav
+						icon="icon-[ph--clipboard-text-light]"
+						label="我发布的需求"
+						onClick={() => mapsTo('/pages/user/demand/index')}
+					/>
+					<ColumnNav
+						icon="icon-[ph--clipboard-text-light]"
+						label="我发布的报价"
+						onClick={() => mapsTo('/pages/user/bid/index')}
+					/>
+					<ColumnNav
+						icon="icon-[ph--clipboard-text-light]"
+						label="我服务的订单"
+						onClick={() => mapsTo('/pages/order/provider/index')}
+					/>
+					<ColumnNav
+						icon="icon-[ph--user-focus-light]"
+						label="我应聘的岗位"
+						onClick={() => mapsTo('/pages/user/job/index')}
+					/>
+					<ColumnNav
+						icon="icon-[ph--scan-light]"
+						label="现场扫码打卡"
+						onClick={doGlobalScan}
+					/>
 
-					{/* 设置与账号模块 */}
-					<View className="bg-white rounded-card overflow-hidden">
-						<ColumnNav
-							icon="icon-[ph--user-gear-light]"
-							label="个人资料"
-							onClick={() => mapsTo('/pages/user/profile/index')}
-						/>
-						<ColumnNav
-							icon="icon-[ph--shield-warning-light]"
-							label="实名认证"
-							extra={userInfo?.reviewId ? '已认证' : '未认证'}
-							onClick={() => mapsTo('/pages/apply/index')}
-						/>
-						<ColumnNav icon="icon-[ph--question]" label="帮助与反馈" />
-					</View>
+					<ColumnNav
+						icon="icon-[ph--user-gear-light]"
+						label="个人资料"
+						onClick={() => mapsTo('/pages/user/profile/index')}
+					/>
+					<ColumnNav
+						icon="icon-[ph--shield-warning-light]"
+						label="实名认证"
+						extra={userInfo?.reviewId ? '已认证' : '未认证'}
+						onClick={() => mapsTo('/pages/apply/index')}
+					/>
+					<ColumnNav icon="icon-[ph--question]" label="帮助与反馈" />
 
 					{/* 退出按钮 */}
 					{isLoggedIn && (
 						<View
-							className="bg-white rounded-card p-4 flex items-center justify-center active:bg-red-50 transition-colors"
+							className="p-4 flex items-center justify-center active:bg-red-50 transition-colors"
 							onClick={() => {
 								Taro.showModal({
 									title: '提示',
@@ -152,7 +154,7 @@ export default function UserPage() {
 							<Text className="text-sm text-primary font-bold">退出登录</Text>
 						</View>
 					)}
-				</View>
+				</Cell>
 			</View>
 		</Page>
 	);

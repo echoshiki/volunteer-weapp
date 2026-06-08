@@ -21,3 +21,4 @@ export * from './ImageUploader';
 export * from './FormItem';
 export * from './EntryCard';
 export * from './Drawer';
+export * from './Tabs';

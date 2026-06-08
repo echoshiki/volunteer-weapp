@@ -1,12 +1,26 @@
 import { View, ScrollView } from '@tarojs/components';
 import { useEmployerOrderList } from '@/hooks/useOrder';
-import { Page, Empty, Loading, Divider, Cell } from '@/components/ui';
-import { OrderRecordCard } from '@/components/biz/OrderRecordCard';
+import { Page, Empty, Loading, Divider, Cell, Tabs } from '@/components/ui';
+import { OrderRecordCard } from '@/components/biz';
 import { mapsTo } from '@/utils/common';
+import { useEffect, useState } from 'react';
+import { useRouter } from '@tarojs/taro';
+import { OrderStatus } from '@/types/order';
+import { ORDER_NAV_ITEMS } from '@/constants/order';
 
 export default function EmployerOrderListPage() {
+	const { params } = useRouter();
+	const [currentTab, setCurrentTab] = useState<OrderStatus | 'all'>('all');
+	const allTabsConfig = [{ label: '全部', value: 'all' }, ...ORDER_NAV_ITEMS];
+
+	useEffect(() => {
+		if (params.status) {
+			setCurrentTab(params.status as OrderStatus | 'all');
+		}
+	}, [params.status]);
+
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-		useEmployerOrderList();
+		useEmployerOrderList(currentTab);
 	const list = data?.pages.flatMap((page) => page.list) || [];
 
 	const handleAction = (type: string, item: any) => {
@@ -15,6 +29,14 @@ export default function EmployerOrderListPage() {
 
 	return (
 		<Page>
+			<Tabs
+				tabs={allTabsConfig}
+				current={currentTab}
+				onChange={(val) => setCurrentTab(val as OrderStatus | 'all')}
+				sticky
+				scrollable
+			/>
+
 			<ScrollView
 				scrollY
 				className="h-screen"

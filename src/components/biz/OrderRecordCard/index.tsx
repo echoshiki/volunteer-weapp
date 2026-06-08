@@ -31,10 +31,7 @@ export const OrderRecordCard = ({
 	const targetAvatar = isEmployer ? record.avatar : '';
 
 	return (
-		<View
-			className={`flex flex-col ${className}`}
-			onClick={() => onClick?.(record.orderId)}
-		>
+		<View className={`flex flex-col ${className}`} onClick={() => onClick?.(record.orderId)}>
 			{/* 头部：单号与状态 */}
 			<View className="flex justify-between items-center mb-3 font-num">
 				<Text className="text-xs text-text-muted">订单号：{record.orderId}</Text>
@@ -56,28 +53,34 @@ export const OrderRecordCard = ({
 				{/* 关联方卡片 */}
 				<View className="flex justify-between items-center mt-1 pt-2 border-t border-gray-100/60">
 					<View className="flex items-center gap-2">
-						<Image
-							src={targetAvatar || 'https://placeholder.com/50'}
-							className="size-10 rounded-full bg-gray-200"
-						/>
-						<View className="flex flex-col gap-2">
-							<Text className="text-xs font-medium text-text-title">
+						{isEmployer && (
+							<Image
+								src={targetAvatar}
+								className="size-10 rounded-full bg-gray-200"
+							/>
+						)}
+
+						<View className="flex flex-col gap-1">
+							<Text className="text-xs text-text-title">
 								{isEmployer ? `服务方: ${targetName}` : `雇主: ${targetName}`}
 							</Text>
 							{isEmployer && (
-								<UserIdentityBadge value={record.identity} />
+								<UserIdentityBadge className="scale-90" value={record.identity} />
 							)}
 						</View>
 					</View>
 
 					{/* 快捷拨打电话 */}
 					<View
-						className="icon-[ph--phone-call] size-6 text-primary active:opacity-60 p-1"
+						className="flex items-center gap-1 text-primary font-medium text-xs"
 						onClick={(e) => {
 							e.stopPropagation();
 							Taro.makePhoneCall({ phoneNumber: targetPhone });
 						}}
-					/>
+					>
+						<View className="icon-[ph--phone-call] size-4" />
+						{targetPhone}
+					</View>
 				</View>
 			</View>
 
@@ -87,9 +90,7 @@ export const OrderRecordCard = ({
 					<Text className="bg-gray-100 px-1.5 py-0.5 rounded text-xs">
 						{record.payType === 'online' ? '线上支付' : '线下结算'}
 					</Text>
-					{record.charge && (
-						<Badge variant='success'>公益单</Badge>
-					)}
+					{record.charge && <Badge variant="success">公益单</Badge>}
 				</View>
 				<Text className="text-text-title">
 					合计:{' '}
@@ -98,7 +99,6 @@ export const OrderRecordCard = ({
 					</Text>
 				</Text>
 			</View>
-			<Divider className="my-2" />
 			{/* 底部动作按钮配置驱动 */}
 			<OrderCardActions record={record} viewMode={viewMode} onAction={onAction} />
 		</View>
@@ -116,49 +116,61 @@ const OrderCardActions = ({
 	if (isEmployer) {
 		if (record.status === 'pending') {
 			return (
-				<View className="w-full flex justify-end gap-2" onClick={(e) => e.stopPropagation()}>
-					<Button
-						variant="ghost"
-						size="sm"
-						onClick={() => onAction?.('cancel', record)}
+				<>
+					<Divider className="my-2" />
+					<View
+						className="w-full flex justify-end gap-2"
+						onClick={(e) => e.stopPropagation()}
 					>
-						取消订单
-					</Button>
-					<Button
-						variant="danger"
-						className="w-56"
-						size="sm"
-						onClick={() => onAction?.('pay', record)}
-					>
-						立即付款
-					</Button>
-				</View>
+						<Button
+							variant="ghost"
+							size="sm"
+							onClick={() => onAction?.('cancel', record)}
+						>
+							取消订单
+						</Button>
+						<Button
+							variant="danger"
+							className="w-56"
+							size="sm"
+							onClick={() => onAction?.('pay', record)}
+						>
+							立即付款
+						</Button>
+					</View>
+				</>
 			);
 		}
 		if (record.status === 'confirming') {
 			return (
-				<View className="flex justify-end" onClick={(e) => e.stopPropagation()}>
-					<Button
-						variant="success"
-						size="sm"
-						onClick={() => onAction?.('confirm', record)}
-					>
-						确认完工验收
-					</Button>
-				</View>
+				<>
+					<Divider className="my-2" />
+					<View className="flex justify-end" onClick={(e) => e.stopPropagation()}>
+						<Button
+							variant="success"
+							size="sm"
+							onClick={() => onAction?.('confirm', record)}
+						>
+							确认完工验收
+						</Button>
+					</View>
+				</>
 			);
 		}
 		if (record.status === 'reviewing') {
 			return (
-				<View className="flex justify-end" onClick={(e) => e.stopPropagation()}>
-					<Button
-						variant="primary"
-						size="sm"
-						onClick={() => onAction?.('comment', record)}
-					>
-						去评价
-					</Button>
-				</View>	
+				<>
+					<Divider className="my-2" />
+					<View className="flex justify-end" onClick={(e) => e.stopPropagation()}>
+						<Button
+							variant="primary"
+							size="sm"
+							onClick={() => onAction?.('comment', record)}
+						>
+							去评价
+						</Button>
+					</View>
+				</>
 			);
 		}
 	}
@@ -167,16 +179,22 @@ const OrderCardActions = ({
 	if (!isEmployer) {
 		if (record.status === 'serving') {
 			return (
-				<View className="flex justify-end text-xs text-text-muted italic">
-					请尽快线下联系雇主上门服务...
-				</View>
+				<>
+					<Divider className="my-2" />
+					<View className="flex justify-end text-xs text-text-muted italic">
+						请尽快线下联系雇主上门服务...
+					</View>
+				</>
 			);
 		}
 		if (record.status === 'confirming') {
 			return (
-				<View className="flex justify-end text-xs text-orange-500 font-medium">
-					已提交完工，等待雇主验收结算...
-				</View>
+				<>
+					<Divider className="my-2" />
+					<View className="flex justify-end text-xs text-orange-500 font-medium">
+						已提交完工，等待雇主验收结算...
+					</View>
+				</>
 			);
 		}
 	}

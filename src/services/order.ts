@@ -1,5 +1,5 @@
 import { PageRes } from '@/types/common';
-import { UnifiedOrderItem } from '@/types/order';
+import { OrderStatus, UnifiedOrderItem } from '@/types/order';
 import { http } from '@/utils/http';
 
 /** 创建服务订单请求入参 */
@@ -20,18 +20,26 @@ export const createServiceOrderAPI = (data: CreateOrderPayload) => {
 };
 
 /** 需求方：获取发出的服务订单列表 */
-export const getEmployerOrdersAPI = (params: { pageNum: number; pageSize: number }) => {
+export const getEmployerOrdersAPI = (params: {
+	pageNum: number;
+	pageSize: number;
+	status?: OrderStatus;
+}) => {
 	return http.get<PageRes<UnifiedOrderItem>>('/demand/order/web/demandUserList', { params });
 };
 
 /** 服务方：获取抢到的服务订单列表 */
-export const getProviderOrdersAPI = (params: { pageNum: number; pageSize: number }) => {
+export const getProviderOrdersAPI = (params: {
+	pageNum: number;
+	pageSize: number;
+	status?: OrderStatus;
+}) => {
 	return http.get<PageRes<UnifiedOrderItem>>('/demand/order/web/demandOrderList', { params });
 };
 
 /** 获取订单详情 (双端通用) */
 export const getOrderDetailAPI = (orderId: string): Promise<UnifiedOrderItem> => {
-    return http.get(`/demand/order/web/${orderId}`);
+	return http.get(`/demand/order/web/${orderId}`);
 };
 
 /** 需求方：取消订单 */
@@ -58,5 +66,3 @@ export const getOrderDetailAPI = (orderId: string): Promise<UnifiedOrderItem> =>
 // export const finishOrderServiceAPI = (orderId: string) => {
 //     return http.post(`/order/web/finishService`, { orderId });
 // };
-
-

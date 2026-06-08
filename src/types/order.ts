@@ -35,3 +35,13 @@ export interface UnifiedOrderItem {
 	employerName: string;
 	employerPhone: string;
 }
+
+export interface OrderNavItem {
+	/** 状态显示文字，如：待支付 */
+	label: string;
+	/** 对应的订单核心状态状态机值，特别的，'all' 可用于代表全部订单 */
+	value: OrderStatus | 'all';
+	/** 图标类名（Iconify 规范） */
+	icon: string;
+	url?: string;
+}
