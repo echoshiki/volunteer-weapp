@@ -1,5 +1,5 @@
 import { PageRes } from '@/types/common';
-import { OrderStatus, UnifiedOrderItem } from '@/types/order';
+import { OrderLifeCycleLogItem, OrderStatus, UnifiedOrderItem } from '@/types/order';
 import { http } from '@/utils/http';
 
 /** 创建服务订单请求入参 */
@@ -42,27 +42,37 @@ export const getOrderDetailAPI = (orderId: string): Promise<UnifiedOrderItem> =>
 	return http.get(`/demand/order/web/${orderId}`);
 };
 
-/** 需求方：取消订单 */
-// export const cancelOrderAPI = (orderId: string, status: string) => {
-//     return http.post(`/demand/order/status`, { orderId });
-// };
+export interface UpdateOrderStatusRequest {
+	orderId: string;
+	/** 变更的目标状态：reviewing 待评价(雇主验收成功)，cancelled 已取消 */
+	status: 'reviewing' | 'cancelled';
+}
+
+/** 需求方：确认/取消订单 */
+export const updateOrderStatusAPI = (param: UpdateOrderStatusRequest) => {
+	return http.post(`/demand/order/status`, param);
+};
+
+export interface AddTrajectoryRequest {
+	orderId: string | number;
+	demandId: number;
+	/** 服务状态：arrived代表到达服务地点，completed代表服务完成 */
+	status: 'arrived' | 'completed';
+	/** 服务轨迹现场打卡/成果图片 */
+	trajectoryImg: string;
+}
+
+/** 添加订单轨迹 */
+export const addOrderTrajectoryAPI = (param: AddTrajectoryRequest) => {
+	return http.post(`/demand/trajectory/web/add`, param);
+};
+
+/** 获取订单轨迹列表 */
+export const getOrderTrajectoryListAPI = (params: { orderId: string }) => {
+	return http.get<PageRes<OrderLifeCycleLogItem>>('/demand/trajectory/web/list', { params });
+};
 
 /** 需求方：发起微信支付 */
 // export const getOrderPayParamsAPI = (orderId: string) => {
 //     return http.post(`/order/web/pay`, { orderId });
-// };
-
-/** 需求方：确认完工验收 */
-// export const confirmOrderCompleteAPI = (orderId: string) => {
-//     return http.post(`/order/web/confirmComplete`, { orderId });
-// };
-
-/** 服务签到打卡 */
-// export const startOrderServiceAPI = (orderId: string) => {
-//     return http.post(`/order/web/startService`, { orderId });
-// };
-
-/** 服务方：申请完工 */
-// export const finishOrderServiceAPI = (orderId: string) => {
-//     return http.post(`/order/web/finishService`, { orderId });
 // };

@@ -177,7 +177,7 @@ const OrderCardActions = ({
 
 	// 服务方（志愿者/机构）动作树
 	if (!isEmployer) {
-		if (record.status === 'serving') {
+		if (record.status === 'paid') {
 			return (
 				<>
 					<Divider className="my-2" />

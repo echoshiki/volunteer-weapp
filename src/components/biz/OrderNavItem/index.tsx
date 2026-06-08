@@ -31,7 +31,7 @@ export const OrderNavItem = ({ nav, count = 0, viewMode }: OrderNavItemProps) =>
 		>
 			<View className="relative">
 				{/* 图标渲染 */}
-				<View className={`${nav.icon} size-8 text-text-body`} />
+				<View className={`${nav.icon} size-6 text-text-body`} />
 
 				{/* 数字角标 */}
 				{count > 0 && (

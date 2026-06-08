@@ -19,11 +19,17 @@ export const ORDER_STATUS_MAP: Record<OrderStatus, StatusConfigItem> = {
 		variant: 'primary',
 		tip: '等待雇主支付资金',
 	},
-	serving: {
+	paid: {
 		label: '待服务',
 		variant: 'primary',
 		employerTip: '服务方正在火速赶来...',
 		providerTip: '您已成功接单，请尽快上门服务',
+	},
+	serving: {
+		label: '服务中',
+		variant: 'primary',
+		employerTip: '服务方正在提供服务...',
+		providerTip: '您正在提供服务，请保持联系',
 	},
 	confirming: {
 		label: '待验收',
@@ -69,8 +75,8 @@ export const getOrderDetailTip = (status: OrderStatus, isEmployer: boolean): str
 /** 订单状态导航菜单 */
 export const ORDER_NAV_ITEMS: OrderNavItem[] = [
 	{ label: '待支付', value: 'pending', icon: 'icon-[ph--wallet-light]' },
-	{ label: '待服务', value: 'serving', icon: 'icon-[ph--person-arms-spread-light]' },
+	{ label: '待服务', value: 'paid', icon: 'icon-[ph--person-arms-spread-light]' },
+	{ label: '服务中', value: 'serving', icon: 'icon-[ph--alarm-light]' },
 	{ label: '待验收', value: 'confirming', icon: 'icon-[ph--clipboard-text-light]' },
 	{ label: '待评价', value: 'reviewing', icon: 'icon-[ph--chat-circle-dots-light]' },
-	{ label: '退款/取消', value: 'cancelled', icon: 'icon-[ph--clock-counter-clockwise-light]' },
 ];

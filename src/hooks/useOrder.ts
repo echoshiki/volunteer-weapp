@@ -1,14 +1,17 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
+	addOrderTrajectoryAPI,
 	createServiceOrderAPI,
 	getEmployerOrdersAPI,
 	getOrderDetailAPI,
+	getOrderTrajectoryListAPI,
 	getProviderOrdersAPI,
+	updateOrderStatusAPI,
 } from '@/services/order';
 import Taro from '@tarojs/taro';
 import { mapsTo } from '@/utils/common';
 import { getTenantId } from '@/utils/tenant';
-import { OrderStatus } from '@/types/order';
+import { OrderStatus, UnifiedOrderItem } from '@/types/order';
 
 /** 下单 */
 export const useCreateServiceOrder = () => {
@@ -70,19 +73,51 @@ export const useOrderDetail = (orderId: string) => {
 	});
 };
 
+/** 订单状态轨迹列表 */
+export const useOrderTrajectoryList = (orderId: string) => {
+	return useQuery({
+		queryKey: ['order', 'trajectory', 'list', orderId],
+		queryFn: () => getOrderTrajectoryListAPI({ orderId }),
+		enabled: !!orderId,
+	});
+};
+
 /** 统一管理订单履约动作的 Hook 组合 */
-export const useOrderActions = (orderId: string) => {
+export const useOrderActions = (order?: UnifiedOrderItem) => {
 	const queryClient = useQueryClient();
 
+	// 服务方打卡判定
+	const needArrivePunch = order ? order.status === 'paid' : false;
+	const needCompletePunch = order ? order.status === 'serving' : false;
+
 	// 公共成功回调：刷新当前详情及双端列表
-	const refreshCache = () => {
+	const refreshOrderCache = () => {
 		queryClient.invalidateQueries({ queryKey: ['order'] });
 	};
 
-	// 取消订单
-	const cancelOrder = useMutation({
-		// mutationFn: () => cancelOrderAPI(orderId),
-		// onSuccess: () => { Taro.showToast({ title: '订单已取消' }); refreshCache(); }
+	// 确认、取消订单
+	const updateStatus = useMutation({
+		mutationFn: updateOrderStatusAPI,
+		onSuccess: (_, variables) => {
+			const successMsg = variables.status === 'reviewing' ? '验收放款成功！' : '订单已取消';
+			Taro.showToast({ title: successMsg, icon: 'success' });
+			refreshOrderCache();
+		},
+		onError: (err: any) => Taro.showToast({ title: err?.message || '操作失败', icon: 'none' }),
+	});
+
+	// 服务方提交服务轨迹（到场、完工）
+	const submitTrajectory = useMutation({
+		mutationFn: addOrderTrajectoryAPI,
+		onSuccess: (_, variables) => {
+			const successMsg =
+				variables.status === 'arrived'
+					? '到场打卡成功，服务开始'
+					: '完工提交成功，等待雇主验收';
+			Taro.showToast({ title: successMsg, icon: 'success' });
+			refreshOrderCache();
+		},
+		onError: (err: any) => Taro.showToast({ title: err?.message || '打卡失败', icon: 'none' }),
 	});
 
 	// 线上微信支付
@@ -106,35 +141,12 @@ export const useOrderActions = (orderId: string) => {
 		// }
 	});
 
-	// 服务方签到
-	const startService = useMutation({
-		// mutationFn: () => startOrderServiceAPI(orderId),
-		// onSuccess: () => { Taro.showToast({ title: '签到成功，开始服务' }); refreshCache(); }
-	});
-
-	// 服务方完工
-	const finishService = useMutation({
-		// mutationFn: () => finishOrderServiceAPI(orderId),
-		// onSuccess: () => { Taro.showToast({ title: '已提交完工申请' }); refreshCache(); }
-	});
-
-	// 雇主确认验收
-	const confirmComplete = useMutation({
-		// mutationFn: () => confirmOrderCompleteAPI(orderId),
-		// onSuccess: () => { Taro.showToast({ title: '验收成功，交易完成', icon: 'success' }); refreshCache(); }
-	});
-
 	return {
-		cancelOrder,
+		needArrivePunch,
+		needCompletePunch,
+		updateStatus,
+		submitTrajectory,
 		runWechatPay,
-		startService,
-		finishService,
-		confirmComplete,
-		isAnyActionPending:
-			cancelOrder.isLoading ||
-			runWechatPay.isLoading ||
-			startService.isLoading ||
-			finishService.isLoading ||
-			confirmComplete.isLoading,
+		isActionLoading: updateStatus.isLoading || runWechatPay.isLoading,
 	};
 };

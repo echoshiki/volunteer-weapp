@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "订单详情",
+          "pathName": "pages/order/detail/index",
+          "query": "id=23",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "服务方订单列表",
           "pathName": "pages/order/provider/index",
           "query": "",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "用户中心",
