@@ -22,3 +22,4 @@ export * from './FormItem';
 export * from './EntryCard';
 export * from './Drawer';
 export * from './Tabs';
+export * from './Rate';

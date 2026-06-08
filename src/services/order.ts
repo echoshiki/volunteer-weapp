@@ -126,3 +126,17 @@ export interface WechatPayQueryRes {
 export const queryOrderPayStatusAPI = (orderId: string): Promise<WechatPayQueryRes> => {
 	return http.get(`/demand/order/payment/query/${orderId}`);
 };
+
+export interface EvaluateOrderRequest {
+	/** 服务订单id */
+	orderId: string;
+	/** 服务评价分数 */
+	rating: number;
+	/** 服务评价内容 */
+	comment?: string;
+}
+
+/** 需求方：对已完工的服务单发起最终评价 */
+export const evaluateOrderAPI = (param: EvaluateOrderRequest) => {
+	return http.put('/demand/order/evaluate', param);
+};

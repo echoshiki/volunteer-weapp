@@ -2,6 +2,8 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tansta
 import {
 	addOrderTrajectoryAPI,
 	createServiceOrderAPI,
+	evaluateOrderAPI,
+	EvaluateOrderRequest,
 	getEmployerOrdersAPI,
 	getOrderDetailAPI,
 	getOrderPayParamsAPI,
@@ -14,6 +16,7 @@ import Taro from '@tarojs/taro';
 import { mapsTo } from '@/utils/common';
 import { getTenantId } from '@/utils/tenant';
 import { OrderStatus, UnifiedOrderItem } from '@/types/order';
+import { useState } from 'react';
 
 /** 创建订单 */
 export const useCreateServiceOrder = () => {
@@ -195,4 +198,45 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 		runWechatPay,
 		isActionLoading: updateStatus.isLoading || runWechatPay.isLoading,
 	};
+};
+
+/** 评价提交 Mutation Hook */
+export const useEvaluateOrder = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: evaluateOrderAPI,
+		onSuccess: () => {
+			Taro.showToast({ title: '感谢您的评价', icon: 'success' });
+			queryClient.invalidateQueries({ queryKey: ['order'] });
+
+			setTimeout(() => {
+				Taro.navigateBack();
+			}, 1500);
+		},
+		onError: (err: any) => {
+			Taro.showToast({ title: err?.message || '评价提交失败', icon: 'none' });
+		},
+	});
+};
+
+export const useEvaluateForm = (initialOrderId: string) => {
+	const [formData, setFormData] = useState<EvaluateOrderRequest>({
+		orderId: initialOrderId,
+		rating: 5,
+		comment: '',
+	});
+
+	const changeRating = (rating: number) => setFormData((prev) => ({ ...prev, rating }));
+	const changeComment = (comment: string) => setFormData((prev) => ({ ...prev, comment }));
+
+	const validate = (): string | null => {
+		if (!formData.orderId) return '订单号缺失';
+		if (formData.rating < 1 || formData.rating > 5) return '请为本次服务打分';
+		// 评价内容非必需，不强制卡死死，但可限制最大字数限制
+		if (formData.comment && formData.comment.length > 200) return '评价内容最多200字';
+		return null;
+	};
+
+	return { formData, changeRating, changeComment, validate };
 };

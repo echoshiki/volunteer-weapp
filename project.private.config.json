@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "评价服务",
+          "pathName": "pages/order/comment/index",
+          "query": "id=40",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "订单详情",
           "pathName": "pages/order/detail/index",
           "query": "id=23",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "服务方订单列表",
