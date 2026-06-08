@@ -72,7 +72,57 @@ export const getOrderTrajectoryListAPI = (params: { orderId: string }) => {
 	return http.get<PageRes<OrderLifeCycleLogItem>>('/demand/trajectory/web/list', { params });
 };
 
+export interface WechatPayParamsRes {
+	appId: string;
+	timeStamp: string;
+	nonceStr: string;
+	package: string;
+	signType: string;
+	paySign: string;
+}
+
 /** 需求方：发起微信支付 */
-// export const getOrderPayParamsAPI = (orderId: string) => {
-//     return http.post(`/order/web/pay`, { orderId });
-// };
+export const getOrderPayParamsAPI = (orderId: string): Promise<WechatPayParamsRes> => {
+	return http.post('/demand/order/payment', { orderId });
+};
+
+export interface WechatPayQueryRes {
+	/** 通信标识 */
+	return_code: string;
+	/** 通信信息 */
+	return_msg: string;
+	/** 小程序AppID */
+	appid: string;
+	/** 商户号 */
+	mch_id: string;
+	/** 随机字符串 */
+	nonce_str: string;
+	/** 签名 */
+	sign: string;
+	/** 业务结果 */
+	result_code: string;
+	/** 用户openid */
+	openid: string;
+	/** 交易类型 */
+	trade_type: string;
+	/** 交易状态 */
+	trade_state: 'SUCCESS' | 'NOTPAY' | 'USERPAYING' | 'CLOSED' | 'REVOKED' | 'PAYERROR';
+	/** 付款银行 */
+	bank_type: string;
+	/** 订单总金额，单位为分 */
+	total_fee: string;
+	/** 现金支付金额（分） */
+	cash_fee: string;
+	/** 微信支付订单号 */
+	transaction_id: string;
+	/** 商户订单号 */
+	out_trade_no: string;
+	/** 支付完成时间 */
+	time_end: string;
+	/** 交易状态描述 */
+	trade_state_desc?: string;
+}
+
+export const queryOrderPayStatusAPI = (orderId: string): Promise<WechatPayQueryRes> => {
+	return http.get(`/demand/order/payment/query/${orderId}`);
+};

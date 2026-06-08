@@ -4,8 +4,10 @@ import {
 	createServiceOrderAPI,
 	getEmployerOrdersAPI,
 	getOrderDetailAPI,
+	getOrderPayParamsAPI,
 	getOrderTrajectoryListAPI,
 	getProviderOrdersAPI,
+	queryOrderPayStatusAPI,
 	updateOrderStatusAPI,
 } from '@/services/order';
 import Taro from '@tarojs/taro';
@@ -13,7 +15,7 @@ import { mapsTo } from '@/utils/common';
 import { getTenantId } from '@/utils/tenant';
 import { OrderStatus, UnifiedOrderItem } from '@/types/order';
 
-/** 下单 */
+/** 创建订单 */
 export const useCreateServiceOrder = () => {
 	const queryClient = useQueryClient();
 
@@ -85,6 +87,7 @@ export const useOrderTrajectoryList = (orderId: string) => {
 /** 统一管理订单履约动作的 Hook 组合 */
 export const useOrderActions = (order?: UnifiedOrderItem) => {
 	const queryClient = useQueryClient();
+	const currentOrderId = order?.orderId || '';
 
 	// 服务方打卡判定
 	const needArrivePunch = order ? order.status === 'paid' : false;
@@ -94,6 +97,70 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 	const refreshOrderCache = () => {
 		queryClient.invalidateQueries({ queryKey: ['order'] });
 	};
+
+	// 轮询订单的支付状态
+	const pollOrderPayStatus = async (id: string, counter = 1) => {
+		if (counter > 5) {
+			Taro.hideLoading();
+			refreshOrderCache();
+			return;
+		}
+
+		try {
+			const res = await queryOrderPayStatusAPI(id);
+			if (
+				res.return_code === 'SUCCESS' &&
+				res.result_code === 'SUCCESS' &&
+				res.trade_state === 'SUCCESS'
+			) {
+				Taro.hideLoading();
+				Taro.showToast({ title: '支付成功', icon: 'success' });
+				refreshOrderCache(); // 瞬间重刷，使界面从 pending 挺进 paid (待服务)
+			} else {
+				setTimeout(() => pollOrderPayStatus(id, counter + 1), 1000);
+			}
+		} catch (err) {
+			setTimeout(() => pollOrderPayStatus(id, counter + 1), 1000);
+		}
+	};
+
+	// 拉起微信支付
+	const runWechatPay = useMutation({
+		mutationFn: () => {
+			if (!currentOrderId) {
+				return Promise.reject(new Error('订单号不存在，无法发起支付'));
+			}
+			return getOrderPayParamsAPI(currentOrderId);
+		},
+		onSuccess: async (payParams) => {
+			try {
+				// 唤起微信底层安全收银台
+				await Taro.requestPayment({
+					timeStamp: payParams.timeStamp,
+					nonceStr: payParams.nonceStr,
+					package: payParams.package,
+					signType: payParams.signType as any,
+					paySign: payParams.paySign,
+				});
+
+				Taro.showLoading({ title: '核验支付结果...', mask: true });
+				await pollOrderPayStatus(currentOrderId);
+			} catch (err) {
+				const error = err as { errMsg?: string };
+
+				if (error?.errMsg?.includes('cancel')) {
+					Taro.showToast({ title: '支付已取消', icon: 'none' });
+				} else {
+					Taro.showToast({ title: error?.errMsg || '微信支付失败', icon: 'none' });
+				}
+
+				refreshOrderCache();
+			}
+		},
+		onError: (err: any) => {
+			Taro.showToast({ title: err?.message || '获取支付参数失败', icon: 'none' });
+		},
+	});
 
 	// 确认、取消订单
 	const updateStatus = useMutation({
@@ -118,27 +185,6 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 			refreshOrderCache();
 		},
 		onError: (err: any) => Taro.showToast({ title: err?.message || '打卡失败', icon: 'none' }),
-	});
-
-	// 线上微信支付
-	const runWechatPay = useMutation({
-		// mutationFn: () => getOrderPayParamsAPI(orderId),
-		// onSuccess: async (payParams: any) => {
-		//     try {
-		//         // 调起微信原生支付
-		//         await Taro.requestPayment({
-		//             timeStamp: payParams.timeStamp,
-		//             nonceStr: payParams.nonceStr,
-		//             package: payParams.package,
-		//             signType: payParams.signType,
-		//             paySign: payParams.paySign,
-		//         });
-		//         Taro.showToast({ title: '支付成功', icon: 'success' });
-		//         refreshCache();
-		//     } catch (err) {
-		//         Taro.showToast({ title: '支付已取消或失败', icon: 'none' });
-		//     }
-		// }
 	});
 
 	return {
