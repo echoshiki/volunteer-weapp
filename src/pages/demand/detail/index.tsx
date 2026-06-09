@@ -82,7 +82,10 @@ export default function DemandDetailPage() {
 			{/* 底部操作栏 */}
 			<Cell className="fixed bottom-0 inset-x-0 border-t border-gray-100 flex flex-col gap-3">
 				<Text className="text-xs text-text-body">
-					已有 <Text className="text-primary font-bold text-base">{bidList.length}</Text>{' '}
+					已有{' '}
+					<Text className="text-primary font-bold text-base">
+						{detail.serviceUserCount}
+					</Text>{' '}
 					人发送了接单申请
 				</Text>
 

@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "我的简历",
+          "pathName": "pages/user/resume/index",
+          "query": "mode=view",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "评价服务",
           "pathName": "pages/order/comment/index",
           "query": "id=40",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "订单详情",

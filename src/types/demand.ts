@@ -58,6 +58,8 @@ export interface DemandItem {
 	status: AuditStatus;
 	/** 是否推荐 */
 	isRecommend: boolean;
+	/** 报价总计 */
+	serviceUserCount: number;
 	/** 发布时间 */
 	createTime: string;
 }

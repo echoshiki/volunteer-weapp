@@ -1,5 +1,14 @@
 import { http } from '@/utils/http';
-import { JobCategory, JobItem, JobDetail, EnterpriseItem, EnterpriseDetail } from '@/types/job';
+import {
+	JobCategory,
+	JobItem,
+	JobDetail,
+	EnterpriseItem,
+	EnterpriseDetail,
+	ResumeFileItem,
+	ResumeDetail,
+	AppliedJobItem,
+} from '@/types/job';
 import { PageRes, ListRes } from '@/types/common';
 
 /** 获取岗位分类列表（不分页） */
@@ -51,3 +60,42 @@ export const getEnterpriseListAPI = (params: EnterpriseListParams) =>
 /** 获取企业详情 */
 export const getEnterpriseDetailAPI = (enterprisesId: number | string) =>
 	http.get<EnterpriseDetail>(`/volunteer/enterprises/web/${enterprisesId}`);
+
+export interface AddResumeRequest {
+	applicantName: string;
+	applicantPhone: string;
+	applicantEmail: string;
+	volunteerFile: ResumeFileItem[];
+}
+
+/** 创建简历 */
+export const addResumeAPI = (data: AddResumeRequest) =>
+	http.post('/volunteer/resume/web/add', data);
+
+/** 获取简历详情 */
+export const getResumeDetailAPI = () => http.get<ResumeDetail>(`/volunteer/resume/web/info`);
+
+export interface UpdateResumeRequest {
+	resumeId: number;
+	applicantName: string;
+	applicantPhone: string;
+	applicantEmail: string;
+	volunteerFile: ResumeFileItem[];
+}
+
+/** 修改简历内容 */
+export const updateResumeAPI = (data: UpdateResumeRequest) =>
+	http.put('/volunteer/resume/web/update', data);
+
+/** 获取已投递岗位列表（分页） */
+export const getAppliedJobListAPI = (params: { pageNum: number; pageSize: number }) =>
+	http.get<PageRes<AppliedJobItem>>('/volunteer/resume/web/appliedList', params);
+
+export interface DeliverRequest {
+	/** 岗位id */
+	id: number;
+}
+
+/** 投递岗位 */
+export const deliverJobAPI = (data: DeliverRequest) =>
+	http.post('/volunteer/resume/web/deliver', data);

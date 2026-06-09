@@ -66,7 +66,7 @@ export interface ApplyHistoryRequest {
  * @param params 可选的 status 过滤
  */
 export const getApplyHistoryListAPI = (params: ApplyHistoryRequest) =>
-	http.post<PageRes<ApplyHistoryItem>>('/volunteer/review/userList', params);
+	http.get<PageRes<ApplyHistoryItem>>('/volunteer/review/userList', params);
 
 /**
  * 获取服务方公开主页合规脱敏资料

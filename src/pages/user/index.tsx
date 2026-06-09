@@ -46,12 +46,6 @@ export default function UserPage() {
 											{userInfo?.phonenumber || '暂无手机号'}
 										</Text>
 									</View>
-									<View className="flex items-center gap-1 mt-0.5">
-										<View className="icon-[ph--map-pin-thin] size-3" />
-										<Text className="text-xs text-text-muted">
-											{userInfo?.regionName || '未绑定社区'}
-										</Text>
-									</View>
 								</View>
 							</View>
 						) : (
@@ -118,6 +112,11 @@ export default function UserPage() {
 						icon="icon-[ph--user-focus-light]"
 						label="我应聘的岗位"
 						onClick={() => mapsTo('/pages/user/job/index')}
+					/>
+					<ColumnNav
+						icon="icon-[ph--clipboard-text-light]"
+						label="我创建的简历"
+						onClick={() => mapsTo('/pages/user/resume/index?mode=view')}
 					/>
 					<ColumnNav
 						icon="icon-[ph--scan-light]"

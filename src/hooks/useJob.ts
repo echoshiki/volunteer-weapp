@@ -1,4 +1,4 @@
-import { useQuery, useInfiniteQuery } from '@tanstack/react-query';
+import { useQuery, useInfiniteQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import {
 	getJobCategoryListAPI,
 	getJobListAPI,
@@ -7,10 +7,16 @@ import {
 	getEnterpriseDetailAPI,
 	JobListParams,
 	EnterpriseListParams,
+	getResumeDetailAPI,
+	addResumeAPI,
+	updateResumeAPI,
+	getAppliedJobListAPI,
+	deliverJobAPI,
 } from '@/services/job';
-import { enabledWithTenant, getTenantId, tenantKey } from '@/utils/tenant';
+import { enabledWithTenant, tenantKey } from '@/utils/tenant';
+import Taro from '@tarojs/taro';
 
-/** 岗位分类列表 Hook */
+/** Query：岗位分类列表 */
 export const useJobCategories = () => {
 	return useQuery({
 		queryKey: ['job', 'categories'],
@@ -21,7 +27,7 @@ export const useJobCategories = () => {
 	});
 };
 
-/** 岗位列表 Hook (无限滚动) */
+/** Query：岗位列表 */
 export const useJobList = (params: Omit<JobListParams, 'pageNum'>) => {
 	return useInfiniteQuery({
 		queryKey: [...tenantKey(), 'job', 'list', params],
@@ -37,7 +43,7 @@ export const useJobList = (params: Omit<JobListParams, 'pageNum'>) => {
 	});
 };
 
-/** 岗位详情 Hook */
+/** Query：岗位详情 */
 export const useJobDetail = (id: number | string) => {
 	return useQuery({
 		queryKey: [...tenantKey(), 'job', 'detail', id],
@@ -46,7 +52,7 @@ export const useJobDetail = (id: number | string) => {
 	});
 };
 
-/** 企业列表 Hook (无限滚动) */
+/** Query：企业列表 */
 export const useEnterpriseList = (params: Omit<EnterpriseListParams, 'pageNum'>) => {
 	return useInfiniteQuery({
 		queryKey: [...tenantKey(), 'enterprise', 'list', params],
@@ -62,11 +68,78 @@ export const useEnterpriseList = (params: Omit<EnterpriseListParams, 'pageNum'>)
 	});
 };
 
-/** 企业详情 Hook */
+/** Query：企业详情 */
 export const useEnterpriseDetail = (enterprisesId: number | string) => {
 	return useQuery({
 		queryKey: [...tenantKey(), 'enterprise', 'detail', enterprisesId],
 		queryFn: () => getEnterpriseDetailAPI(enterprisesId),
 		enabled: enabledWithTenant(!!enterprisesId),
+	});
+};
+
+/** Query：获取简历详情 */
+export const useResumeDetail = () => {
+	return useQuery({
+		queryKey: ['resume', 'detail'],
+		queryFn: () => getResumeDetailAPI(),
+		retry: false,
+		staleTime: 5 * 60 * 1000,
+	});
+};
+
+/** Mutation：管理简历创建、修改与投递历史动作 */
+export const useResumeActions = () => {
+	const queryClient = useQueryClient();
+
+	// 动作：新建简历
+	const createResume = useMutation({
+		mutationFn: addResumeAPI,
+		onSuccess: () => {
+			Taro.showToast({ title: '简历创建成功', icon: 'success' });
+			queryClient.invalidateQueries({ queryKey: ['resume'] });
+			setTimeout(() => Taro.navigateBack(), 1500);
+		},
+		onError: (err: any) => Taro.showToast({ title: err?.message || '创建失败', icon: 'none' }),
+	});
+
+	// 动作：投递简历
+	const deliverJob = useMutation({
+		mutationFn: deliverJobAPI,
+		onSuccess: () => {
+			Taro.showToast({ title: '岗位投递成功！', icon: 'success' });
+			queryClient.invalidateQueries({ queryKey: ['resume', 'applied', 'list'] });
+		},
+		onError: (err: any) => {
+			Taro.showToast({ title: err?.message || '投递失败，请重试', icon: 'none' });
+		},
+	});
+
+	// 动作：修改简历
+	const updateResume = useMutation({
+		mutationFn: updateResumeAPI,
+		onSuccess: (res, variables) => {
+			Taro.showToast({ title: '简历修改成功', icon: 'success' });
+			queryClient.invalidateQueries({ queryKey: ['resume', 'detail'] });
+			setTimeout(() => Taro.navigateBack(), 1500);
+		},
+		onError: (err: any) => Taro.showToast({ title: err?.message || '修改失败', icon: 'none' }),
+	});
+
+	return {
+		createResume,
+		deliverJob,
+		updateResume,
+		isActionPending: createResume.isLoading || deliverJob.isLoading || updateResume.isLoading,
+	};
+};
+
+/** Query：已投递岗位历史列表（无限滚动） */
+export const useAppliedJobList = () => {
+	return useInfiniteQuery({
+		queryKey: [...tenantKey(), 'resume', 'applied', 'list'],
+		queryFn: ({ pageParam = 1 }) => getAppliedJobListAPI({ pageNum: pageParam, pageSize: 10 }),
+		getNextPageParam: (lastPage) =>
+			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		enabled: enabledWithTenant(),
 	});
 };
