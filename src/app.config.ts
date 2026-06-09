@@ -30,6 +30,7 @@ export default defineAppConfig({
 		'pages/order/employer/index',
 		'pages/order/detail/index',
 		'pages/order/comment/index',
+		'pages/association/index',
 		'pages/onboarding/index',
 		'pages/login/index',
 	],

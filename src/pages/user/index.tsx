@@ -41,7 +41,7 @@ export default function UserPage() {
 								</View>
 								<View className="flex items-center gap-1 text-xs text-text-muted mt-1">
 									<View className="flex items-center gap-1 mt-0.5">
-										<View className="icon-[ph--device-mobile-thin] size-3" />
+										<View className="icon-[ph--device-mobile-thin] size-3.5" />
 										<Text className="text-xs text-text-muted">
 											{userInfo?.phonenumber || '暂无手机号'}
 										</Text>

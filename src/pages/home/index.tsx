@@ -41,6 +41,8 @@ export default function HomePage() {
 		volunteerCount: 0,
 		totalDuration: 0,
 		resolvedDemands: 0,
+		associationName: '',
+		associationId: 0,
 	};
 
 	// 计算：提取轮播图
@@ -112,7 +114,7 @@ export default function HomePage() {
 					<GridNav
 						icon="icon-[ph--gift-bold]"
 						label="志愿组织"
-						path="/pages/points/index"
+						path="/pages/association/index"
 					/>
 					<GridNav
 						icon="icon-[ph--star-bold]"
@@ -136,7 +138,9 @@ export default function HomePage() {
 			<View className="container-x mb-4">
 				<Cell>
 					<View className="flex items-center justify-between mb-3 border-b border-gray-50 pb-2">
-						<Text className="text-sm font-bold text-text-title">智慧社区网格概览</Text>
+						<Text className="text-sm font-bold text-text-title">
+							{stats.associationName}
+						</Text>
 						<Text className="text-xs text-text-muted font-sans scale-90">
 							数据实时更新
 						</Text>

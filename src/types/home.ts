@@ -10,6 +10,8 @@ export interface HomeStatistics {
 	volunteerCount: number;
 	totalDuration: number;
 	resolvedDemands: number;
+	associationName: string;
+	associationId: number;
 }
 
 /** 首页聚合数据 */

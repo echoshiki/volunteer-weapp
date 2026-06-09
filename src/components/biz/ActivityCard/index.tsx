@@ -34,7 +34,7 @@ export const ActivityCard = ({
 				<Image
 					src={activity.banner}
 					mode="aspectFill"
-					className="w-28 h-28 object-cover shrink-0 rounded"
+					className="size-20 object-cover shrink-0 rounded"
 				/>
 
 				{/* 右侧详细描述 */}
@@ -52,7 +52,7 @@ export const ActivityCard = ({
 					</View>
 
 					<View className="flex justify-between items-center">
-						<ActivityStatusBadge value={activity.status} />
+						<EnrollStatusBadge value={activity.status} />
 						<View className="flex items-center gap-1 text-text-muted">
 							<View className="icon-[ph--users-three-light] w-5 h-5" />
 							<Text className="text-xs">
