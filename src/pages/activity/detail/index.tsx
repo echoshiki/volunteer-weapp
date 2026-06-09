@@ -5,6 +5,7 @@ import { Badge, Button, Cell, Description, Heading, Page } from '@/components/ui
 import { EnrollStatusBadge } from '@/components/biz/BizBadge';
 import { useAuthStore } from '@/store/auth';
 import { runWithAuth } from '@/utils/auth';
+import { mapsTo } from '@/utils/common';
 
 export default function ActivityDetail() {
 	// 数据：路由参数中的活动 ID
@@ -36,10 +37,7 @@ export default function ActivityDetail() {
 								confirmText: '去认证',
 								confirmColor: '#ea3323',
 								success: (res) => {
-									if (res.confirm) {
-										// TODO: 实际验证逻辑
-										// Taro.mapsTo('/pages/user/certification/index');
-									}
+									if (res.confirm) mapsTo('/pages/apply/volunteer/index');
 								},
 							});
 							return;
