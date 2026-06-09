@@ -12,3 +12,4 @@ export * from './BidForm';
 export * from './OrderNavItem';
 export * from './OrderRecordCard';
 export * from './OrderActions';
+export * from './AppliedJobRecordCard';

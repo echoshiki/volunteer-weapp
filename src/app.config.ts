@@ -20,6 +20,7 @@ export default defineAppConfig({
 		'pages/user/bid/index',
 		'pages/user/bid/edit/index',
 		'pages/user/resume/index',
+		'pages/user/job/index',
 		'pages/provider/index',
 		'pages/apply/index',
 		'pages/apply/history/index',

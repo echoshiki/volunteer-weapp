@@ -1,4 +1,6 @@
-import { UploadFileItem } from './common';
+import { AuditStatus, UploadFileItem } from './common';
+
+export type JobApplyStatus = 'applied' | 'accepted' | 'rejected';
 
 /** 岗位分类 */
 export interface JobCategory {
@@ -85,7 +87,7 @@ export interface ResumeDetail {
 	/** 附件对应 ID */
 	resumeFile: string;
 	/** 简历审核状态：pending未审批，approved审批通过，rejected审批未通过 */
-	reviewStatus: 'pending' | 'approved' | 'rejected';
+	reviewStatus: AuditStatus;
 	volunteerFile: ResumeFileItem[];
 }
 
@@ -100,5 +102,5 @@ export interface AppliedJobItem {
 	enterprisesName: string;
 	logo: string;
 	/** 求职状态：applied投递，accepted录用，rejected驳回 */
-	jobStatus: 'applied' | 'accepted' | 'rejected';
+	jobStatus: JobApplyStatus;
 }
