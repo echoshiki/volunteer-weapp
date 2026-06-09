@@ -40,7 +40,7 @@ export default function JobPage() {
 		isFetchingNextPage,
 	} = useJobList({
 		keyword,
-		jobIds: appliedJobIds || undefined,
+		jobIds: appliedJobIds.length ? appliedJobIds.join(',') : undefined,
 	});
 
 	const jobList = useMemo(() => {

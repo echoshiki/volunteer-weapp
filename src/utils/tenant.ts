@@ -68,3 +68,15 @@ export const guardUnselectedTenant = (options: Taro.getLaunchOptionsSync.LaunchO
 	// 带着目标页路径参数
 	mapsTo(`/pages/onboarding/index?redirect=${encodeURIComponent(targetUrl)}`, 'reLaunch');
 };
+
+/**
+ * 带 tenant 隔离的 queryKey 前缀
+ * 用于所有需要按街道隔离数据的 React Query key
+ */
+export const tenantKey = () => ['tenant', getTenantId()];
+
+/**
+ * 需要 tenant 才能发起查询的 enabled 守卫
+ * @param extraCondition 额外的启用条件，默认 true
+ */
+export const enabledWithTenant = (extraCondition = true): boolean => hasTenant() && extraCondition;

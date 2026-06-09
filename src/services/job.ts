@@ -9,7 +9,7 @@ export const getJobCategoryListAPI = () =>
 /** 岗位列表请求参数 */
 export interface JobListParams {
 	/** 岗位分类 ID */
-	jobIds?: (number | string)[];
+	jobIds?: string;
 	/** 关键字 */
 	keyword?: string;
 	/** 是否推荐 */
@@ -35,7 +35,7 @@ export interface EnterpriseListParams {
 	/** 是否推荐 */
 	isRecommend?: boolean;
 	/** 岗位分类id */
-	jobId?: string[];
+	jobIds?: string;
 	/** 页码 */
 	pageNum?: number;
 	/** 每页显示条数 */

@@ -14,7 +14,7 @@ import {
 } from '@/services/order';
 import Taro from '@tarojs/taro';
 import { mapsTo } from '@/utils/common';
-import { getTenantId } from '@/utils/tenant';
+import { getTenantId, tenantKey } from '@/utils/tenant';
 import { OrderStatus, UnifiedOrderItem } from '@/types/order';
 import { useState } from 'react';
 
@@ -28,7 +28,7 @@ export const useCreateServiceOrder = () => {
 			Taro.showToast({ title: '服务订单已生成', icon: 'success' });
 			// 刷新需求单数据
 			queryClient.invalidateQueries({
-				queryKey: ['tenant', getTenantId(), 'demand'],
+				queryKey: [...tenantKey(), 'demand'],
 			});
 
 			// 刷新服务方的报价单列表

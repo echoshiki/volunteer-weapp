@@ -200,8 +200,16 @@ class HttpRequest {
 		});
 	}
 
+	/** 过滤掉参数里所有的 undefined */
+	private cleanParams = (params: any) => {
+		if (!params) return params;
+		return Object.fromEntries(
+			Object.entries(params).filter(([_, v]) => v !== undefined && v !== null),
+		);
+	};
+
 	public get<T = any>(url: string, params?: any, config?: RequestConfig) {
-		return this.request<T>({ ...config, url, data: params, method: 'GET' });
+		return this.request<T>({ ...config, url, data: this.cleanParams(params), method: 'GET' });
 	}
 
 	public post<T = any>(url: string, data?: any, config?: RequestConfig) {

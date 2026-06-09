@@ -6,5 +6,5 @@ import { TenantItem, ListRes } from '@/types/common';
  * @param areaCode 区域 code，如 110100
  */
 export const getTenantListApi = (areaCode: string | number) => {
-	return http.get<ListRes<TenantItem>>('/volunteer/region/web/tenantList', { areaCode });
+	return http.get<ListRes<TenantItem>>('/volunteer/tenant/web/tenantList', { areaCode });
 };

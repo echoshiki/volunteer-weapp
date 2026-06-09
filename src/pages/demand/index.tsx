@@ -51,7 +51,7 @@ export default function DemandPage() {
 	} = useDemandList({
 		keyword,
 		categoryId: appliedCategoryId,
-		tagIds: appliedTagIds.length > 0 ? appliedTagIds : undefined,
+		tagIds: appliedTagIds.length > 0 ? appliedTagIds.join(',') : undefined,
 		charge: appliedCharge !== undefined ? String(appliedCharge) : undefined,
 	});
 

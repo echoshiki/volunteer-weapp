@@ -26,7 +26,7 @@ export interface GetDemandListRequest {
 	/** 是否收费 */
 	charge?: string;
 	/** 标签 ID */
-	tagIds?: number[];
+	tagIds?: string;
 	/** 是否推荐 */
 	isRecommend?: boolean;
 	pageNum: number;
@@ -54,6 +54,7 @@ export const getDemandBidListAPI = (params: GetDemandBidListParams) =>
 
 /** 我发布的需求单列表请求参数 */
 export interface GetUserDemandListRequest {
+	tagsId?: string;
 	pageNum: number;
 	pageSize: number;
 }

@@ -8,7 +8,7 @@ import {
 	JobListParams,
 	EnterpriseListParams,
 } from '@/services/job';
-import { getTenantId } from '@/utils/tenant';
+import { enabledWithTenant, getTenantId, tenantKey } from '@/utils/tenant';
 
 /** 岗位分类列表 Hook */
 export const useJobCategories = () => {
@@ -24,7 +24,7 @@ export const useJobCategories = () => {
 /** 岗位列表 Hook (无限滚动) */
 export const useJobList = (params: Omit<JobListParams, 'pageNum'>) => {
 	return useInfiniteQuery({
-		queryKey: ['tenant', getTenantId(), 'job', 'list', params],
+		queryKey: [...tenantKey(), 'job', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
 			getJobListAPI({
 				...params,
@@ -33,22 +33,23 @@ export const useJobList = (params: Omit<JobListParams, 'pageNum'>) => {
 			}),
 		getNextPageParam: (lastPage) =>
 			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		enabled: enabledWithTenant(),
 	});
 };
 
 /** 岗位详情 Hook */
 export const useJobDetail = (id: number | string) => {
 	return useQuery({
-		queryKey: ['tenant', getTenantId(), 'job', 'detail', id],
+		queryKey: [...tenantKey(), 'job', 'detail', id],
 		queryFn: () => getJobDetailAPI(id),
-		enabled: !!id,
+		enabled: enabledWithTenant(!!id),
 	});
 };
 
 /** 企业列表 Hook (无限滚动) */
 export const useEnterpriseList = (params: Omit<EnterpriseListParams, 'pageNum'>) => {
 	return useInfiniteQuery({
-		queryKey: ['enterprise', 'list', params],
+		queryKey: [...tenantKey(), 'enterprise', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
 			getEnterpriseListAPI({
 				...params,
@@ -57,14 +58,15 @@ export const useEnterpriseList = (params: Omit<EnterpriseListParams, 'pageNum'>)
 			}),
 		getNextPageParam: (lastPage) =>
 			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		enabled: enabledWithTenant(),
 	});
 };
 
 /** 企业详情 Hook */
 export const useEnterpriseDetail = (enterprisesId: number | string) => {
 	return useQuery({
-		queryKey: ['enterprise', 'detail', enterprisesId],
+		queryKey: [...tenantKey(), 'enterprise', 'detail', enterprisesId],
 		queryFn: () => getEnterpriseDetailAPI(enterprisesId),
-		enabled: !!enterprisesId,
+		enabled: enabledWithTenant(!!enterprisesId),
 	});
 };

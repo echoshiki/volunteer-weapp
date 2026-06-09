@@ -15,7 +15,7 @@ import {
 	updateBidAPI,
 	BidDemandRequest,
 } from '@/services/demand';
-import { getTenantId } from '@/utils/tenant';
+import { enabledWithTenant, getTenantId, tenantKey } from '@/utils/tenant';
 import Taro from '@tarojs/taro';
 import { useState } from 'react';
 import { DemandCategory, DemandItem, MyBidItem } from '@/types/demand';
@@ -46,7 +46,7 @@ export const useDemandTags = () => {
 /** 需求单列表 Hook (无限滚动) */
 export const useDemandList = (params: Omit<GetDemandListRequest, 'pageNum' | 'pageSize'>) => {
 	return useInfiniteQuery({
-		queryKey: ['tenant', getTenantId(), 'demand', 'list', params],
+		queryKey: [...tenantKey(), 'demand', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
 			getDemandListAPI({
 				...params,
@@ -56,22 +56,23 @@ export const useDemandList = (params: Omit<GetDemandListRequest, 'pageNum' | 'pa
 		// 根据后端返回的 page 和 totalPage 控制下一页
 		getNextPageParam: (lastPage) =>
 			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		enabled: enabledWithTenant(),
 	});
 };
 
 /** 需求单详情 Hook */
 export const useDemandDetail = (demandId: number) => {
 	return useQuery({
-		queryKey: ['tenant', getTenantId(), 'demand', 'detail', demandId],
+		queryKey: [...tenantKey(), 'demand', 'detail', demandId],
 		queryFn: () => getDemandDetailAPI(demandId),
-		enabled: !!demandId,
+		enabled: enabledWithTenant(!!demandId),
 	});
 };
 
 /** 需求单报价列表 Hook (支持无限滚动) */
 export const useDemandBidList = (demandId: number) => {
 	return useInfiniteQuery({
-		queryKey: ['tenant', getTenantId(), 'demand', 'bid', demandId],
+		queryKey: [...tenantKey(), 'demand', 'bid', demandId],
 		queryFn: ({ pageParam = 1 }) =>
 			getDemandBidListAPI({
 				demandId,
@@ -80,7 +81,7 @@ export const useDemandBidList = (demandId: number) => {
 			}),
 		getNextPageParam: (lastPage) =>
 			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
-		enabled: !!demandId,
+		enabled: enabledWithTenant(!!demandId),
 	});
 };
 
@@ -191,7 +192,7 @@ export const usePublishDemand = () => {
 		onSuccess: () => {
 			Taro.showToast({ title: '发布成功', icon: 'success' });
 			queryClient.invalidateQueries({
-				queryKey: ['tenant', getTenantId(), 'demand', 'list'],
+				queryKey: [...tenantKey(), 'demand', 'list'],
 			});
 
 			setTimeout(() => Taro.navigateBack(), 1500);
@@ -210,10 +211,10 @@ export const useEditDemand = () => {
 		onSuccess: () => {
 			Taro.showToast({ title: '修改成功', icon: 'success' });
 			queryClient.invalidateQueries({
-				queryKey: ['tenant', getTenantId(), 'demand', 'list'],
+				queryKey: [...tenantKey(), 'demand', 'list'],
 			});
 			queryClient.invalidateQueries({
-				queryKey: ['tenant', getTenantId(), 'demand', 'detail'],
+				queryKey: [...tenantKey(), 'demand', 'detail'],
 			});
 			setTimeout(() => Taro.navigateBack(), 1500);
 		},
@@ -232,7 +233,7 @@ export const useDemandBid = () => {
 		onSuccess: () => {
 			Taro.showToast({ title: '报价提交成功', icon: 'success' });
 			queryClient.invalidateQueries({
-				queryKey: ['tenant', getTenantId(), 'demand'],
+				queryKey: [...tenantKey(), 'demand'],
 			});
 			setTimeout(() => {
 				Taro.navigateBack();
