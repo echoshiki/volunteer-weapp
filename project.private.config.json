@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
-          "name": "志愿者协会列表",
-          "pathName": "pages/association/index",
+          "name": "服务大厅",
+          "pathName": "pages/demand/index",
           "query": "",
           "scene": null,
           "launchMode": "default"
+        },
+        {
+          "name": "志愿者协会列表",
+          "pathName": "pages/association/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "岗位详情",

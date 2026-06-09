@@ -1,9 +1,8 @@
-import { useMemo } from 'react';
 import { useRouter } from '@tarojs/taro';
-import { View, Text, ScrollView } from '@tarojs/components';
-import { useDemandDetail, useDemandBidList } from '@/hooks/useDemand';
+import { View, Text, ScrollView, RichText } from '@tarojs/components';
+import { useDemandDetail } from '@/hooks/useDemand';
 import { Badge, Cell, Description, Empty, Heading, Loading, Page, Button } from '@/components/ui';
-import { mapsTo } from '@/utils/common';
+import { cleanHTML, mapsTo } from '@/utils/common';
 
 export default function DemandDetailPage() {
 	const { params } = useRouter();
@@ -11,19 +10,6 @@ export default function DemandDetailPage() {
 
 	// 数据：需求详情
 	const { data: detail, isLoading } = useDemandDetail(demandId);
-
-	// 数据：抢单用户
-	const {
-		data: bidListData,
-		hasNextPage,
-		isFetchingNextPage,
-		fetchNextPage,
-		isLoading: userListLoading,
-	} = useDemandBidList(demandId);
-
-	const bidList = useMemo(() => {
-		return bidListData?.pages.flatMap((page) => page.list) || [];
-	}, [bidListData]);
 
 	if (isLoading) return <Loading />;
 	if (!detail) return <Empty title="未找到该需求" />;
@@ -55,7 +41,7 @@ export default function DemandDetailPage() {
 				{/* 服务需求描述 */}
 				<Cell className="mt-3" rounded={false}>
 					<Heading title="需求描述" size="md" />
-					<Text className="text-sm text-text-body leading-relaxed">{detail.content}</Text>
+					<RichText nodes={cleanHTML(detail.content)} />
 				</Cell>
 
 				{/* 服务明细卡片 */}

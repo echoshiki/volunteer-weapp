@@ -140,3 +140,14 @@ export const cleanHTML = (html: string, noMargin: boolean = false) => {
 			})
 	);
 };
+
+/**
+ * 清除 HTML 标签并返回纯文本
+ */
+export const stripHtml = (htmlStr: string): string => {
+	if (!htmlStr) return '';
+	return htmlStr
+		.replace(/<[^>]+>/g, '') // 核心：刮掉所有 <...> 标签
+		.replace(/&nbsp;/gi, ' ') // 替换常见的 HTML 实体空格
+		.trim();
+};

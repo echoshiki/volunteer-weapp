@@ -1,5 +1,5 @@
 import { View, Text } from '@tarojs/components';
-import { mapsTo } from '@/utils/common';
+import { mapsTo, stripHtml } from '@/utils/common';
 import { DemandItem } from '@/types/demand';
 import { Badge } from '@/components/ui';
 
@@ -36,7 +36,9 @@ export const DemandCard = ({ demand, className = '' }: DemandCardProps) => {
 			</View>
 
 			{/* 需求描述正文 */}
-			<Text className="text-sm text-text-body line-clamp-2 mb-3">{demand.content}</Text>
+			<Text className="text-sm text-text-body line-clamp-2 mb-3">
+				{stripHtml(demand.content)}
+			</Text>
 
 			{/* 底部发单人信息与操作按钮 */}
 			<View className="flex justify-between items-end border-t border-gray-50 pt-3">

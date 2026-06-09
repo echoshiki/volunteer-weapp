@@ -1,7 +1,7 @@
 import { View, Picker, PickerMultiSelectorProps } from '@tarojs/components';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import pcaData from '@/assets/data/pca-code.json';
-import { getTenantListApi } from '@/services/tenant';
+import { getTenantListAPI } from '@/services/tenant';
 import Taro from '@tarojs/taro';
 
 /** 回调方法属性类型 */
@@ -68,7 +68,7 @@ export const TenantPicker = ({ onChange, children, disabled = false }: TenantPic
 		try {
 			// 发起自定义级数据请求
 			if (currentAreaCode) {
-				const { list } = await getTenantListApi(currentAreaCode);
+				const { list } = await getTenantListAPI(currentAreaCode);
 				dataRef.current = { provs, cities, areas, tenants: list || [] };
 
 				const tenantNames =

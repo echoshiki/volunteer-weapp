@@ -42,6 +42,13 @@ export type ThemeVariant = 'primary' | 'success' | 'secondary' | 'warning' | 'da
 /** 通用尺寸变体 */
 export type SizeVariant = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
+/** 后端省市区类型 */
+export interface RegionItem {
+	areaCode: string;
+	name: string;
+	parentCode: string;
+}
+
 /** 自定义区域项 */
 export interface TenantItem {
 	id: number;
