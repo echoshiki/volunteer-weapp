@@ -1,8 +1,9 @@
 import { useRouter, makePhoneCall } from '@tarojs/taro';
 import { View, Text, ScrollView } from '@tarojs/components';
-import { useJobDetail } from '@/hooks/useJob';
+import { useJobDetail, useResumeActions, useResumeDetail } from '@/hooks/useJob';
 import { mapsTo } from '@/utils/common';
 import { Cell, Alert, Heading, Button, Empty, Loading, Page } from '@/components/ui';
+import Taro from '@tarojs/taro';
 
 export default function JobDetail() {
 	const { params } = useRouter();
@@ -10,8 +11,46 @@ export default function JobDetail() {
 
 	const { data: detail, isLoading } = useJobDetail(id);
 
+	const {
+		data: resumeDetail,
+		error: resumeError,
+		isLoading: isResumeLoading,
+	} = useResumeDetail();
+
+	const { deliverJob, isActionPending } = useResumeActions();
+
 	if (isLoading) return <Loading title="岗位加载中..." />;
 	if (!detail) return <Empty title="岗位信息不存在" />;
+
+	// 处理投递简历
+	const handleDeliverClick = () => {
+		// 判定依据：如果拿到简历详情且有合法的姓名（说明已建档）
+		const hasCreatedResume = !!resumeDetail && !resumeError;
+		if (hasCreatedResume) {
+			Taro.showModal({
+				title: '确认投递',
+				content: `是否确认将您的专属简历投递至【${detail.enterprisesName}】的【${detail.title}】岗位？`,
+				success: (res) => {
+					if (res.confirm) {
+						deliverJob.mutate({
+							id: Number(id), // 传入当前岗位 id
+						});
+					}
+				},
+			});
+		} else {
+			Taro.showModal({
+				title: '提示',
+				content: '您目前尚未在平台创建求职简历，请先完善您的个人基础求职名片。',
+				confirmText: '去创建',
+				success: (res) => {
+					if (res.confirm) {
+						mapsTo('/pages/user/resume/index?mode=create');
+					}
+				},
+			});
+		}
+	};
 
 	return (
 		<Page>
@@ -77,13 +116,12 @@ export default function JobDetail() {
 			{/* 底部固定操作栏 */}
 			<View className="fixed bottom-0 inset-x-0 bg-white p-4 border-t border-gray-100 flex gap-3 z-20">
 				<Button
-					variant="info"
-					icon="icon-[ph--chat-centered-dots]"
-					onClick={() => makePhoneCall({ phoneNumber: '10086' })}
+					variant="primary"
+					icon="icon-[ph--paper-plane-tilt]"
+					className="flex-[1.5]"
+					loading={isActionPending || isResumeLoading}
+					onClick={handleDeliverClick}
 				>
-					立即咨询
-				</Button>
-				<Button variant="primary" icon="icon-[ph--paper-plane-tilt]" className="flex-[1.5]">
 					投递简历
 				</Button>
 			</View>

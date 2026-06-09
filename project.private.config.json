@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "岗位详情",
+          "pathName": "pages/job/detail/index",
+          "query": "id=6",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "我的简历",
           "pathName": "pages/user/resume/index",
           "query": "mode=view",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "评价服务",
