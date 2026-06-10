@@ -110,6 +110,7 @@ export interface ApplyHistoryItem {
 	institutionName: string;
 	/** 审核认证类型: 1：志愿者；2：服务机构 */
 	reviewType: 1 | 2;
+	tenantId: number;
 	/** 审核状态 */
 	status: ReviewStatus;
 	/** 创建时间 */

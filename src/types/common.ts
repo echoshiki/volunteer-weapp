@@ -83,6 +83,11 @@ export interface WeappConfig {
 	copyright?: string;
 	/** 备案号 */
 	icp?: string;
+	/** 订阅模板 */
+	templateIds?: {
+		demandChange: string;
+		demandSelected: string;
+	};
 }
 
 export interface UploadFileItem {

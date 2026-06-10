@@ -32,7 +32,9 @@ export interface EntryCardProps {
 	/** Ph 图标类名，例如 'icon-[ph--user-focus-duotone]' */
 	icon: string;
 	/** 点击跳转的目标路由 */
-	url: string;
+	url?: string;
+	/** 外部点击拦截或自定义行为回调 */
+	onClick?: () => void;
 	/** 主题色调 */
 	theme?: keyof typeof THEME_MAP;
 	/** 是否置灰禁用（比如用户已经在审核中，禁止重复点击） */
@@ -42,15 +44,14 @@ export interface EntryCardProps {
 /**
  * 玄关入口卡片
  */
-export const EntryCard = ({
-	title,
-	desc,
-	icon,
-	url,
-	theme = 'blue',
-	disabled = false,
-}: EntryCardProps) => {
+export const EntryCard = ({ title, desc, icon, url, onClick, theme = 'blue', disabled = false }: EntryCardProps) => {
 	const activeTheme = THEME_MAP[theme];
+
+	const handleCardTap = () => {
+		if (disabled) return;
+		if (onClick) onClick();
+		else if (url) mapsTo(url);
+	};
 
 	return (
 		<Cell
@@ -58,13 +59,11 @@ export const EntryCard = ({
 			className={`p-6 relative overflow-hidden border ${activeTheme.bg} ${
 				disabled ? 'opacity-50 grayscale pointer-events-none' : ''
 			}`}
-			onClick={() => !disabled && mapsTo(url)}
+			onClick={handleCardTap}
 		>
 			{/* 左侧主体内容区 */}
 			<View className="relative z-10 flex flex-col gap-2.5 w-2/3">
-				<View
-					className={`size-10 rounded-full flex justify-center items-center ${activeTheme.iconBg}`}
-				>
+				<View className={`size-10 rounded-full flex justify-center items-center ${activeTheme.iconBg}`}>
 					<View className={`${icon} size-6`} />
 				</View>
 
@@ -84,9 +83,7 @@ export const EntryCard = ({
 			</View>
 
 			{/* 大背景装饰 Icon */}
-			<View
-				className={`absolute -right-6 -bottom-6 opacity-[0.05] pointer-events-none ${activeTheme.decorText}`}
-			>
+			<View className={`absolute -right-6 -bottom-6 opacity-[0.05] pointer-events-none ${activeTheme.decorText}`}>
 				<View className={`${icon} size-36`} />
 			</View>
 		</Cell>

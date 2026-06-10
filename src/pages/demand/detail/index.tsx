@@ -17,12 +17,31 @@ export default function DemandDetailPage() {
 	const { userInfo } = useAuthStore();
 	const isMyDemand = detail?.userId === userInfo?.userId;
 
+	// 是否为可接单角色
+	const isServerRole = userInfo?.identity === 'volunteer' || userInfo?.identity === 'institution';
+
 	if (isLoading) return <Loading />;
 	if (!detail) return <Empty title="未找到该需求" />;
 
 	const handleCallPublisher = () => {
 		if (isMyDemand) return;
 		Taro.makePhoneCall({ phoneNumber: detail.phone });
+	};
+
+	const handleBidClick = () => {
+		if (isMyDemand) return;
+		if (isServerRole) {
+			mapsTo(`/pages/demand/bid/index?id=${demandId}&charge=${detail.charge}`);
+		} else {
+			Taro.showModal({
+				title: '需要服务方认证',
+				content: '很抱歉，当前社区互助需求仅限平台实名认证的“志愿者”或“志愿组织”承接。',
+				confirmText: '去入驻',
+				success: (res) => {
+					if (res.confirm) mapsTo('/pages/apply/index');
+				},
+			});
+		}
 	};
 
 	return (
@@ -97,9 +116,9 @@ export default function DemandDetailPage() {
 						icon="icon-[ph--hand-coins]"
 						className="flex-1"
 						disabled={isMyDemand}
-						onClick={() => mapsTo(`/pages/demand/bid/index?id=${demandId}`)}
+						onClick={handleBidClick}
 					>
-						立即接单/报价
+						{isMyDemand ? '无法承接自己的需求' : '立即接单/报价'}
 					</Button>
 				</View>
 			</Cell>
