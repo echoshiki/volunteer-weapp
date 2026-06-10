@@ -3,6 +3,8 @@ import { View, Text, ScrollView, RichText } from '@tarojs/components';
 import { useDemandDetail } from '@/hooks/useDemand';
 import { Badge, Cell, Description, Empty, Heading, Loading, Page, Button } from '@/components/ui';
 import { cleanHTML, mapsTo } from '@/utils/common';
+import { useAuthStore } from '@/store/auth';
+import Taro from '@tarojs/taro';
 
 export default function DemandDetailPage() {
 	const { params } = useRouter();
@@ -11,8 +13,17 @@ export default function DemandDetailPage() {
 	// 数据：需求详情
 	const { data: detail, isLoading } = useDemandDetail(demandId);
 
+	// 判断是否是自己发布的需求单
+	const { userInfo } = useAuthStore();
+	const isMyDemand = detail?.userId === userInfo?.userId;
+
 	if (isLoading) return <Loading />;
 	if (!detail) return <Empty title="未找到该需求" />;
+
+	const handleCallPublisher = () => {
+		if (isMyDemand) return;
+		Taro.makePhoneCall({ phoneNumber: detail.phone });
+	};
 
 	return (
 		<Page hasTabBar>
@@ -68,20 +79,24 @@ export default function DemandDetailPage() {
 			{/* 底部操作栏 */}
 			<Cell className="fixed bottom-0 inset-x-0 border-t border-gray-100 flex flex-col gap-3">
 				<Text className="text-xs text-text-body">
-					已有{' '}
-					<Text className="text-primary font-bold text-base">
-						{detail.serviceUserCount}
-					</Text>{' '}
+					已有 <Text className="text-primary font-bold text-base">{detail.serviceUserCount}</Text>{' '}
 					人发送了接单申请
 				</Text>
 
 				<View className="w-full flex flex-row gap-2">
-					<Button icon="icon-[ph--phone-call]" size="md" variant="info">
+					<Button
+						icon="icon-[ph--phone-call]"
+						size="md"
+						variant="info"
+						disabled={isMyDemand}
+						onClick={handleCallPublisher}
+					>
 						咨询发布者
 					</Button>
 					<Button
 						icon="icon-[ph--hand-coins]"
 						className="flex-1"
+						disabled={isMyDemand}
 						onClick={() => mapsTo(`/pages/demand/bid/index?id=${demandId}`)}
 					>
 						立即接单/报价

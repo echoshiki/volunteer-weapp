@@ -40,6 +40,7 @@ export interface DemandItem {
 	districtName: string;
 	tenantId: number;
 	tenantName: string;
+	userId: number;
 	/** 需求单详细地址 */
 	address: string;
 	/** 联系人 */
