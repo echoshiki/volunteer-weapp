@@ -35,7 +35,7 @@ export default function UserApplyPage() {
 
 		// 是否存在正在审核中的认证申请
 		if (isPending) {
-			Taro.showModal({
+			return Taro.showModal({
 				title: '申请正在审核中',
 				content: `您提交的认证申请正在加急审核中，请勿重复提交。`,
 				confirmText: '查看进度',

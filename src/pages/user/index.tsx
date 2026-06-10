@@ -1,4 +1,4 @@
-import Taro from '@tarojs/taro';
+import Taro, { useDidShow } from '@tarojs/taro';
 import { View, Text } from '@tarojs/components';
 import { useAuthStore } from '@/store/auth';
 import { useLogin } from '@/hooks/useLogin';
@@ -14,7 +14,10 @@ export default function UserPage() {
 	const { isLoggedIn, onLogout } = useLogin();
 
 	// 挂载更新用户信息
-	useUser();
+	const { refetch } = useUser();
+	useDidShow(() => {
+		if (isLoggedIn) refetch().catch((err) => console.error('用户中心同步最新身份失败:', err));
+	});
 
 	return (
 		<Page hasTabBar>
@@ -34,9 +37,7 @@ export default function UserPage() {
 						{isLoggedIn && userInfo ? (
 							<View className="flex flex-col">
 								<View className="flex items-center gap-2">
-									<Text className="text-lg font-bold text-text-title block">
-										{userInfo.nickName}
-									</Text>
+									<Text className="text-lg font-bold text-text-title block">{userInfo.nickName}</Text>
 									<UserIdentityBadge value={userInfo.identity} />
 								</View>
 								<View className="flex items-center gap-1 text-xs text-text-muted mt-1">
@@ -51,9 +52,7 @@ export default function UserPage() {
 						) : (
 							<View onClick={() => !isLoggedIn && mapsTo('/pages/login/index')}>
 								<Text className="text-xl font-bold text-white">点击登录</Text>
-								<Text className="text-sm text-white/50 block mt-1">
-									登录发现更多精彩
-								</Text>
+								<Text className="text-sm text-white/50 block mt-1">登录发现更多精彩</Text>
 							</View>
 						)}
 					</View>
@@ -118,11 +117,7 @@ export default function UserPage() {
 						label="我创建的简历"
 						onClick={() => mapsTo('/pages/user/resume/index?mode=view')}
 					/>
-					<ColumnNav
-						icon="icon-[ph--scan-light]"
-						label="现场扫码打卡"
-						onClick={doGlobalScan}
-					/>
+					<ColumnNav icon="icon-[ph--scan-light]" label="现场扫码打卡" onClick={doGlobalScan} />
 
 					<ColumnNav
 						icon="icon-[ph--user-gear-light]"

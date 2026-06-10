@@ -13,12 +13,7 @@ import { useAuthStore } from '@/store/auth';
 import Taro from '@tarojs/taro';
 import { useState, useEffect, useMemo } from 'react';
 import { uploadImageAPI } from '@/services/upload';
-import {
-	formatUserInfo,
-	getInstitutionFormFields,
-	getUserProfileFields,
-	getVolunteerFormFields,
-} from '@/utils/user';
+import { formatUserInfo, getInstitutionFormFields, getUserProfileFields, getVolunteerFormFields } from '@/utils/user';
 import { useUpload } from './useUpload';
 
 /**
@@ -34,13 +29,12 @@ export const useUser = () => {
 		queryKey: ['user', 'profile'],
 		queryFn: async () => {
 			const raw = await getUserInfoAPI();
-			// 格式化数据
 			const data = formatUserInfo(raw);
 			updateUserInfo(data);
 			return data;
 		},
 		enabled: isLoggedIn,
-		staleTime: 1000 * 60 * 5,
+		staleTime: 30 * 1000,
 	});
 };
 
@@ -57,10 +51,7 @@ export const useUpdateUser = () => {
 	const [form, setForm] = useState<UpdatesUserInfoRequest>(() => getUserProfileFields(userInfo));
 
 	// 执行：统一更新表单字段状态
-	const updateField = <K extends keyof UpdatesUserInfoRequest>(
-		field: K,
-		value: UpdatesUserInfoRequest[K],
-	) => {
+	const updateField = <K extends keyof UpdatesUserInfoRequest>(field: K, value: UpdatesUserInfoRequest[K]) => {
 		setForm((prev) => ({ ...prev, [field]: value }));
 	};
 
@@ -124,15 +115,10 @@ export const useVolunteerApply = (initialData: any = null) => {
 	const { triggerUpload, isUploading } = useUpload();
 
 	// 状态：表单数据
-	const [form, setForm] = useState<ApplyVolunteerRequest>(() =>
-		getVolunteerFormFields(initialData),
-	);
+	const [form, setForm] = useState<ApplyVolunteerRequest>(() => getVolunteerFormFields(initialData));
 
 	// 执行：统一更新表单普通字段
-	const updateField = <K extends keyof ApplyVolunteerRequest>(
-		field: K,
-		value: ApplyVolunteerRequest[K],
-	) => {
+	const updateField = <K extends keyof ApplyVolunteerRequest>(field: K, value: ApplyVolunteerRequest[K]) => {
 		setForm((prev) => ({ ...prev, [field]: value }));
 	};
 
@@ -150,8 +136,7 @@ export const useVolunteerApply = (initialData: any = null) => {
 
 	// 执行：提交前表单校验
 	const handleSave = () => {
-		if (!form.realName?.trim())
-			return Taro.showToast({ title: '请输入真实姓名', icon: 'none' });
+		if (!form.realName?.trim()) return Taro.showToast({ title: '请输入真实姓名', icon: 'none' });
 		if (!form.idCard?.trim()) return Taro.showToast({ title: '请输入身份证号', icon: 'none' });
 		if (!form.phone?.trim()) return Taro.showToast({ title: '请输入联系电话', icon: 'none' });
 		if (!form.provinceCode) return Taro.showToast({ title: '请选择常住地区', icon: 'none' });
@@ -179,14 +164,9 @@ export const useInstitutionApply = (initialData: any = null) => {
 	const queryClient = useQueryClient();
 
 	// 状态：表单数据
-	const [form, setForm] = useState<ApplyInstitutionRequest>(() =>
-		getInstitutionFormFields(initialData),
-	);
+	const [form, setForm] = useState<ApplyInstitutionRequest>(() => getInstitutionFormFields(initialData));
 
-	const updateField = <K extends keyof ApplyInstitutionRequest>(
-		field: K,
-		value: ApplyInstitutionRequest[K],
-	) => {
+	const updateField = <K extends keyof ApplyInstitutionRequest>(field: K, value: ApplyInstitutionRequest[K]) => {
 		setForm((prev) => ({ ...prev, [field]: value }));
 	};
 
@@ -201,23 +181,16 @@ export const useInstitutionApply = (initialData: any = null) => {
 	});
 
 	const handleSave = () => {
-		if (!form.institutionName?.trim())
-			return Taro.showToast({ title: '请输入机构名称', icon: 'none' });
-		if (!form.orgCode?.trim())
-			return Taro.showToast({ title: '请输入信用代码或注册号', icon: 'none' });
-		if (!form.legalPerson?.trim())
-			return Taro.showToast({ title: '请输入法人姓名', icon: 'none' });
-		if (!form.phone?.trim())
-			return Taro.showToast({ title: '请输入机构联系电话', icon: 'none' });
+		if (!form.institutionName?.trim()) return Taro.showToast({ title: '请输入机构名称', icon: 'none' });
+		if (!form.orgCode?.trim()) return Taro.showToast({ title: '请输入信用代码或注册号', icon: 'none' });
+		if (!form.legalPerson?.trim()) return Taro.showToast({ title: '请输入法人姓名', icon: 'none' });
+		if (!form.phone?.trim()) return Taro.showToast({ title: '请输入机构联系电话', icon: 'none' });
 		if (!form.provinceCode) return Taro.showToast({ title: '请选择机构所在地', icon: 'none' });
-		if (!form.orgCodeCertUrl)
-			return Taro.showToast({ title: '请上传机构营业执照', icon: 'none' });
+		if (!form.orgCodeCertUrl) return Taro.showToast({ title: '请上传机构营业执照', icon: 'none' });
 		if (!form.realName) return Taro.showToast({ title: '请输入负责人姓名', icon: 'none' });
 		if (!form.idCard) return Taro.showToast({ title: '请输入负责人身份证号码', icon: 'none' });
-		if (!form.idCardFront)
-			return Taro.showToast({ title: '请上传负责人身份证正面', icon: 'none' });
-		if (!form.idCardBack)
-			return Taro.showToast({ title: '请上传负责人身份证反面', icon: 'none' });
+		if (!form.idCardFront) return Taro.showToast({ title: '请上传负责人身份证正面', icon: 'none' });
+		if (!form.idCardBack) return Taro.showToast({ title: '请上传负责人身份证反面', icon: 'none' });
 		mutation.mutate(form);
 	};
 
@@ -238,7 +211,6 @@ export const useApplyHistory = (params: Omit<ApplyHistoryRequest, 'pageNum' | 'p
 				pageNum: pageParam,
 				pageSize: 10,
 			}),
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
 };
