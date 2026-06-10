@@ -1,7 +1,7 @@
 import { View, Text, Input, Textarea, Picker } from '@tarojs/components';
 import Taro from '@tarojs/taro';
 import { Cell, Heading, FormItem, Button, Badge, Loading } from '@/components/ui';
-import { TenantPicker } from '@/components/biz/TenantPicker';
+import { TenantPicker } from '@/components/biz';
 import { useDemandCategoryList, useDemandTags, useDemandForm } from '@/hooks/useDemand';
 import { DemandItem } from '@/types/demand';
 import { PublishDemandRequest } from '@/services/demand';
@@ -26,8 +26,10 @@ export const DemandForm = ({
 	const { data: categoryList = [] } = useDemandCategoryList();
 	const { data: tagList = [] } = useDemandTags();
 
-	const { formData, validate, handleInput, regionLabel, toggleTag, handleTenantChange } =
-		useDemandForm(initialData, categoryList);
+	const { formData, validate, handleInput, regionLabel, toggleTag, handleTenantChange } = useDemandForm(
+		initialData,
+		categoryList,
+	);
 
 	// 获取到当前表单选中的分类索引
 	const categoryIndex = categoryList.findIndex((c) => c.categoryId === formData.categoryId);
@@ -84,11 +86,7 @@ export const DemandForm = ({
 								{tagList.map((tag) => (
 									<Badge
 										key={tag.tagId}
-										variant={
-											formData.tagIds?.includes(tag.tagId)
-												? 'primary'
-												: 'secondary'
-										}
+										variant={formData.tagIds?.includes(tag.tagId) ? 'primary' : 'secondary'}
 										onClick={() => toggleTag(tag.tagId)}
 										size="sm"
 									>
@@ -124,9 +122,7 @@ export const DemandForm = ({
 
 					<TenantPicker onChange={handleTenantChange}>
 						<FormItem label="服务区域" className="gap-2">
-							<Text
-								className={`text-sm ${regionLabel ? 'text-text-title' : 'text-text-muted'}`}
-							>
+							<Text className={`text-sm ${regionLabel ? 'text-text-title' : 'text-text-muted'}`}>
 								{regionLabel || '请选择省市区及运营中心'}
 							</Text>
 							<View className="icon-[ph--caret-right] text-text-muted" />
@@ -183,12 +179,7 @@ export const DemandForm = ({
 
 			{/* 吸底按钮 */}
 			<View className="fixed bottom-0 left-0 w-full p-4 bg-white border-t border-gray-100 pb-safe z-50">
-				<Button
-					variant="primary"
-					className="w-full"
-					onClick={handleSubmit}
-					loading={isSubmitting}
-				>
+				<Button variant="primary" className="w-full" onClick={handleSubmit} loading={isSubmitting}>
 					{submitText}
 				</Button>
 			</View>

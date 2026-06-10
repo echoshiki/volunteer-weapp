@@ -15,9 +15,15 @@ export default function OnboardingPage() {
 	const { config } = useConfigStore();
 
 	// 执行：选择自定义级区域后的逻辑
-	const handleSelectTenant = ({ tenantId, tenantName }: TenantChangeEventProps) => {
-		// 更新进小程序本地缓存
-		setTenant(tenantId.toString(), tenantName);
+	const handleSelectTenant = ({
+		tenantId,
+		tenantName,
+		provinceCode,
+		cityCode,
+		districtCode,
+	}: TenantChangeEventProps) => {
+		// 将省市区、租户信息保存到本地
+		setTenant(tenantId.toString(), tenantName, provinceCode, cityCode, districtCode);
 		Taro.showToast({ title: '入驻成功', icon: 'success' });
 
 		// 目标页路径

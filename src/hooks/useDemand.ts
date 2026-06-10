@@ -15,11 +15,11 @@ import {
 	updateBidAPI,
 	BidDemandRequest,
 } from '@/services/demand';
-import { enabledWithTenant, getTenantId, tenantKey } from '@/utils/tenant';
+import { enabledWithTenant, tenantKey } from '@/utils/tenant';
 import Taro from '@tarojs/taro';
 import { useState } from 'react';
 import { DemandCategory, DemandItem, MyBidItem } from '@/types/demand';
-import { TenantChangeEventProps } from '@/components/biz/TenantPicker';
+import { TenantChangeEventProps } from '@/components/biz';
 
 /** 服务对象分类列表 Hook */
 export const useDemandCategoryList = () => {
@@ -54,8 +54,7 @@ export const useDemandList = (params: Omit<GetDemandListRequest, 'pageNum' | 'pa
 				pageSize: 10,
 			}),
 		// 根据后端返回的 page 和 totalPage 控制下一页
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(),
 	});
 };
@@ -79,8 +78,7 @@ export const useDemandBidList = (demandId: number) => {
 				pageNum: pageParam,
 				pageSize: 10,
 			}),
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(!!demandId),
 	});
 };
@@ -95,8 +93,7 @@ export const useUserDemandList = () => {
 				pageSize: 10,
 			}),
 		// 根据后端返回的 page 和 totalPage 控制下一页
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
 };
 
@@ -165,10 +162,7 @@ export const useDemandForm = (initial?: DemandItem, categoryList: DemandCategory
 			[!formData.address, '请输入详细地址'],
 			[!formData.name || !formData.phone, '请填写联系人及电话'],
 			[!formData.content, '请输入需求描述'],
-			[
-				!formData.minMoney || !formData.maxMoney || formData.minMoney > formData.maxMoney,
-				'请填写正确的预算区间',
-			],
+			[!formData.minMoney || !formData.maxMoney || formData.minMoney > formData.maxMoney, '请填写正确的预算区间'],
 		];
 		return rules.find(([invalid]) => invalid)?.[1] ?? null;
 	};
@@ -250,8 +244,7 @@ export const useMyBidList = () => {
 	return useInfiniteQuery({
 		queryKey: ['user', 'bid', 'list'],
 		queryFn: ({ pageParam = 1 }) => getMyBidsAPI({ pageNum: pageParam, pageSize: 10 }),
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
 };
 

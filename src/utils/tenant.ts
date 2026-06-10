@@ -4,6 +4,9 @@ import { mapsTo, serializeParams } from './common';
 // 统一管理 Storage Key
 const TENANT_KEY = 'tenant_id';
 const TENANT_NAME_KEY = 'tenant_name';
+const ACTIVE_PROVINCE_KEY = 'active_province_code';
+const ACTIVE_CITY_KEY = 'active_city_code';
+const ACTIVE_DISTRICT_KEY = 'active_district_code';
 
 /**
  * 获取当前选中的租户 ID
@@ -20,21 +23,53 @@ export const getTenantName = (): string => {
 };
 
 /**
- * 设置/切换 租户信息
- * @param id 租户/街道/协会 ID
- * @param name 租户/街道/协会 名称
+ * 获取本地缓存中的省市区强数字编码
  */
-export const setTenant = (id: string | number, name: string) => {
-	Taro.setStorageSync(TENANT_KEY, id);
-	Taro.setStorageSync(TENANT_NAME_KEY, name);
+export const getActiveRegionCodes = () => {
+	return {
+		provinceCode: Taro.getStorageSync(ACTIVE_PROVINCE_KEY)
+			? Number(Taro.getStorageSync(ACTIVE_PROVINCE_KEY))
+			: undefined,
+		cityCode: Taro.getStorageSync(ACTIVE_CITY_KEY)
+			? Number(Taro.getStorageSync(ACTIVE_CITY_KEY))
+			: undefined,
+		districtCode: Taro.getStorageSync(ACTIVE_DISTRICT_KEY)
+			? Number(Taro.getStorageSync(ACTIVE_DISTRICT_KEY))
+			: undefined,
+	};
 };
 
 /**
- * 清除租户信息 (通常用于极特殊情况的重置)
+ * 设置/切换 租户信息
+ * @param id 租户/街道/协会 ID
+ * @param name 租户/街道/协会 名称
+ * @param provinceCode 省市区 强数字编码
+ * @param cityCode 省市区 强数字编码
+ * @param districtCode 省市区 强数字编码
+ */
+export const setTenant = (
+	id: string | number,
+	name: string,
+	provinceCode?: string | number,
+	cityCode?: string | number,
+	districtCode?: string | number,
+) => {
+	Taro.setStorageSync(TENANT_KEY, id);
+	Taro.setStorageSync(TENANT_NAME_KEY, name);
+	if (provinceCode) Taro.setStorageSync(ACTIVE_PROVINCE_KEY, Number(provinceCode));
+	if (cityCode) Taro.setStorageSync(ACTIVE_CITY_KEY, Number(cityCode));
+	if (districtCode) Taro.setStorageSync(ACTIVE_DISTRICT_KEY, Number(districtCode));
+};
+
+/**
+ * 清除租户信息
  */
 export const clearTenant = () => {
 	Taro.removeStorageSync(TENANT_KEY);
 	Taro.removeStorageSync(TENANT_NAME_KEY);
+	Taro.removeStorageSync(ACTIVE_PROVINCE_KEY);
+	Taro.removeStorageSync(ACTIVE_CITY_KEY);
+	Taro.removeStorageSync(ACTIVE_DISTRICT_KEY);
 };
 
 /**
