@@ -8,10 +8,60 @@ import { UserIdentityBadge, OrderNavItem } from '@/components/biz';
 import { doGlobalScan } from '@/utils/scan';
 import { mapsTo } from '@/utils/common';
 import { ORDER_NAV_ITEMS } from '@/constants/order';
+import { Icon } from '@/components/ui/Icon';
+
+const VOLUNTEER_MENUS = [
+	{
+		label: '我的报名',
+		icon: 'icon-[ph--star-light]',
+		theme: 'orange' as const,
+		url: '/pages/user/activity/index',
+	},
+	{
+		label: '我的报价',
+		icon: 'icon-[ph--hand-coins-light]',
+		theme: 'orange' as const,
+		url: '/pages/user/bid/index',
+	},
+	{
+		label: '服务订单',
+		icon: 'icon-[ph--clipboard-text-light]',
+		theme: 'blue' as const,
+		url: '/pages/order/provider/index',
+	},
+	{
+		label: '现场打卡',
+		icon: 'icon-[ph--scan-light]',
+		theme: 'green' as const,
+		handler: () => doGlobalScan(),
+	},
+	{
+		label: '志愿证书',
+		icon: 'icon-[ph--certificate-light]',
+		theme: 'red' as const,
+		url: '/pages/user/certificate/index',
+	},
+];
+
+const INSITUTION_MENUS = [
+	{
+		label: '我的报价',
+		icon: 'icon-[ph--hand-coins-light]',
+		theme: 'orange' as const,
+		url: '/pages/user/bid/index',
+	},
+	{
+		label: '服务订单',
+		icon: 'icon-[ph--clipboard-text-light]',
+		theme: 'blue' as const,
+		url: '/pages/order/provider/index',
+	},
+];
 
 export default function UserPage() {
 	const { userInfo } = useAuthStore();
 	const { isLoggedIn, onLogout } = useLogin();
+	const indentity = userInfo?.identity;
 
 	// 挂载更新用户信息
 	const { refetch } = useUser();
@@ -84,41 +134,50 @@ export default function UserPage() {
 					))}
 				</Cell>
 
+				<Cell className="grid grid-cols-4 gap-4">
+					{indentity === 'volunteer' &&
+						VOLUNTEER_MENUS.map((menu) => (
+							<View
+								key={menu.label}
+								className="flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform"
+								onClick={() => (menu.handler ? menu.handler() : mapsTo(menu.url!))}
+							>
+								<Icon icon={menu.icon} shape="square" size="md" theme={menu.theme} />
+								<Text className="text-xs text-text-title">{menu.label}</Text>
+							</View>
+						))}
+
+					{indentity === 'institution' &&
+						INSITUTION_MENUS.map((menu) => (
+							<View
+								key={menu.label}
+								className="flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform"
+								onClick={() => mapsTo(menu.url)}
+							>
+								<Icon icon={menu.icon} shape="square" size="md" theme={menu.theme} />
+								<Text className="text-xs text-text-title">{menu.label}</Text>
+							</View>
+						))}
+				</Cell>
+
 				{/* 功能列表区域 */}
 				<Cell className="px-2 py-1">
 					{/* 服务管理模块 */}
 					<ColumnNav
-						icon="icon-[ph--star-light]"
-						label="我报名的活动"
-						onClick={() => mapsTo('/pages/user/activity/index')}
-					/>
-					<ColumnNav
 						icon="icon-[ph--clipboard-text-light]"
-						label="我发布的需求"
+						label="我的需求"
 						onClick={() => mapsTo('/pages/user/demand/index')}
 					/>
 					<ColumnNav
-						icon="icon-[ph--clipboard-text-light]"
-						label="我发布的报价"
-						onClick={() => mapsTo('/pages/user/bid/index')}
-					/>
-					<ColumnNav
-						icon="icon-[ph--clipboard-text-light]"
-						label="我服务的订单"
-						onClick={() => mapsTo('/pages/order/provider/index')}
-					/>
-					<ColumnNav
 						icon="icon-[ph--user-focus-light]"
-						label="我应聘的岗位"
+						label="我的求职"
 						onClick={() => mapsTo('/pages/user/job/index')}
 					/>
 					<ColumnNav
 						icon="icon-[ph--clipboard-text-light]"
-						label="我创建的简历"
+						label="我的简历"
 						onClick={() => mapsTo('/pages/user/resume/index?mode=view')}
 					/>
-					<ColumnNav icon="icon-[ph--scan-light]" label="现场扫码打卡" onClick={doGlobalScan} />
-
 					<ColumnNav
 						icon="icon-[ph--user-gear-light]"
 						label="个人资料"
