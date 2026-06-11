@@ -24,3 +24,4 @@ export * from './Drawer';
 export * from './Tabs';
 export * from './Rate';
 export * from './FileUploader';
+export * from './ImagePreview';

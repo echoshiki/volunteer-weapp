@@ -19,9 +19,15 @@ export const doGlobalScan = () => {
 			// 场景 A：扫的是微信官方生成的小程序码
 			// ==========================================
 			if (res.scanType === 'WX_CODE' && res.path) {
-				// 微信会自动把码里配置的页面路径和参数解出来，例如:
-				// "pages/activity/check/index?scene=id%3D10023"
-				const targetPath = res.path.startsWith('/') ? res.path : `/${res.path}`;
+				let targetPath = res.path.startsWith('/') ? res.path : `/${res.path}`;
+
+				if (targetPath.includes('scene=')) {
+					const parts = targetPath.split('scene=');
+					const basePath = parts[0];
+					const sceneValue = parts[1];
+					targetPath = `${basePath}scene=${encodeURIComponent(sceneValue)}`;
+				}
+
 				mapsTo(targetPath);
 				return;
 			}

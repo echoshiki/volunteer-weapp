@@ -1,9 +1,12 @@
 import { View, Text, Image } from '@tarojs/components';
-import { Button } from '@/components/ui';
+import { Button, ImagePreview } from '@/components/ui';
 import { AuditStatusBadge } from '@/components/biz';
-import { mapsTo } from '@/utils/common';
+import { mapsTo, saveImageToAlbum } from '@/utils/common';
 import { ActivityRecordItem } from '@/types/activity';
 import { doGlobalScan } from '@/utils/scan';
+import { useState } from 'react';
+import { useCertificate } from '@/hooks/useCertificate';
+import Taro from '@tarojs/taro';
 
 export interface ActivityRecordCardProps {
 	record: ActivityRecordItem;
@@ -15,6 +18,21 @@ export interface ActivityRecordCardProps {
  * 用户活动报名记录卡片
  */
 export const ActivityRecordCard = ({ record, className = '' }: ActivityRecordCardProps) => {
+	const [preview, setPreview] = useState({ visible: false, url: '' });
+	const { generateCertificate, isGenerating } = useCertificate();
+
+	const handleActionGenerateCert = async (e: any) => {
+		e.stopPropagation();
+		Taro.showLoading({ title: '证书加印中...', mask: true });
+		try {
+			const res = await generateCertificate({ activityId: record.activityId });
+			Taro.hideLoading();
+			if (res?.url) setPreview({ visible: true, url: res.url });
+		} catch (err) {
+			Taro.hideLoading();
+		}
+	};
+
 	return (
 		<View onClick={() => mapsTo(`/pages/activity/detail/index?id=${record.activityId}`)} className={`${className}`}>
 			<View className="flex gap-3">
@@ -63,19 +81,29 @@ export const ActivityRecordCard = ({ record, className = '' }: ActivityRecordCar
 						{/* 动作或成果 */}
 						<View>
 							{record.duration !== null ? (
-								<View className="flex items-baseline text-primary text-xs">
-									<Text className="text-primary/80">时长</Text>
-									<Text className="text-xl mx-1 font-bold font-sans tracking-tight">
-										{record.duration}
-									</Text>
-									<Text className="text-primary/80">分钟</Text>
+								<View className="flex items-center gap-3">
+									<View className="flex items-baseline text-primary text-xs">
+										<Text className="text-primary/80">时长</Text>
+										<Text className="text-xl mx-1 font-bold font-sans tracking-tight">
+											{record.duration}
+										</Text>
+										<Text className="text-primary/80">分钟</Text>
+									</View>
+									<Button
+										size="sm"
+										variant="info"
+										icon="icon-[ph--certificate-bold]"
+										loading={isGenerating}
+										onClick={handleActionGenerateCert}
+									>
+										荣誉证书
+									</Button>
 								</View>
 							) : (
 								<Button
 									size="sm"
 									variant={record.checkInTime ? 'outline' : 'primary'}
 									onClick={(e) => {
-										// 阻止事件冒泡，防止点击按钮时触发卡片的跳转详情
 										e.stopPropagation();
 										doGlobalScan();
 									}}
@@ -97,6 +125,27 @@ export const ActivityRecordCard = ({ record, className = '' }: ActivityRecordCar
 					</Text>
 				)}
 			</View>
+
+			<ImagePreview
+				visible={preview.visible}
+				src={preview.url}
+				onClose={() => setPreview({ visible: false, url: '' })}
+				// 通过 Slot 注入下载行为，按钮也必须加上 e.stopPropagation()
+				actions={
+					<Button
+						variant="primary"
+						size="xl"
+						block
+						icon="icon-[ph--download-simple-bold]"
+						onClick={(e) => {
+							e.stopPropagation();
+							saveImageToAlbum(preview.url);
+						}}
+					>
+						保存证书至手机相册
+					</Button>
+				}
+			/>
 		</View>
 	);
 };

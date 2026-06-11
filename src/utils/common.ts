@@ -46,10 +46,7 @@ export const isTabBarPage = (path: string): boolean => {
  * @param url 页面路径
  * @param type 跳转类型
  */
-export const mapsTo = (
-	url: string,
-	type: 'navigateTo' | 'redirectTo' | 'reLaunch' = 'navigateTo',
-) => {
+export const mapsTo = (url: string, type: 'navigateTo' | 'redirectTo' | 'reLaunch' = 'navigateTo') => {
 	const path = url.split('?')[0];
 	isTabBarPage(path) ? Taro.switchTab({ url }) : Taro[type]({ url });
 };
@@ -150,4 +147,40 @@ export const stripHtml = (htmlStr: string): string => {
 		.replace(/<[^>]+>/g, '') // 核心：刮掉所有 <...> 标签
 		.replace(/&nbsp;/gi, ' ') // 替换常见的 HTML 实体空格
 		.trim();
+};
+
+/**
+ * 安全下载网络图片并保存到手机相册
+ * @param imageUrl 后端返回的证书图片绝对路径
+ */
+export const saveImageToAlbum = async (imageUrl: string): Promise<void> => {
+	if (!imageUrl) return;
+
+	Taro.showLoading({ title: '正在下载证书...', mask: true });
+
+	try {
+		const downloadRes = await Taro.downloadFile({ url: imageUrl });
+		if (downloadRes.statusCode !== 200) throw new Error('下载文件服务器响应异常');
+
+		// 保存到相册
+		await Taro.saveImageToPhotosAlbum({ filePath: downloadRes.tempFilePath });
+
+		Taro.hideLoading();
+		Taro.showToast({ title: '证书已保存到相册', icon: 'success' });
+	} catch (error: any) {
+		Taro.hideLoading();
+		if (error.errMsg?.includes('auth deny') || error.errMsg?.includes('auth denied')) {
+			Taro.showModal({
+				title: '提示',
+				content: '需要您授权保存图片到相册的权限，请在后续打开的设置页中勾选。',
+				confirmText: '去开启',
+				success: (res) => {
+					if (res.confirm) Taro.openSetting();
+				},
+			});
+		} else {
+			Taro.showToast({ title: '保存失败，请稍后再试', icon: 'none' });
+			console.error('保存证书发生错误:', error);
+		}
+	}
 };

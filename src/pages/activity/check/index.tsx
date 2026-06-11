@@ -36,6 +36,7 @@ export default function ActivityCheckPage() {
 
 		// 如果没有提取到合法的活动 ID，直接中断并报错
 		if (!currentActivityId || isNaN(Number(currentActivityId))) {
+			console.log('currentActivityId', currentActivityId);
 			setStatus('error');
 			setMessage('无效的打卡凭证，未找到关联的志愿活动');
 			return;
@@ -111,9 +112,7 @@ export default function ActivityCheckPage() {
 							<View className="bg-primary/10 rounded-card p-4 w-full flex flex-col items-center border border-primary/20">
 								<Text className="text-xs text-primary mb-1">本次志愿服务时长</Text>
 								<View className="flex items-baseline gap-1 text-primary">
-									<Text className="text-4xl font-black">
-										{resultData.duration}
-									</Text>
+									<Text className="text-4xl font-black">{resultData.duration}</Text>
 									<Text className="text-sm font-bold">分钟</Text>
 								</View>
 							</View>

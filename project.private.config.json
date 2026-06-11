@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "报名记录",
+          "pathName": "pages/user/activity/index",
+          "query": "",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "订单详情",
           "pathName": "pages/order/detail/index",
           "query": "id=19",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "服务详情",
