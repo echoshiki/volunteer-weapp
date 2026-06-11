@@ -1,6 +1,6 @@
 import { View, Text } from '@tarojs/components';
-import { mapsTo } from '@/utils/common';
 import { JobItem } from '@/types/job';
+import { navigateWithAuth } from '@/utils/auth';
 
 export interface JobCardProps {
 	/** 岗位数据对象 */
@@ -14,26 +14,18 @@ export interface JobCardProps {
  */
 export const JobCard = ({ job, className }: JobCardProps) => {
 	return (
-		<View className={className} onClick={() => mapsTo(`/pages/job/detail/index?id=${job.id}`)}>
+		<View className={className} onClick={() => navigateWithAuth(`/pages/job/detail/index?id=${job.id}`)}>
 			{/* 头部：标题与薪资 */}
 			<View className="flex justify-between items-start mb-2">
-				<Text className="text-text-title font-bold text-base line-clamp-1 flex-1 pr-2">
-					{job.title}
-				</Text>
-				<Text className="text-primary font-bold text-base whitespace-nowrap">
-					{job.salaryBudget}k
-				</Text>
+				<Text className="text-text-title font-bold text-base line-clamp-1 flex-1 pr-2">{job.title}</Text>
+				<Text className="text-primary font-bold text-base whitespace-nowrap">{job.salaryBudget}k</Text>
 			</View>
 
 			{/* 标签区 */}
 			<View className="flex items-center gap-2 mb-4">
-				<Text className="text-xs text-text-muted bg-gray-100 px-2 py-1 rounded">
-					招 {job.hireCount} 人
-				</Text>
+				<Text className="text-xs text-text-muted bg-gray-100 px-2 py-1 rounded">招 {job.hireCount} 人</Text>
 				{job.jobTitle && (
-					<Text className="text-xs text-text-muted bg-gray-100 px-2 py-1 rounded">
-						{job.jobTitle}
-					</Text>
+					<Text className="text-xs text-text-muted bg-gray-100 px-2 py-1 rounded">{job.jobTitle}</Text>
 				)}
 			</View>
 

@@ -1,7 +1,7 @@
 import { View, ScrollView } from '@tarojs/components';
 import { useProviderOrderList } from '@/hooks/useOrder';
 import { Page, Empty, Loading, Divider, Cell, Tabs } from '@/components/ui';
-import { OrderRecordCard } from '@/components/biz/OrderRecordCard';
+import { OrderRecordCard } from '@/components/biz';
 import { mapsTo } from '@/utils/common';
 import { useRouter } from '@tarojs/taro';
 import { OrderStatus } from '@/types/order';
@@ -19,8 +19,7 @@ export default function ProviderOrderListPage() {
 		}
 	}, [params.status]);
 
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-		useProviderOrderList(currentTab);
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useProviderOrderList(currentTab);
 	const list = data?.pages.flatMap((page) => page.list) || [];
 
 	const handleAction = (type: string, item: any) => {
@@ -50,16 +49,11 @@ export default function ProviderOrderListPage() {
 					) : (
 						<>
 							{list.map((order) => (
-								<Cell
-									key={order.orderId}
-									className="p-0 shadow-sm overflow-hidden rounded-xl"
-								>
+								<Cell key={order.orderId} className="p-0 shadow-sm overflow-hidden rounded-xl">
 									<OrderRecordCard
 										record={order}
 										viewMode="provider"
-										onClick={(id) =>
-											mapsTo(`/pages/order/detail/index?id=${id}`)
-										}
+										onClick={(id) => mapsTo(`/pages/order/detail/index?id=${id}`)}
 									/>
 								</Cell>
 							))}

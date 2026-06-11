@@ -1,6 +1,6 @@
 import { View, Text, Image } from '@tarojs/components';
 import { Button } from '@/components/ui';
-import { AuditStatusBadge } from '@/components/biz/BizBadge';
+import { AuditStatusBadge } from '@/components/biz';
 import { mapsTo } from '@/utils/common';
 import { ActivityRecordItem } from '@/types/activity';
 import { doGlobalScan } from '@/utils/scan';
@@ -16,10 +16,7 @@ export interface ActivityRecordCardProps {
  */
 export const ActivityRecordCard = ({ record, className = '' }: ActivityRecordCardProps) => {
 	return (
-		<View
-			onClick={() => mapsTo(`/pages/activity/detail/index?id=${record.activityId}`)}
-			className={`${className}`}
-		>
+		<View onClick={() => mapsTo(`/pages/activity/detail/index?id=${record.activityId}`)} className={`${className}`}>
 			<View className="flex gap-3">
 				<Image
 					src={record.banner}
@@ -37,12 +34,8 @@ export const ActivityRecordCard = ({ record, className = '' }: ActivityRecordCar
 
 					{/* 活动时间、地点 */}
 					<View className="flex flex-col gap-1">
-						<Text className="text-xs text-text-muted truncate">
-							时间: {record.startTime}
-						</Text>
-						<Text className="text-xs text-text-muted truncate">
-							地点: {record.address}
-						</Text>
+						<Text className="text-xs text-text-muted truncate">时间: {record.startTime}</Text>
+						<Text className="text-xs text-text-muted truncate">地点: {record.address}</Text>
 					</View>
 				</View>
 			</View>
@@ -55,23 +48,15 @@ export const ActivityRecordCard = ({ record, className = '' }: ActivityRecordCar
 						<View className="flex flex-col gap-0.5">
 							{record.checkInTime ? (
 								<>
-									<Text className="text-xs text-gray-500">
-										入: {record.checkInTime}
-									</Text>
+									<Text className="text-xs text-gray-500">入: {record.checkInTime}</Text>
 									{record.checkOutTime ? (
-										<Text className="text-xs text-gray-500">
-											出: {record.checkOutTime}
-										</Text>
+										<Text className="text-xs text-gray-500">出: {record.checkOutTime}</Text>
 									) : (
-										<Text className="text-xs text-orange-500">
-											等待活动结束签退...
-										</Text>
+										<Text className="text-xs text-orange-500">等待活动结束签退...</Text>
 									)}
 								</>
 							) : (
-								<Text className="text-xs text-text-muted">
-									到达现场后请及时打卡
-								</Text>
+								<Text className="text-xs text-text-muted">到达现场后请及时打卡</Text>
 							)}
 						</View>
 
@@ -103,9 +88,7 @@ export const ActivityRecordCard = ({ record, className = '' }: ActivityRecordCar
 				)}
 
 				{record.auditStatus === 'pending' && (
-					<Text className="text-xs text-orange-400 block w-full truncate">
-						资料已提交，等待主办方审核...
-					</Text>
+					<Text className="text-xs text-orange-400 block w-full truncate">资料已提交，等待主办方审核...</Text>
 				)}
 
 				{record.auditStatus === 'rejected' && (

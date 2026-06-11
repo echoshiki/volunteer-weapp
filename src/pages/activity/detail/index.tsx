@@ -1,8 +1,8 @@
 import Taro, { useRouter } from '@tarojs/taro';
 import { View, Text, Image, RichText, ScrollView } from '@tarojs/components';
 import { useActivityDetail, useEnrollActivity } from '@/hooks/useActivity';
-import { Badge, Button, Cell, Description, Heading, Page } from '@/components/ui';
-import { EnrollStatusBadge } from '@/components/biz/BizBadge';
+import { Badge, Button, Description, Heading, Page } from '@/components/ui';
+import { EnrollStatusBadge } from '@/components/biz';
 import { useAuthStore } from '@/store/auth';
 import { runWithAuth } from '@/utils/auth';
 import { mapsTo } from '@/utils/common';
@@ -87,10 +87,7 @@ export default function ActivityDetail() {
 
 					{/* 活动信息 */}
 					<View className="mt-6 flex flex-col gap-4 bg-gray-50 p-4 rounded-card">
-						<Description
-							label="活动时间"
-							value={`${activity.startTime} 至 ${activity.endTime}`}
-						/>
+						<Description label="活动时间" value={`${activity.startTime} 至 ${activity.endTime}`} />
 						<Description label="活动地点" value={activity.address} />
 						<Description label="主办单位" value={activity.organizer} />
 						<Description
@@ -122,10 +119,7 @@ export default function ActivityDetail() {
 				<View className="flex flex-1 flex-col gap-0.5 text-text-muted text-xs ">
 					<Text>当前报名进度</Text>
 					<Text>
-						<Text className="font-bold text-primary text-sm">
-							{activity.attendance}
-						</Text>{' '}
-						人已报名
+						<Text className="font-bold text-primary text-sm">{activity.attendance}</Text> 人已报名
 					</Text>
 				</View>
 

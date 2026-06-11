@@ -14,3 +14,4 @@ export * from './OrderRecordCard';
 export * from './OrderActions';
 export * from './AppliedJobRecordCard';
 export * from './AssociationCard';
+export * from './BidRecordCard';

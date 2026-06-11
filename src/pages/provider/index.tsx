@@ -1,7 +1,7 @@
 import { View, Image, Text } from '@tarojs/components';
 import { useRouter } from '@tarojs/taro';
 import { Page, Cell, Heading, Loading, Empty, Description } from '@/components/ui';
-import { UserIdentityBadge } from '@/components/biz/BizBadge';
+import { UserIdentityBadge } from '@/components/biz';
 import { useProviderProfile } from '@/hooks/useProvider';
 
 export default function ProviderPage() {
@@ -18,9 +18,7 @@ export default function ProviderPage() {
 	const isInstitution = profile.identity === 'institution';
 
 	// 动态决定头部卡片呈现的核心名称
-	const displayName = isInstitution
-		? profile.institutionName || '未命名服务机构'
-		: profile.realName || '爱心志愿者';
+	const displayName = isInstitution ? profile.institutionName || '未命名服务机构' : profile.realName || '爱心志愿者';
 
 	return (
 		<Page className="bg-main-bg min-h-screen pb-6">
@@ -36,9 +34,7 @@ export default function ProviderPage() {
 					/>
 
 					<View className="flex items-center gap-2 mb-1 px-4 text-center">
-						<Text className="text-lg font-bold text-text-title line-clamp-1">
-							{displayName}
-						</Text>
+						<Text className="text-lg font-bold text-text-title line-clamp-1">{displayName}</Text>
 					</View>
 
 					<View className="flex items-center gap-2 mt-1">
@@ -56,8 +52,7 @@ export default function ProviderPage() {
 						<View className="bg-gray-50 rounded-lg p-3 flex flex-col justify-center">
 							<Text className="text-xs text-text-muted mb-1">累计服务单数</Text>
 							<Text className="text-sm font-bold font-num text-orange-500">
-								{profile.serviceCount || 0}{' '}
-								<Text className="text-sm font-normal">单</Text>
+								{profile.serviceCount || 0} <Text className="text-sm font-normal">单</Text>
 							</Text>
 						</View>
 
@@ -66,17 +61,14 @@ export default function ProviderPage() {
 							<View className="bg-gray-50 rounded-lg p-3 flex flex-col justify-center">
 								<Text className="text-xs text-text-muted mb-1">志愿服务总时长</Text>
 								<Text className="text-sm font-bold font-num text-primary">
-									{profile.duration || 0}{' '}
-									<Text className="font-normal">小时</Text>
+									{profile.duration || 0} <Text className="font-normal">小时</Text>
 								</Text>
 							</View>
 						) : (
 							<View className="bg-gray-50 rounded-lg p-3 flex flex-col justify-center">
 								<Text className="text-xs text-text-muted mb-1">官方认证年资</Text>
 								<Text className="text-sm text-text-body line-clamp-1 px-1">
-									{profile.reviewTime
-										? `${profile.reviewTime.split(' ')[0]} 入驻`
-										: '已官方核验'}
+									{profile.reviewTime ? `${profile.reviewTime.split(' ')[0]} 入驻` : '已官方核验'}
 								</Text>
 							</View>
 						)}
@@ -90,45 +82,21 @@ export default function ProviderPage() {
 					{/* 志愿者(个人)核心信息呈现 */}
 					{isVolunteer && (
 						<>
-							<Description
-								label="志愿者姓名"
-								value={profile.realName}
-								variant="between"
-							/>
-							<Description
-								label="服务区域"
-								value={profile.tenantName}
-								variant="between"
-							/>
+							<Description label="志愿者姓名" value={profile.realName} variant="between" />
+							<Description label="服务区域" value={profile.tenantName} variant="between" />
 						</>
 					)}
 
 					{/* 机构(组织)核心信息呈现 */}
 					{isInstitution && (
 						<>
-							<Description
-								label="机构负责人"
-								value={profile.realName}
-								variant="between"
-							/>
-							<Description
-								label="直属服务机构"
-								value={profile.institutionName}
-								variant="between"
-							/>
-							<Description
-								label="常驻服务区域"
-								value={profile.tenantName}
-								variant="between"
-							/>
+							<Description label="机构负责人" value={profile.realName} variant="between" />
+							<Description label="直属服务机构" value={profile.institutionName} variant="between" />
+							<Description label="常驻服务区域" value={profile.tenantName} variant="between" />
 						</>
 					)}
 
-					<Description
-						label="认证核验时间"
-						value={profile.reviewTime || '暂无记录'}
-						variant="between"
-					/>
+					<Description label="认证核验时间" value={profile.reviewTime || '暂无记录'} variant="between" />
 
 					<Description
 						label="服务点地址"

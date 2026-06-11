@@ -1,7 +1,7 @@
 import { View, ScrollView } from '@tarojs/components';
 import { useMyBidList } from '@/hooks/useDemand';
 import { Page, Empty, Loading, Divider, Cell } from '@/components/ui';
-import { BidRecordCard } from '@/components/biz/BidRecordCard';
+import { BidRecordCard } from '@/components/biz';
 import { mapsTo } from '@/utils/common';
 import { MyBidItem } from '@/types/demand';
 import Taro from '@tarojs/taro';

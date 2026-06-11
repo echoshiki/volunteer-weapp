@@ -83,8 +83,7 @@ class HttpRequest {
 		return new Promise((resolve, reject) => {
 			Taro.request({
 				...options,
-				success: (res) =>
-					this.handleSuccess<T>(res.statusCode, res.data, options, resolve, reject),
+				success: (res) => this.handleSuccess<T>(res.statusCode, res.data, options, resolve, reject),
 				fail: (err) => this.handleNetworkFail(err, reject),
 				complete: () => {
 					if (options.showLoading) this.hideLoading();
@@ -122,13 +121,7 @@ class HttpRequest {
 						return;
 					}
 
-					this.handleSuccess<T>(
-						res.statusCode,
-						parsedData,
-						config || {},
-						resolve,
-						reject,
-					);
+					this.handleSuccess<T>(res.statusCode, parsedData, config || {}, resolve, reject);
 				},
 				fail: (err) => this.handleNetworkFail(err, reject),
 				complete: () => {
@@ -150,9 +143,7 @@ class HttpRequest {
 			const { code, msg, data } = responseData as BaseResponse<T>;
 
 			if (code === 200) {
-				const finalData = options.interceptors?.response
-					? options.interceptors.response(data)
-					: data;
+				const finalData = options.interceptors?.response ? options.interceptors.response(data) : data;
 				resolve(finalData as T);
 			} else if ([410000, 410001, 410002, 401, 402].includes(code)) {
 				this.handleAuthError();
@@ -180,22 +171,30 @@ class HttpRequest {
 		if (HttpRequest.isRedirecting) return;
 		HttpRequest.isRedirecting = true;
 
+		const authStore = useAuthStore.getState();
+		const hasTokenBefore = !!authStore.token;
+
 		useAuthStore.getState().setLogout();
 
 		// 获取当前页面路径
 		const backUrl = getCurrentPageUrl();
+		const modalContent = hasTokenBefore ? '您的登录已过期，请重新登录' : '当前操作需要您登录账户';
 
 		Taro.showModal({
 			title: '提示',
-			content: '登录已过期，请重新登录',
-			showCancel: false,
-			success: () => {
-				Taro.redirectTo({
-					url: `/pages/login/index?back_url=${encodeURIComponent(backUrl)}`,
-					complete: () => {
-						HttpRequest.isRedirecting = false;
-					},
-				});
+			content: modalContent,
+			showCancel: !hasTokenBefore,
+			success: (res) => {
+				if (res.confirm) {
+					Taro.navigateTo({
+						url: `/pages/login/index?back_url=${encodeURIComponent(backUrl)}`,
+						complete: () => {
+							HttpRequest.isRedirecting = false;
+						},
+					});
+				} else {
+					HttpRequest.isRedirecting = false;
+				}
 			},
 		});
 	}
@@ -203,9 +202,7 @@ class HttpRequest {
 	/** 过滤掉参数里所有的 undefined */
 	private cleanParams = (params: any) => {
 		if (!params) return params;
-		return Object.fromEntries(
-			Object.entries(params).filter(([_, v]) => v !== undefined && v !== null),
-		);
+		return Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== undefined && v !== null));
 	};
 
 	public get<T = any>(url: string, params?: any, config?: RequestConfig) {

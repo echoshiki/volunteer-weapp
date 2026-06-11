@@ -3,18 +3,19 @@ import { View, Text } from '@tarojs/components';
 import { useAuthStore } from '@/store/auth';
 import { useLogin } from '@/hooks/useLogin';
 import { useUser } from '@/hooks/useUser';
-import { Avatar, Asset, ColumnNav, Page, Cell } from '@/components/ui';
+import { Avatar, ColumnNav, Page, Cell } from '@/components/ui';
 import { UserIdentityBadge, OrderNavItem } from '@/components/biz';
 import { doGlobalScan } from '@/utils/scan';
 import { mapsTo } from '@/utils/common';
 import { ORDER_NAV_ITEMS } from '@/constants/order';
 import { Icon } from '@/components/ui/Icon';
+import { navigateWithAuth } from '@/utils/auth';
 
 const VOLUNTEER_MENUS = [
 	{
 		label: '我的报名',
 		icon: 'icon-[ph--star-light]',
-		theme: 'orange' as const,
+		theme: 'red' as const,
 		url: '/pages/user/activity/index',
 	},
 	{
@@ -34,12 +35,6 @@ const VOLUNTEER_MENUS = [
 		icon: 'icon-[ph--scan-light]',
 		theme: 'green' as const,
 		handler: () => doGlobalScan(),
-	},
-	{
-		label: '志愿证书',
-		icon: 'icon-[ph--certificate-light]',
-		theme: 'red' as const,
-		url: '/pages/user/certificate/index',
 	},
 ];
 
@@ -111,54 +106,46 @@ export default function UserPage() {
 					{isLoggedIn && (
 						<View
 							className="icon-[ph--gear] w-6 h-6 text-text-title"
-							onClick={() => mapsTo('/pages/user/profile/index')}
+							onClick={() => navigateWithAuth('/pages/user/profile/index')}
 						/>
 					)}
 				</View>
 			</View>
 
 			<View className="px-4 -mt-10 flex flex-col gap-4">
-				<Cell className="flex items-center">
-					<Asset label="我的积分" value={userInfo?.points || 0} />
-					<View className="w-px h-8 bg-slate-100" />
-					<Asset
-						label="志愿时长"
-						value={userInfo?.duration || 0}
-						onClick={() => mapsTo('/pages/user/coupons/index')}
-					/>
-				</Cell>
-
 				<Cell className="grid grid-cols-5">
 					{ORDER_NAV_ITEMS.map((item) => (
 						<OrderNavItem key={item.value} nav={item} viewMode="employer" />
 					))}
 				</Cell>
 
-				<Cell className="grid grid-cols-4 gap-4">
-					{indentity === 'volunteer' &&
-						VOLUNTEER_MENUS.map((menu) => (
-							<View
-								key={menu.label}
-								className="flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform"
-								onClick={() => (menu.handler ? menu.handler() : mapsTo(menu.url!))}
-							>
-								<Icon icon={menu.icon} shape="square" size="md" theme={menu.theme} />
-								<Text className="text-xs text-text-title">{menu.label}</Text>
-							</View>
-						))}
+				{(indentity === 'volunteer' || indentity === 'institution') && (
+					<Cell className="grid grid-cols-4 gap-4">
+						{indentity === 'volunteer' &&
+							VOLUNTEER_MENUS.map((menu) => (
+								<View
+									key={menu.label}
+									className="flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform"
+									onClick={() => (menu.handler ? menu.handler() : mapsTo(menu.url!))}
+								>
+									<Icon icon={menu.icon} shape="square" size="md" theme={menu.theme} />
+									<Text className="text-xs text-text-title">{menu.label}</Text>
+								</View>
+							))}
 
-					{indentity === 'institution' &&
-						INSITUTION_MENUS.map((menu) => (
-							<View
-								key={menu.label}
-								className="flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform"
-								onClick={() => mapsTo(menu.url)}
-							>
-								<Icon icon={menu.icon} shape="square" size="md" theme={menu.theme} />
-								<Text className="text-xs text-text-title">{menu.label}</Text>
-							</View>
-						))}
-				</Cell>
+						{indentity === 'institution' &&
+							INSITUTION_MENUS.map((menu) => (
+								<View
+									key={menu.label}
+									className="flex flex-col items-center justify-center gap-2 active:scale-95 transition-transform"
+									onClick={() => mapsTo(menu.url)}
+								>
+									<Icon icon={menu.icon} shape="square" size="md" theme={menu.theme} />
+									<Text className="text-xs text-text-title">{menu.label}</Text>
+								</View>
+							))}
+					</Cell>
+				)}
 
 				{/* 功能列表区域 */}
 				<Cell className="px-2 py-1">
@@ -166,28 +153,28 @@ export default function UserPage() {
 					<ColumnNav
 						icon="icon-[ph--clipboard-text-light]"
 						label="我的需求"
-						onClick={() => mapsTo('/pages/user/demand/index')}
+						onClick={() => navigateWithAuth('/pages/user/demand/index')}
 					/>
 					<ColumnNav
 						icon="icon-[ph--user-focus-light]"
 						label="我的求职"
-						onClick={() => mapsTo('/pages/user/job/index')}
+						onClick={() => navigateWithAuth('/pages/user/job/index')}
 					/>
 					<ColumnNav
 						icon="icon-[ph--clipboard-text-light]"
 						label="我的简历"
-						onClick={() => mapsTo('/pages/user/resume/index?mode=view')}
+						onClick={() => navigateWithAuth('/pages/user/resume/index?mode=view')}
 					/>
 					<ColumnNav
 						icon="icon-[ph--user-gear-light]"
 						label="个人资料"
-						onClick={() => mapsTo('/pages/user/profile/index')}
+						onClick={() => navigateWithAuth('/pages/user/profile/index')}
 					/>
 					<ColumnNav
 						icon="icon-[ph--shield-warning-light]"
 						label="实名认证"
 						extra={userInfo?.reviewId ? '已认证' : '未认证'}
-						onClick={() => mapsTo('/pages/apply/index')}
+						onClick={() => navigateWithAuth('/pages/apply/index')}
 					/>
 					<ColumnNav icon="icon-[ph--question]" label="帮助与反馈" />
 

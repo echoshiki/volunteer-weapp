@@ -6,8 +6,7 @@ import { mapsTo } from '@/utils/common';
 import { formatUserInfo } from '@/utils/user';
 
 export const useLogin = () => {
-	const { authStage, uuid, setLoginSuccess, setNeedBind, updateUserInfo, setLogout } =
-		useAuthStore();
+	const { authStage, uuid, setLoginSuccess, setNeedBind, updateUserInfo, setLogout } = useAuthStore();
 
 	/**
 	 * 统一处理登录成功的副作用
@@ -17,10 +16,8 @@ export const useLogin = () => {
 		// 设置登录成功状态
 		setLoginSuccess(token);
 		try {
-			// 获取包含身份标识 (identity) 的完整用户信息
+			// 获取并格式化用户信息到本地
 			const raw = await getUserInfoAPI();
-
-			// 将格式化后的用户信息保存到全局状态中
 			updateUserInfo(formatUserInfo(raw));
 
 			// 跳转回跳页面

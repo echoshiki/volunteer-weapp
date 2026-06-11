@@ -17,10 +17,7 @@ export const OrderNavItem = ({ nav, count = 0, viewMode }: OrderNavItemProps) =>
 			navigateWithAuth(nav.url);
 			return;
 		}
-
-		const basePath =
-			viewMode === 'employer' ? '/pages/order/employer/index' : '/pages/order/provider/index';
-
+		const basePath = viewMode === 'employer' ? '/pages/order/employer/index' : '/pages/order/provider/index';
 		navigateWithAuth(`${basePath}?status=${nav.value}`);
 	};
 

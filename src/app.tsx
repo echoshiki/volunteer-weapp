@@ -18,14 +18,14 @@ const queryClient = new QueryClient({
 });
 
 function App({ children }: PropsWithChildren<any>) {
-	const { onSilentLogin, isLoggedIn } = useLogin();
+	const { onSilentLogin } = useLogin();
 	const fetchConfig = useConfigStore((state) => state.fetchConfig);
 
 	useLaunch((options) => {
 		// 数据：获取全局配置数据
 		fetchConfig();
 		// 检测：是否登录，执行静默登录
-		if (!isLoggedIn) onSilentLogin();
+		onSilentLogin();
 		// 检测：是否选择地区，执行跳转到引导页逻辑
 		guardUnselectedTenant(options);
 	});

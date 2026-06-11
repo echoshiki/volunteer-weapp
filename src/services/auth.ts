@@ -1,5 +1,4 @@
 import { http } from '@/utils/http';
-import { UserInfo } from '@/types/user';
 
 /**
  * 登录响应对象

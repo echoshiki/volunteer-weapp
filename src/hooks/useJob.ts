@@ -37,8 +37,7 @@ export const useJobList = (params: Omit<JobListParams, 'pageNum'>) => {
 				pageNum: pageParam,
 				pageSize: params.pageSize || 10,
 			}),
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(),
 	});
 };
@@ -62,8 +61,7 @@ export const useEnterpriseList = (params: Omit<EnterpriseListParams, 'pageNum'>)
 				pageNum: pageParam,
 				pageSize: params.pageSize || 10,
 			}),
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(),
 	});
 };
@@ -138,8 +136,7 @@ export const useAppliedJobList = () => {
 	return useInfiniteQuery({
 		queryKey: [...tenantKey(), 'resume', 'applied', 'list'],
 		queryFn: ({ pageParam = 1 }) => getAppliedJobListAPI({ pageNum: pageParam, pageSize: 10 }),
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(),
 	});
 };

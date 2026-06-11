@@ -1,7 +1,7 @@
 import { View, ScrollView, Text } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
 import { Page, Empty, Loading, Divider, Cell } from '@/components/ui';
-import { DemandBidCard } from '@/components/biz/DemandBidCard';
+import { DemandBidCard } from '@/components/biz';
 import { useDemandBidList } from '@/hooks/useDemand';
 import { DemandBidItem } from '@/types/demand';
 import { mapsTo } from '@/utils/common';
@@ -15,8 +15,7 @@ export default function UserDemandBidPage() {
 	const demandId = Number(params.id);
 
 	// 获取投递了该需求单的所有服务方报价列表数据 (支持分页/无限滚动)
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-		useDemandBidList(demandId);
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useDemandBidList(demandId);
 	const list = data?.pages.flatMap((page) => page.list) || [];
 
 	// 执行：跳转志愿者/机构统一公开主页
@@ -69,8 +68,7 @@ export default function UserDemandBidPage() {
 					{list.length > 0 && (
 						<View className="px-1">
 							<View className="text-sm text-text-title font-medium">
-								共有 <Text className="text-primary font-bold">{list.length}</Text>{' '}
-								位服务方参与抢单
+								共有 <Text className="text-primary font-bold">{list.length}</Text> 位服务方参与抢单
 							</View>
 							<View className="text-xs text-text-muted mt-1">
 								请综合考量服务方的身份核验、报价留言进行决策
@@ -86,10 +84,7 @@ export default function UserDemandBidPage() {
 					) : (
 						<>
 							{list.map((item) => (
-								<Cell
-									key={item.userId}
-									className="shadow-sm p-0 overflow-hidden rounded-xl"
-								>
+								<Cell key={item.userId} className="shadow-sm p-0 overflow-hidden rounded-xl">
 									<DemandBidCard
 										user={item}
 										onViewProfile={handleViewProfile}
@@ -110,9 +105,7 @@ export default function UserDemandBidPage() {
 				<View className="fixed inset-0 z-50 flex items-center justify-center bg-black/20 pb-safe">
 					<View className="bg-white p-5 rounded-xl flex flex-col items-center shadow-2xl">
 						<Loading />
-						<View className="text-sm mt-3 text-text-title font-medium">
-							正在锁定服务方，生成订单...
-						</View>
+						<View className="text-sm mt-3 text-text-title font-medium">正在锁定服务方，生成订单...</View>
 					</View>
 				</View>
 			)}

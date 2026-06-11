@@ -283,20 +283,14 @@ export const useBidForm = (initial?: MyBidItem, isFree: boolean = false) => {
 
 	const validate = (): string | null => {
 		const { name, phone, money, description } = formData;
-
-		if (!name?.trim()) return '请填写联系人姓名';
-		if (!phone?.trim()) return '请填写联系电话';
-		if (!/^1[3-9]\d{9}$/.test(phone)) return '手机号格式有误';
-
-		if (!isFree) {
-			if (money === undefined || Number(money) < 0) {
-				return '请填写合理的报价金额';
-			}
-		}
-
-		if (!description?.trim()) return '请填写服务描述与优势';
-
-		return null;
+		const rules: [boolean, string][] = [
+			[!name?.trim(), '请填写联系人姓名'],
+			[!phone?.trim(), '请填写联系电话'],
+			[!/^1[3-9]\d{9}$/.test(phone ?? ''), '手机号格式有误'],
+			[!isFree && (money === undefined || Number(money) < 0), '请填写合理的报价金额'],
+			[!description?.trim(), '请填写服务描述与优势'],
+		];
+		return rules.find(([invalid]) => invalid)?.[1] ?? null;
 	};
 
 	return {
