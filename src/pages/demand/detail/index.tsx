@@ -30,6 +30,7 @@ export default function DemandDetailPage() {
 
 	const handleBidClick = () => {
 		if (isMyDemand) return;
+		if (detail.isBid) return;
 		if (isServerRole) {
 			mapsTo(`/pages/demand/bid/index?id=${demandId}&charge=${detail.charge}`);
 		} else {
@@ -43,6 +44,31 @@ export default function DemandDetailPage() {
 			});
 		}
 	};
+
+	// 报价按钮配置
+	const getBidButtonConfig = () => {
+		if (isMyDemand) {
+			return {
+				text: '无法承接自己的需求',
+				disabled: true,
+				icon: 'icon-[ph--prohibit]',
+			};
+		}
+		if (detail.isBid) {
+			return {
+				text: '已提交接单申请',
+				disabled: true,
+				icon: 'icon-[ph--check-circle]',
+			};
+		}
+		return {
+			text: '立即接单/报价',
+			disabled: false,
+			variant: 'primary' as const,
+			icon: 'icon-[ph--hand-coins]',
+		};
+	};
+	const buttonConfig = getBidButtonConfig();
 
 	return (
 		<Page hasTabBar>
@@ -113,12 +139,13 @@ export default function DemandDetailPage() {
 						咨询发布者
 					</Button>
 					<Button
-						icon="icon-[ph--hand-coins]"
+						icon={buttonConfig.icon}
 						className="flex-1"
-						disabled={isMyDemand}
+						variant={buttonConfig.variant}
+						disabled={buttonConfig.disabled}
 						onClick={handleBidClick}
 					>
-						{isMyDemand ? '无法承接自己的需求' : '立即接单/报价'}
+						{buttonConfig.text}
 					</Button>
 				</View>
 			</Cell>

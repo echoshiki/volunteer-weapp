@@ -59,6 +59,8 @@ export interface DemandItem {
 	status: AuditStatus;
 	/** 是否推荐 */
 	isRecommend: boolean;
+	/** 当前用户是否报过价 */
+	isBid: boolean;
 	/** 报价总计 */
 	serviceUserCount: number;
 	/** 发布时间 */

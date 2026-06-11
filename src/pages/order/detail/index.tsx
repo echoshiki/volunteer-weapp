@@ -1,21 +1,12 @@
 import { View, Image, Text } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
-import {
-	Page,
-	Cell,
-	Heading,
-	Divider,
-	Button,
-	Loading,
-	Empty,
-	Description,
-	ImageUploader,
-} from '@/components/ui';
+import { Page, Cell, Heading, Divider, Button, Loading, Empty, Description, ImageUploader } from '@/components/ui';
 import { useOrderDetail, useOrderActions, useOrderTrajectoryList } from '@/hooks/useOrder';
 import { EmployerActions, ProviderActions, UserIdentityBadge } from '@/components/biz';
 import { getOrderDetailTip, ORDER_STATUS_MAP } from '@/constants/order';
 import { useUpload } from '@/hooks/useUpload';
 import { useAuthStore } from '@/store/auth';
+import { mapsTo } from '@/utils/common';
 
 export default function OrderDetailPage() {
 	const { params } = useRouter();
@@ -23,11 +14,7 @@ export default function OrderDetailPage() {
 	const initialAction = params.action || '';
 
 	// 数据：订单详情数据、订单服务轨迹
-	const {
-		data: order,
-		isLoading: isDetailLoading,
-		refetch: refetchDetail,
-	} = useOrderDetail(orderId);
+	const { data: order, isLoading: isDetailLoading, refetch: refetchDetail } = useOrderDetail(orderId);
 
 	const {
 		data: trajectoryData,
@@ -35,8 +22,7 @@ export default function OrderDetailPage() {
 		refetch: refetchTrajectory,
 	} = useOrderTrajectoryList(orderId);
 
-	const { needArrivePunch, needCompletePunch, submitTrajectory, isActionLoading } =
-		useOrderActions(order);
+	const { needArrivePunch, needCompletePunch, submitTrajectory, isActionLoading } = useOrderActions(order);
 
 	const { triggerUpload, isUploading } = useUpload();
 	const { userInfo } = useAuthStore();
@@ -56,10 +42,7 @@ export default function OrderDetailPage() {
 	const logList = trajectoryData?.list || [];
 
 	// 服务方打卡
-	const handleTrajectorySubmit = async (
-		urls: string[],
-		targetStatus: 'arrived' | 'completed',
-	) => {
+	const handleTrajectorySubmit = async (urls: string[], targetStatus: 'arrived' | 'completed') => {
 		if (!urls.length) return;
 		submitTrajectory.mutate(
 			{
@@ -82,16 +65,15 @@ export default function OrderDetailPage() {
 			{/* 顶部高亮身份状态横幅 */}
 			<View className="bg-linear-to-r from-primary to-red-400 p-6 text-white flex justify-between items-center">
 				<View className="flex flex-col gap-2 flex-1 pr-4">
-					<Text className="text-xl font-bold font-num">
-						{getOrderDetailTip(order.status, isEmployer)}
-					</Text>
-					<View className="flex flex-col gap-1">
-						<Text className="text-xs text-red-100 font-num">
-							服务订单号：{order.orderId}
-						</Text>
-						<Text className="text-xs text-red-100">
-							状态：{ORDER_STATUS_MAP[order.status].label}
-						</Text>
+					<Text className="text-xl font-bold font-num">{getOrderDetailTip(order.status, isEmployer)}</Text>
+					<View className="flex flex-col gap-1 text-xs text-red-100 ">
+						<View className="flex items-center gap-3">
+							<Text className="font-num">服务单号：{order.orderId}</Text>
+							<Text onClick={() => mapsTo(`/pages/demand/detail/index?id=${order.demandId}`)}>
+								[点击查看原需求单]
+							</Text>
+						</View>
+						<Text>状态：{ORDER_STATUS_MAP[order.status].label}</Text>
 					</View>
 				</View>
 			</View>
@@ -101,9 +83,7 @@ export default function OrderDetailPage() {
 				{!isEmployer && (needArrivePunch || needCompletePunch) && (
 					<Cell className="p-4">
 						<Heading
-							title={
-								needArrivePunch ? '第一步：到达现场打卡' : '第二步：完工成果拍照'
-							}
+							title={needArrivePunch ? '第一步：到达现场打卡' : '第二步：完工成果拍照'}
 							subtitle={
 								needArrivePunch
 									? '请拍摄服务对象现场照片，确认您已安全到达，开启服务。'
@@ -119,21 +99,10 @@ export default function OrderDetailPage() {
 								isUploading={isUploading || isActionLoading}
 								onUpload={(files) => triggerUpload(files)}
 								onChange={(urls) =>
-									handleTrajectorySubmit(
-										urls,
-										needArrivePunch ? 'arrived' : 'completed',
-									)
+									handleTrajectorySubmit(urls, needArrivePunch ? 'arrived' : 'completed')
 								}
-								icon={
-									needArrivePunch
-										? 'icon-[ph--map-pin-line-duotone]'
-										: 'icon-[ph--camera-car-duotone]'
-								}
-								label={
-									needArrivePunch
-										? '点击拍照/上传到场存证'
-										: '点击拍照/上传完工成果'
-								}
+								icon={needArrivePunch ? 'icon-[ph--map-pin-line-duotone]' : 'icon-[ph--camera-duotone]'}
+								label={needArrivePunch ? '点击拍照/上传到场存证' : '点击拍照/上传完工成果'}
 								className="w-full"
 							/>
 						</View>
@@ -142,27 +111,16 @@ export default function OrderDetailPage() {
 
 				{/* 相关人员资料信息 */}
 				<Cell className="p-4">
-					<Heading
-						title={isEmployer ? '服务方资料' : '雇主资料'}
-						size="md"
-						className="mb-3"
-					/>
+					<Heading title={isEmployer ? '服务方资料' : '雇主资料'} size="md" className="mb-3" />
 					<View className="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
 						<View className="flex items-center gap-3">
-							<Image
-								src={targetAvatar}
-								className="size-11 rounded-full bg-gray-200 shrink-0"
-							/>
+							<Image src={targetAvatar} className="size-11 rounded-full bg-gray-200 shrink-0" />
 							<View className="flex flex-col gap-0.5">
 								<View className="flex items-center gap-1.5">
-									<Text className="text-sm font-bold text-text-title">
-										{targetName}
-									</Text>
+									<Text className="text-sm font-bold text-text-title">{targetName}</Text>
 									{isEmployer && <UserIdentityBadge value={order.identity} />}
 								</View>
-								<Text className="text-xs text-text-muted font-num">
-									{targetPhone}
-								</Text>
+								<Text className="text-xs text-text-muted font-num">{targetPhone}</Text>
 							</View>
 						</View>
 
@@ -201,9 +159,7 @@ export default function OrderDetailPage() {
 						className="mb-4"
 					/>
 					{logList.length === 0 ? (
-						<Text className="text-xs text-text-muted italic block py-2">
-							暂无打卡轨迹存证
-						</Text>
+						<Text className="text-xs text-text-muted italic block py-2">暂无打卡轨迹存证</Text>
 					) : (
 						<View className="flex flex-col pl-2 mt-2">
 							{logList.map((log, index) => {
@@ -223,9 +179,7 @@ export default function OrderDetailPage() {
 											>
 												{log.title || ORDER_STATUS_MAP[log.status]?.label}
 											</Text>
-											<Text className="text-xs text-text-muted font-num">
-												{log.createTime}
-											</Text>
+											<Text className="text-xs text-text-muted font-num">{log.createTime}</Text>
 
 											{/* 轨迹照片放大预览体验 */}
 											{log.trajectoryImg && (
@@ -289,9 +243,7 @@ export default function OrderDetailPage() {
 				)}
 
 				{order.status === 'cancelled' && (
-					<View className="text-sm text-center w-full text-text-muted py-2">
-						该订单已被取消关闭
-					</View>
+					<View className="text-sm text-center w-full text-text-muted py-2">该订单已被取消关闭</View>
 				)}
 			</View>
 		</Page>

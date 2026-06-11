@@ -4,15 +4,7 @@ import { Button as TaroButton, ButtonProps as TaroButtonProps, View } from '@tar
 type ButtonSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 /** 按钮视觉变体 */
-type ButtonVariant =
-	| 'primary'
-	| 'success'
-	| 'secondary'
-	| 'warning'
-	| 'danger'
-	| 'info'
-	| 'outline'
-	| 'ghost';
+type ButtonVariant = 'primary' | 'success' | 'secondary' | 'warning' | 'danger' | 'info' | 'outline' | 'ghost';
 
 // 尺寸样式映射 (高度、内边距、字体、图标大小)
 const SIZE_MAP: Record<ButtonSize, string> = {
@@ -41,7 +33,7 @@ const VARIANT_MAP: Record<ButtonVariant, string> = {
 	warning: 'bg-amber-500 text-white border-none active:bg-amber-600',
 	info: 'bg-blue-500 text-white border-none active:bg-blue-600',
 	outline: 'bg-transparent text-primary border border-primary active:bg-red-50',
-	ghost: 'bg-transparent text-text-muted border-none active:bg-gray-100 after:border-none',
+	ghost: 'bg-transparent text-text-muted! border-none active:bg-gray-100 after:border-none',
 };
 
 export interface ButtonProps extends Omit<TaroButtonProps, 'size' | 'type'> {
