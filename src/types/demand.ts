@@ -72,6 +72,7 @@ export interface DemandDetail extends DemandItem {}
 
 /** 需求单里的报价单 */
 export interface DemandBidItem {
+	id: number;
 	userId: number;
 	/** 服务方名称 */
 	name: string;

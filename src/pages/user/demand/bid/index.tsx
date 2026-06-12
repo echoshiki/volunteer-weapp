@@ -27,10 +27,10 @@ export default function UserDemandBidPage() {
 	const { mutate: createOrder, isLoading: isSubmitting } = useCreateServiceOrder();
 
 	// 执行：选中该服务方，触发系统级严肃二次确认
-	const handleSelect = (user: DemandBidItem) => {
+	const handleSelect = (bid: DemandBidItem) => {
 		Taro.showModal({
 			title: '确认选择服务方',
-			content: `确定选择【${user.name}】为您提供服务吗？`,
+			content: `确定选择【${bid.name}】为您提供服务吗？`,
 			confirmText: '下一步',
 			success: (modalRes) => {
 				if (modalRes.confirm) {
@@ -41,7 +41,7 @@ export default function UserDemandBidPage() {
 							const payType = sheetRes.tapIndex === 0 ? 'online' : 'offline';
 							createOrder({
 								demandId,
-								id: user.userId,
+								id: bid.id,
 								payType,
 							});
 						},
@@ -84,9 +84,9 @@ export default function UserDemandBidPage() {
 					) : (
 						<>
 							{list.map((item) => (
-								<Cell key={item.userId} className="shadow-sm p-0 overflow-hidden rounded-xl">
+								<Cell key={item.id} className="shadow-sm p-0 overflow-hidden rounded-xl">
 									<DemandBidCard
-										user={item}
+										bid={item}
 										onViewProfile={handleViewProfile}
 										onSelect={handleSelect}
 									/>

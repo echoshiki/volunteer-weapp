@@ -20,21 +20,13 @@ export const createServiceOrderAPI = (data: CreateOrderPayload) => {
 };
 
 /** 需求方：获取发出的服务订单列表 */
-export const getEmployerOrdersAPI = (params: {
-	pageNum: number;
-	pageSize: number;
-	status?: OrderStatus;
-}) => {
-	return http.get<PageRes<UnifiedOrderItem>>('/demand/order/web/demandUserList', { params });
+export const getEmployerOrdersAPI = (params: { pageNum: number; pageSize: number; status?: OrderStatus }) => {
+	return http.get<PageRes<UnifiedOrderItem>>('/demand/order/web/demandUserList', params);
 };
 
 /** 服务方：获取抢到的服务订单列表 */
-export const getProviderOrdersAPI = (params: {
-	pageNum: number;
-	pageSize: number;
-	status?: OrderStatus;
-}) => {
-	return http.get<PageRes<UnifiedOrderItem>>('/demand/order/web/demandOrderList', { params });
+export const getProviderOrdersAPI = (params: { pageNum: number; pageSize: number; status?: OrderStatus }) => {
+	return http.get<PageRes<UnifiedOrderItem>>('/demand/order/web/demandOrderList', params);
 };
 
 /** 获取订单详情 (双端通用) */
@@ -69,7 +61,7 @@ export const addOrderTrajectoryAPI = (param: AddTrajectoryRequest) => {
 
 /** 获取订单轨迹列表 */
 export const getOrderTrajectoryListAPI = (params: { orderId: string }) => {
-	return http.get<PageRes<OrderLifeCycleLogItem>>('/demand/trajectory/web/list', { params });
+	return http.get<PageRes<OrderLifeCycleLogItem>>('/demand/trajectory/web/list', params);
 };
 
 export interface WechatPayParamsRes {

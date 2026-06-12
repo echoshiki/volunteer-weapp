@@ -1,5 +1,5 @@
 {
-  "libVersion": "3.8.12",
+  "libVersion": "2.26.2",
   "projectname": "%E5%BF%97%E6%84%BF%E8%80%85%E5%B9%B3%E5%8F%B0",
   "setting": {
     "urlCheck": false,
@@ -23,11 +23,25 @@
     "miniprogram": {
       "list": [
         {
+          "name": "订单列表",
+          "pathName": "pages/order/employer/index",
+          "query": "status=pending",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
+          "name": "我的资料",
+          "pathName": "pages/user/profile/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "我的需求单",
           "pathName": "pages/user/demand/index",
           "query": "",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "报名记录",

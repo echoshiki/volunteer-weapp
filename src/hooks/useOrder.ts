@@ -21,23 +21,14 @@ import { useState } from 'react';
 /** 创建订单 */
 export const useCreateServiceOrder = () => {
 	const queryClient = useQueryClient();
-
 	return useMutation({
 		mutationFn: createServiceOrderAPI,
 		onSuccess: (res: any) => {
 			Taro.showToast({ title: '服务订单已生成', icon: 'success' });
-			// 刷新需求单数据
-			queryClient.invalidateQueries({
-				queryKey: [...tenantKey(), 'demand'],
-			});
-
-			// 刷新服务方的报价单列表
-			queryClient.invalidateQueries({
-				queryKey: ['user', 'bid', 'list'],
-			});
-			setTimeout(() => {
-				mapsTo(`/pages/order/detail/index?id=${res.orderId}`, 'redirectTo');
-			}, 1500);
+			// 刷新需求单数据、报价单列表
+			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'demand'] });
+			queryClient.invalidateQueries({ queryKey: ['user', 'bid', 'list'] });
+			setTimeout(() => mapsTo(`/pages/order/detail/index?id=${res.orderId}`, 'redirectTo'), 1500);
 		},
 		onError: (err: any) => {
 			Taro.showToast({ title: err?.message || '订单创建失败，请重试', icon: 'none' });
@@ -52,8 +43,7 @@ export const useEmployerOrderList = (status?: OrderStatus | 'all') => {
 		queryKey: ['order', 'employer', 'list', requestStatus],
 		queryFn: ({ pageParam = 1 }) =>
 			getEmployerOrdersAPI({ pageNum: pageParam, pageSize: 10, status: requestStatus }),
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
 };
 
@@ -64,8 +54,7 @@ export const useProviderOrderList = (status?: OrderStatus | 'all') => {
 		queryKey: ['order', 'provider', 'list', requestStatus],
 		queryFn: ({ pageParam = 1 }) =>
 			getProviderOrdersAPI({ pageNum: pageParam, pageSize: 10, status: requestStatus }),
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
 };
 
@@ -111,11 +100,7 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 
 		try {
 			const res = await queryOrderPayStatusAPI(id);
-			if (
-				res.return_code === 'SUCCESS' &&
-				res.result_code === 'SUCCESS' &&
-				res.trade_state === 'SUCCESS'
-			) {
+			if (res.return_code === 'SUCCESS' && res.result_code === 'SUCCESS' && res.trade_state === 'SUCCESS') {
 				Taro.hideLoading();
 				Taro.showToast({ title: '支付成功', icon: 'success' });
 				refreshOrderCache(); // 瞬间重刷，使界面从 pending 挺进 paid (待服务)
@@ -180,10 +165,7 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 	const submitTrajectory = useMutation({
 		mutationFn: addOrderTrajectoryAPI,
 		onSuccess: (_, variables) => {
-			const successMsg =
-				variables.status === 'arrived'
-					? '到场打卡成功，服务开始'
-					: '完工提交成功，等待雇主验收';
+			const successMsg = variables.status === 'arrived' ? '到场打卡成功，服务开始' : '完工提交成功，等待雇主验收';
 			Taro.showToast({ title: successMsg, icon: 'success' });
 			refreshOrderCache();
 		},

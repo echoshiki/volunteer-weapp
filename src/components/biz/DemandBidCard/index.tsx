@@ -5,7 +5,7 @@ import { Button, Divider } from '@/components/ui';
 
 export interface DemandBidCardProps {
 	/** 活动数据源 */
-	user: DemandBidItem;
+	bid: DemandBidItem;
 	/** 动作：查看资料 */
 	onViewProfile?: (user: DemandBidItem) => void;
 	/** 动作：确认选择（中标） */
@@ -14,40 +14,32 @@ export interface DemandBidCardProps {
 	className?: string;
 }
 
-export const DemandBidCard = ({
-	user,
-	onViewProfile,
-	onSelect,
-	className = '',
-}: DemandBidCardProps) => {
+export const DemandBidCard = ({ bid, onViewProfile, onSelect, className = '' }: DemandBidCardProps) => {
 	return (
 		<View className={`flex flex-col ${className}`}>
 			{/* 服务方身份信息 */}
 			<View className="flex items-center justify-between mb-3">
 				<View className="flex items-center gap-3">
-					<Image
-						src={user.avatar}
-						className="size-12 rounded-full bg-gray-100 shrink-0"
-					/>
+					<Image src={bid.avatar} className="size-12 rounded-full bg-gray-100 shrink-0" />
 					<View className="flex flex-col gap-1">
 						<View className="flex items-center gap-2">
-							<Text className="text-sm font-bold text-text-title">{user.name}</Text>
-							<UserIdentityBadge value={user.identity} />
+							<Text className="text-sm font-bold text-text-title">{bid.name}</Text>
+							<UserIdentityBadge value={bid.identity} />
 						</View>
 						<View className="flex items-center gap-2 text-xs text-text-muted">
-							<Text>已服务 {user.serviceCount} 次</Text>
+							<Text>已服务 {bid.serviceCount} 次</Text>
 							<Text>|</Text>
-							<Text>报价时间: {user.createTime.split(' ')[0]}</Text>
+							<Text>报价时间: {bid.createTime.split(' ')[0]}</Text>
 						</View>
 					</View>
 				</View>
 
 				{/* 报价金额高亮展示 */}
 				<View className="flex flex-col items-end">
-					{user.money > 0 ? (
+					{bid.money > 0 ? (
 						<Text className="text-orange-500 font-bold font-num text-lg">
 							<Text className="text-sm">¥</Text>
-							{user.money}
+							{bid.money}
 						</Text>
 					) : (
 						<Text className="text-green-500 font-bold text-sm">公益免单</Text>
@@ -56,13 +48,11 @@ export const DemandBidCard = ({
 			</View>
 
 			{/* 报价留言/描述 */}
-			{user.description && (
+			{bid.description && (
 				<View className="bg-gray-50 rounded p-3 mb-3 relative">
 					{/* 小三角气泡指示器 */}
 					<View className="absolute -top-2 left-6 w-0 h-0 border-l-[6px] border-r-[6px] border-b-8 border-transparent border-b-gray-50" />
-					<Text className="text-xs text-text-body line-clamp-3 leading-relaxed">
-						“{user.description}”
-					</Text>
+					<Text className="text-xs text-text-body line-clamp-3 leading-relaxed">“{bid.description}”</Text>
 				</View>
 			)}
 
@@ -70,12 +60,12 @@ export const DemandBidCard = ({
 			<View className="flex items-center gap-4 text-xs text-text-muted mb-3">
 				<View className="flex items-center gap-1">
 					<View className="icon-[ph--user] size-4" />
-					<Text>联系人：{user.name}</Text>
+					<Text>联系人：{bid.name}</Text>
 				</View>
-				{user.phone && (
+				{bid.phone && (
 					<View className="flex items-center gap-1">
 						<View className="icon-[ph--phone-incoming] size-4" />
-						<Text>联系电话：{user.phone}</Text>
+						<Text>联系电话：{bid.phone}</Text>
 					</View>
 				)}
 			</View>
@@ -86,18 +76,13 @@ export const DemandBidCard = ({
 			<View className="flex justify-between items-center">
 				<View
 					className="w-1/2 flex items-center gap-1 text-primary active:opacity-70 transition-opacity"
-					onClick={() => onViewProfile?.(user)}
+					onClick={() => onViewProfile?.(bid)}
 				>
 					<View className="icon-[ph--user-circle] size-4" />
 					<Text className="text-xs">查看详细资料</Text>
 				</View>
 
-				<Button
-					variant="primary"
-					className="flex-1"
-					size="sm"
-					onClick={() => onSelect?.(user)}
-				>
+				<Button variant="primary" className="flex-1" size="sm" onClick={() => onSelect?.(bid)}>
 					确认选择
 				</Button>
 			</View>

@@ -1,17 +1,9 @@
 import { http } from '@/utils/http';
 import { ListRes, PageRes } from '@/types/common';
-import {
-	DemandCategory,
-	DemandTag,
-	DemandItem,
-	DemandDetail,
-	DemandBidItem,
-	MyBidItem,
-} from '@/types/demand';
+import { DemandCategory, DemandTag, DemandItem, DemandDetail, DemandBidItem, MyBidItem } from '@/types/demand';
 
 /** 获取需求分类列表 */
-export const getDemandCategoryListAPI = () =>
-	http.get<ListRes<DemandCategory>>('/demand/target/web/targetList');
+export const getDemandCategoryListAPI = () => http.get<ListRes<DemandCategory>>('/demand/target/web/targetList');
 
 /** 获取需求标签列表 */
 export const getDemandTagListAPI = (params?: { categoryUserId?: number | string }) =>
@@ -38,8 +30,7 @@ export const getDemandListAPI = (params: GetDemandListRequest) =>
 	http.get<PageRes<DemandItem>>('/demand/web/demandList', params);
 
 /** 获取需求订单详情 */
-export const getDemandDetailAPI = (demandId: number) =>
-	http.get<DemandDetail>(`/demand/web/${demandId}`);
+export const getDemandDetailAPI = (demandId: number) => http.get<DemandDetail>(`/demand/web/${demandId}`);
 
 /** 需求单抢单用户列表请求参数 */
 interface GetDemandBidListParams {
@@ -116,7 +107,7 @@ export const bidDemandAPI = (data: BidDemandRequest) => {
 
 /** 服务方：获取我发布的报价单/抢单记录列表 */
 export const getMyBidsAPI = (params: { pageNum: number; pageSize: number }) => {
-	return http.get<PageRes<MyBidItem>>('/demand/web/orderUserList', { params });
+	return http.get<PageRes<MyBidItem>>('/demand/web/orderUserList', params);
 };
 
 /** 修改报价单的请求入参 */
