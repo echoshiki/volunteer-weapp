@@ -30,8 +30,7 @@ export const useActivityList = (params: Partial<Omit<ActivityListParams, 'pageNu
 				pageNum: pageParam,
 				pageSize: params.pageSize || 10,
 			}),
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(),
 	});
 };
@@ -50,8 +49,7 @@ export const useActivityRecordList = () => {
 	return useInfiniteQuery({
 		queryKey: ['user', 'activity'],
 		queryFn: ({ pageParam = 1 }) => getActivityRecordListApi(pageParam),
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
 };
 
@@ -65,14 +63,11 @@ export const useEnrollActivity = () => {
 				title: '报名成功',
 				icon: 'success',
 			});
-
-			// 更新报名人数
-			queryClient.invalidateQueries({
-				queryKey: ['activity', 'detail', String(activityId)],
-			});
+			// 重新获取活动详情和我的活动报名记录
+			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'activity', 'detail', String(activityId)] });
+			queryClient.invalidateQueries({ queryKey: ['user', 'activity'] });
 		},
 		onError: (err: any) => {
-			// 截止/满员/已报名
 			Taro.showToast({
 				title: err?.message || '报名失败，请重试',
 				icon: 'none',
@@ -90,7 +85,7 @@ export const useCheckActivity = () => {
 		onSuccess: () => {
 			// 打卡成功后，立刻使“我的活动列表”和“活动详情”缓存失效
 			queryClient.invalidateQueries({ queryKey: ['user', 'activity'] });
-			queryClient.invalidateQueries({ queryKey: ['activityDetail'] });
+			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'activity', 'detail'] });
 		},
 	});
 };

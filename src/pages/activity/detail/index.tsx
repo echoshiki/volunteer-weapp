@@ -58,12 +58,14 @@ export default function ActivityDetail() {
 	const isFull = activity.attendance >= activity.maxPeople;
 	const isPending = activity.enrollStatus === 'pending';
 	const isExpired = activity.enrollStatus === 'ended';
+	const isEnrolled = activity.isEnrolled;
 
 	const renderButtonText = () => {
 		if (isEnrolling) return '报名中...';
 		if (isPending) return '报名未开始';
 		if (isExpired) return '报名已结束';
 		if (isFull) return '报名人数已满';
+		if (isEnrolled) return '已报名';
 		return '立即报名';
 	};
 
@@ -119,7 +121,7 @@ export default function ActivityDetail() {
 				<View className="flex flex-1 flex-col gap-0.5 text-text-muted text-xs ">
 					<Text>当前报名进度</Text>
 					<Text>
-						<Text className="font-bold text-primary text-sm">{activity.attendance}</Text> 人已报名
+						<Text className="font-bold text-primary text-sm">{activity.attendance}</Text> 人报名成功
 					</Text>
 				</View>
 
@@ -129,7 +131,7 @@ export default function ActivityDetail() {
 					size="md"
 					variant="primary"
 					loading={isEnrolling}
-					disabled={isEnrolling || isFull || isPending || isExpired}
+					disabled={isEnrolling || isFull || isPending || isExpired || isEnrolled}
 					onClick={handleEnroll}
 				>
 					{renderButtonText()}
