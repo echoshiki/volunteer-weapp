@@ -8,18 +8,13 @@ import Taro from '@tarojs/taro';
 
 export default function MyBidsPage() {
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useMyBidList();
-
 	const list = data?.pages.flatMap((page) => page.list) || [];
 
 	// 查看原需求单
-	const handleViewDemand = (demandId: number) => {
-		mapsTo(`/pages/demand/detail/index?id=${demandId}`);
-	};
+	const handleViewDemand = (demandId: number) => mapsTo(`/pages/demand/detail/index?id=${demandId}`);
 
-	// 跳转到服务订单
-	const handleGoToOrder = (demandId: number) => {
-		mapsTo(`/pages/order/detail/index?demandId=${demandId}`);
-	};
+	// 查看服务订单
+	const handleGoToOrder = (orderId: string) => mapsTo(`/pages/order/detail/index?id=${orderId}`);
 
 	// 编辑报价单
 	const handleEditBid = (record: MyBidItem) => {

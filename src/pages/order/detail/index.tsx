@@ -67,13 +67,13 @@ export default function OrderDetailPage() {
 				<View className="flex flex-col gap-2 flex-1 pr-4">
 					<Text className="text-xl font-bold font-num">{getOrderDetailTip(order.status, isEmployer)}</Text>
 					<View className="flex flex-col gap-1 text-xs text-red-100 ">
+						<Text className="font-num">服务单号：{order.orderId}</Text>
 						<View className="flex items-center gap-3">
-							<Text className="font-num">服务单号：{order.orderId}</Text>
+							<Text>状态：{ORDER_STATUS_MAP[order.status].label}</Text>
 							<Text onClick={() => mapsTo(`/pages/demand/detail/index?id=${order.demandId}`)}>
 								[点击查看原需求单]
 							</Text>
 						</View>
-						<Text>状态：{ORDER_STATUS_MAP[order.status].label}</Text>
 					</View>
 				</View>
 			</View>

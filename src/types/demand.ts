@@ -41,7 +41,7 @@ export interface DemandItem {
 	tenantId: number;
 	tenantName: string;
 	/** 转换的服务订单 ID */
-	orderId: number;
+	orderId: string;
 	userId: number;
 	/** 需求单详细地址 */
 	address: string;
@@ -106,6 +106,7 @@ export interface MyBidItem {
 	description: string;
 	createTime: string;
 	status: BidStatus;
+	orderId: string;
 	employerName: string;
 	employerPhone: string;
 }
