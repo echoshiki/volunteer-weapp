@@ -5,9 +5,7 @@ import Taro from '@tarojs/taro';
 import { mapsTo } from '@/utils/common';
 
 /** Query 全域志愿者协会列表 */
-export const useAssociationList = (
-	params: Omit<AssociationListRequest, 'pageNum' | 'pageSize'>,
-) => {
+export const useAssociationList = (params: Omit<AssociationListRequest, 'pageNum' | 'pageSize'>) => {
 	return useInfiniteQuery({
 		queryKey: ['association', 'all-list', params],
 		queryFn: ({ pageParam = 1 }) =>
@@ -16,15 +14,13 @@ export const useAssociationList = (
 				pageNum: pageParam,
 				pageSize: 10,
 			}),
-		getNextPageParam: (lastPage) =>
-			lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined,
+		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
 };
 
 /** Mutation 管理入驻/切换大区的行为动作 */
 export const useAssociationActions = () => {
 	const queryClient = useQueryClient();
-
 	const switchAssociation = (tenantId: number, tenantName: string) => {
 		Taro.showModal({
 			title: '切换志愿大区',

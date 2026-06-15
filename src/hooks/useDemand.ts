@@ -21,6 +21,7 @@ import Taro from '@tarojs/taro';
 import { useState } from 'react';
 import { DemandCategory, DemandItem, MyBidItem } from '@/types/demand';
 import { TenantChangeEventProps } from '@/components/biz';
+import { delayBack, showErrorToast } from '@/utils/common';
 
 /** Query - 服务对象分类列表 */
 export const useDemandCategoryList = () => {
@@ -188,11 +189,9 @@ export const usePublishDemand = () => {
 			Taro.showToast({ title: '发布成功', icon: 'success' });
 			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'demand', 'list'] });
 			queryClient.invalidateQueries({ queryKey: ['user', 'demand', 'list'] });
-			setTimeout(() => Taro.navigateBack(), 1500);
+			delayBack();
 		},
-		onError: (err: any) => {
-			Taro.showToast({ title: err?.message || '发布失败', icon: 'none' });
-		},
+		onError: (err) => showErrorToast(err, '发布失败'),
 	});
 };
 
@@ -206,11 +205,9 @@ export const useEditDemand = () => {
 			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'demand', 'list'] });
 			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'demand', 'detail'] });
 			queryClient.invalidateQueries({ queryKey: ['user', 'demand', 'list'] });
-			setTimeout(() => Taro.navigateBack(), 1500);
+			delayBack();
 		},
-		onError: (err: any) => {
-			Taro.showToast({ title: err?.message || '修改失败', icon: 'none' });
-		},
+		onError: (err) => showErrorToast(err, '修改失败'),
 	});
 };
 
@@ -228,10 +225,7 @@ export const useDeleteDemand = () => {
 		},
 		onError: (err: any) => {
 			Taro.hideLoading();
-			Taro.showToast({
-				title: err?.msg || err?.message || '删除失败，请稍后再试',
-				icon: 'none',
-			});
+			showErrorToast(err, '删除失败');
 		},
 	});
 };
@@ -254,11 +248,9 @@ export const useDemandBid = () => {
 			Taro.showToast({ title: '报价提交成功', icon: 'success' });
 			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'demand'] });
 			queryClient.invalidateQueries({ queryKey: ['user', 'bid', 'list'] });
-			setTimeout(() => Taro.navigateBack(), 1500);
+			delayBack();
 		},
-		onError: (err: any) => {
-			Taro.showToast({ title: err?.message || '提交失败', icon: 'none' });
-		},
+		onError: (err) => showErrorToast(err, '报价失败'),
 	});
 };
 
@@ -270,11 +262,9 @@ export const useUpdateBid = () => {
 		onSuccess: () => {
 			Taro.showToast({ title: '修改成功', icon: 'success' });
 			queryClient.invalidateQueries({ queryKey: ['user', 'bid', 'list'] });
-			setTimeout(() => Taro.navigateBack(), 1500);
+			delayBack();
 		},
-		onError: (err: any) => {
-			Taro.showToast({ title: err?.message || '修改失败', icon: 'none' });
-		},
+		onError: (err) => showErrorToast(err, '发布失败'),
 	});
 };
 

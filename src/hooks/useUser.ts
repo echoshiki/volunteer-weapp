@@ -15,6 +15,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { uploadImageAPI } from '@/services/upload';
 import { formatUserInfo, getInstitutionFormFields, getUserProfileFields, getVolunteerFormFields } from '@/utils/user';
 import { useUpload } from './useUpload';
+import { delayBack } from '@/utils/common';
 
 /**
  * ============================================================================
@@ -79,11 +80,9 @@ export const useUpdateUser = () => {
 		mutationFn: (data: UpdatesUserInfoRequest) => updateUserInfoAPI(data),
 		onSuccess: () => {
 			Taro.showToast({ title: '修改成功', icon: 'success' });
-			// 更新本地存储和全局状态
 			if (userInfo) updateUserInfo({ ...userInfo, ...form });
-			// 使个人中心缓存失效，触发刷新
 			queryClient.invalidateQueries(['user', 'profile']);
-			setTimeout(() => Taro.navigateBack(), 1500);
+			delayBack();
 		},
 	});
 
@@ -130,7 +129,7 @@ export const useVolunteerApply = (initialData: any = null) => {
 			// 使认证状态及明细接口缓存失效
 			queryClient.invalidateQueries({ queryKey: ['apply', 'detail'] });
 			queryClient.invalidateQueries({ queryKey: ['apply', 'history'] });
-			setTimeout(() => Taro.navigateBack(), 1500);
+			delayBack();
 		},
 	});
 
@@ -176,7 +175,7 @@ export const useInstitutionApply = (initialData: any = null) => {
 			Taro.showToast({ title: '申请提交成功', icon: 'success' });
 			queryClient.invalidateQueries({ queryKey: ['apply', 'detail'] });
 			queryClient.invalidateQueries({ queryKey: ['apply', 'history'] });
-			setTimeout(() => Taro.navigateBack(), 1500);
+			delayBack();
 		},
 	});
 

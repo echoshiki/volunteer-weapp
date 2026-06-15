@@ -164,7 +164,6 @@ export const saveImageToAlbum = async (imageUrl: string): Promise<void> => {
 
 		// 保存到相册
 		await Taro.saveImageToPhotosAlbum({ filePath: downloadRes.tempFilePath });
-
 		Taro.hideLoading();
 		Taro.showToast({ title: '证书已保存到相册', icon: 'success' });
 	} catch (error: any) {
@@ -184,3 +183,10 @@ export const saveImageToAlbum = async (imageUrl: string): Promise<void> => {
 		}
 	}
 };
+
+/** 统一错误提示 */
+export const showErrorToast = (err: any, fallback: string) =>
+	Taro.showToast({ title: err?.message || err?.msg || fallback, icon: 'none' });
+
+/** 延迟返回上一页 */
+export const delayBack = (delay = 1500) => setTimeout(() => Taro.navigateBack(), delay);

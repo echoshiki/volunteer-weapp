@@ -13,7 +13,7 @@ import {
 	updateOrderStatusAPI,
 } from '@/services/order';
 import Taro from '@tarojs/taro';
-import { mapsTo } from '@/utils/common';
+import { delayBack, mapsTo, showErrorToast } from '@/utils/common';
 import { getTenantId, tenantKey } from '@/utils/tenant';
 import { OrderStatus, UnifiedOrderItem } from '@/types/order';
 import { useState } from 'react';
@@ -30,9 +30,7 @@ export const useCreateServiceOrder = () => {
 			queryClient.invalidateQueries({ queryKey: ['user', 'bid', 'list'] });
 			setTimeout(() => mapsTo(`/pages/order/detail/index?id=${res.orderId}`, 'redirectTo'), 1500);
 		},
-		onError: (err: any) => {
-			Taro.showToast({ title: err?.message || '订单创建失败，请重试', icon: 'none' });
-		},
+		onError: (err) => showErrorToast(err, '订单创建失败，请稍后重试'),
 	});
 };
 
@@ -130,24 +128,19 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 					signType: payParams.signType as any,
 					paySign: payParams.paySign,
 				});
-
 				Taro.showLoading({ title: '核验支付结果...', mask: true });
 				await pollOrderPayStatus(currentOrderId);
 			} catch (err) {
 				const error = err as { errMsg?: string };
-
 				if (error?.errMsg?.includes('cancel')) {
-					Taro.showToast({ title: '支付已取消', icon: 'none' });
+					showErrorToast(err, '支付已取消');
 				} else {
-					Taro.showToast({ title: error?.errMsg || '微信支付失败', icon: 'none' });
+					showErrorToast(err, '微信支付失败，请稍后重试');
 				}
-
 				refreshOrderCache();
 			}
 		},
-		onError: (err: any) => {
-			Taro.showToast({ title: err?.message || '获取支付参数失败', icon: 'none' });
-		},
+		onError: (err) => showErrorToast(err, '未获取到支付参数，请稍后再试'),
 	});
 
 	// 确认、取消订单
@@ -158,7 +151,7 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 			Taro.showToast({ title: successMsg, icon: 'success' });
 			refreshOrderCache();
 		},
-		onError: (err: any) => Taro.showToast({ title: err?.message || '操作失败', icon: 'none' }),
+		onError: (err) => showErrorToast(err, '操作失败'),
 	});
 
 	// 服务方提交服务轨迹（到场、完工）
@@ -169,7 +162,7 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 			Taro.showToast({ title: successMsg, icon: 'success' });
 			refreshOrderCache();
 		},
-		onError: (err: any) => Taro.showToast({ title: err?.message || '打卡失败', icon: 'none' }),
+		onError: (err) => showErrorToast(err, '打卡失败，请稍后再试'),
 	});
 
 	return {
@@ -185,20 +178,14 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 /** 评价提交 Mutation Hook */
 export const useEvaluateOrder = () => {
 	const queryClient = useQueryClient();
-
 	return useMutation({
 		mutationFn: evaluateOrderAPI,
 		onSuccess: () => {
 			Taro.showToast({ title: '感谢您的评价', icon: 'success' });
 			queryClient.invalidateQueries({ queryKey: ['order'] });
-
-			setTimeout(() => {
-				Taro.navigateBack();
-			}, 1500);
+			delayBack();
 		},
-		onError: (err: any) => {
-			Taro.showToast({ title: err?.message || '评价提交失败', icon: 'none' });
-		},
+		onError: (err) => showErrorToast(err, '评价发布失败，请稍后再试'),
 	});
 };
 
@@ -208,17 +195,13 @@ export const useEvaluateForm = (initialOrderId: string) => {
 		rating: 5,
 		comment: '',
 	});
-
 	const changeRating = (rating: number) => setFormData((prev) => ({ ...prev, rating }));
 	const changeComment = (comment: string) => setFormData((prev) => ({ ...prev, comment }));
-
 	const validate = (): string | null => {
 		if (!formData.orderId) return '订单号缺失';
 		if (formData.rating < 1 || formData.rating > 5) return '请为本次服务打分';
-		// 评价内容非必需，不强制卡死死，但可限制最大字数限制
 		if (formData.comment && formData.comment.length > 200) return '评价内容最多200字';
 		return null;
 	};
-
 	return { formData, changeRating, changeComment, validate };
 };

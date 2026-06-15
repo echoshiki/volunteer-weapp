@@ -11,6 +11,7 @@ import {
 	CheckActivityParams,
 } from '@/services/activity';
 import { enabledWithTenant, tenantKey } from '@/utils/tenant';
+import { showErrorToast } from '@/utils/common';
 
 /** Query - 分类列表 */
 export const useActivityCategories = () => {
@@ -67,19 +68,13 @@ export const useEnrollActivity = () => {
 			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'activity', 'detail', String(activityId)] });
 			queryClient.invalidateQueries({ queryKey: ['user', 'activity'] });
 		},
-		onError: (err: any) => {
-			Taro.showToast({
-				title: err?.message || '报名失败，请重试',
-				icon: 'none',
-			});
-		},
+		onError: (err) => showErrorToast(err, '报名失败'),
 	});
 };
 
 /** Mutation - 用户签到/签退 */
 export const useCheckActivity = () => {
 	const queryClient = useQueryClient();
-
 	return useMutation({
 		mutationFn: (params: CheckActivityParams) => checkActivityAPI(params),
 		onSuccess: () => {
@@ -87,5 +82,6 @@ export const useCheckActivity = () => {
 			queryClient.invalidateQueries({ queryKey: ['user', 'activity'] });
 			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'activity', 'detail'] });
 		},
+		onError: (err) => showErrorToast(err, '打卡失败'),
 	});
 };

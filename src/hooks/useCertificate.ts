@@ -1,4 +1,5 @@
 import { generateCertificateAPI, GenerateCertRequest } from '@/services/certificate';
+import { showErrorToast } from '@/utils/common';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Taro from '@tarojs/taro';
 
@@ -10,8 +11,7 @@ export const useCertificate = () => {
 		mutationFn: (data: GenerateCertRequest) => generateCertificateAPI(data),
 		onError: (err) => {
 			Taro.hideLoading();
-			Taro.showToast({ title: '荣誉证书加印失败，请联系社区管理员', icon: 'none' });
-			console.error('证书下发生错误:', err);
+			showErrorToast(err, '荣誉证书加印失败，请联系社区管理员');
 		},
 	});
 

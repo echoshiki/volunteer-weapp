@@ -15,6 +15,7 @@ import {
 } from '@/services/job';
 import { enabledWithTenant, tenantKey } from '@/utils/tenant';
 import Taro from '@tarojs/taro';
+import { delayBack, showErrorToast } from '@/utils/common';
 
 /** Query：岗位分类列表 */
 export const useJobCategories = () => {
@@ -95,9 +96,9 @@ export const useResumeActions = () => {
 		onSuccess: () => {
 			Taro.showToast({ title: '简历创建成功', icon: 'success' });
 			queryClient.invalidateQueries({ queryKey: ['resume'] });
-			setTimeout(() => Taro.navigateBack(), 1500);
+			delayBack();
 		},
-		onError: (err: any) => Taro.showToast({ title: err?.message || '创建失败', icon: 'none' }),
+		onError: (err) => showErrorToast(err, '创建失败'),
 	});
 
 	// 动作：投递简历
@@ -107,9 +108,7 @@ export const useResumeActions = () => {
 			Taro.showToast({ title: '岗位投递成功！', icon: 'success' });
 			queryClient.invalidateQueries({ queryKey: ['resume', 'applied', 'list'] });
 		},
-		onError: (err: any) => {
-			Taro.showToast({ title: err?.message || '投递失败，请重试', icon: 'none' });
-		},
+		onError: (err) => showErrorToast(err, '投递失败，请稍后再试'),
 	});
 
 	// 动作：修改简历
@@ -118,9 +117,9 @@ export const useResumeActions = () => {
 		onSuccess: (res, variables) => {
 			Taro.showToast({ title: '简历修改成功', icon: 'success' });
 			queryClient.invalidateQueries({ queryKey: ['resume', 'detail'] });
-			setTimeout(() => Taro.navigateBack(), 1500);
+			delayBack();
 		},
-		onError: (err: any) => Taro.showToast({ title: err?.message || '修改失败', icon: 'none' }),
+		onError: (err) => showErrorToast(err, '修改失败'),
 	});
 
 	return {
