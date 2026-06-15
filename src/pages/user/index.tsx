@@ -3,7 +3,7 @@ import { View, Text } from '@tarojs/components';
 import { useAuthStore } from '@/store/auth';
 import { useLogin } from '@/hooks/useLogin';
 import { useUser } from '@/hooks/useUser';
-import { Avatar, ColumnNav, Page, Cell } from '@/components/ui';
+import { Avatar, ColumnNav, Page, Cell, Heading } from '@/components/ui';
 import { UserIdentityBadge, OrderNavItem } from '@/components/biz';
 import { doGlobalScan } from '@/utils/scan';
 import { mapsTo } from '@/utils/common';
@@ -113,10 +113,17 @@ export default function UserPage() {
 			</View>
 
 			<View className="px-4 -mt-10 flex flex-col gap-4">
-				<Cell className="grid grid-cols-5">
-					{ORDER_NAV_ITEMS.map((item) => (
-						<OrderNavItem key={item.value} nav={item} viewMode="employer" />
-					))}
+				<Cell>
+					<Heading
+						title="我的订单"
+						size="sm"
+						link={{ name: '全部订单', url: '/pages/order/employer/index' }}
+					/>
+					<View className="grid grid-cols-5 py-2">
+						{ORDER_NAV_ITEMS.map((item) => (
+							<OrderNavItem key={item.value} nav={item} viewMode="employer" />
+						))}
+					</View>
 				</Cell>
 
 				{(indentity === 'volunteer' || indentity === 'institution') && (

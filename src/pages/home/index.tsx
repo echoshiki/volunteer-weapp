@@ -10,6 +10,7 @@ import { getTenantName, setTenant, getTenantId } from '@/utils/tenant';
 import { useState, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import Taro from '@tarojs/taro';
+import { doGlobalScan } from '@/utils/scan';
 
 export default function HomePage() {
 	// 状态：当前 Tenant
@@ -80,19 +81,25 @@ export default function HomePage() {
 						<View className="flex items-center gap-1.5 active:opacity-60 transition-opacity p-1 -ml-1">
 							<View className="icon-[ph--map-pin-bold] w-4 h-4 text-primary" />
 							{/* 动态展示当前街道名 */}
-							<Text className="text-sm font-bold text-text-title truncate max-w-36">
-								{currentName}
-							</Text>
+							<Text className="text-sm font-bold text-text-title truncate max-w-36">{currentName}</Text>
 							<View className="icon-[ph--caret-down-bold] w-3 h-3 text-text-muted" />
 						</View>
 					</TenantPicker>
 
 					{/* 右上角用户菜单 */}
-					<View
-						className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center"
-						onClick={() => mapsTo('/pages/user/index')}
-					>
-						<View className="icon-[ph--user-bold] w-4 h-4 text-text-body" />
+					<View className="flex items-center gap-2">
+						<View
+							className="size-8 rounded-full bg-gray-100 flex items-center justify-center"
+							onClick={doGlobalScan}
+						>
+							<View className="icon-[ph--scan-bold] size-4 text-text-body" />
+						</View>
+						<View
+							className="size-8 rounded-full bg-gray-100 flex items-center justify-center"
+							onClick={() => mapsTo('/pages/user/index')}
+						>
+							<View className="icon-[ph--user-bold] size-4 text-text-body" />
+						</View>
 					</View>
 				</View>
 			</View>
@@ -111,26 +118,10 @@ export default function HomePage() {
 			<View className="container-x flex flex-col gap-3 mb-4">
 				{/* 核心金刚区 */}
 				<Cell className="grid grid-cols-4 px-1">
-					<GridNav
-						icon="icon-[ph--gift-bold]"
-						label="志愿组织"
-						path="/pages/association/index"
-					/>
-					<GridNav
-						icon="icon-[ph--star-bold]"
-						label="志愿活动"
-						path="/pages/activity/index"
-					/>
-					<GridNav
-						icon="icon-[ph--hand-heart-bold]"
-						label="服务大厅"
-						path="/pages/demand/index"
-					/>
-					<GridNav
-						icon="icon-[ph--briefcase-bold]"
-						label="家门口就业"
-						path="/pages/job/index"
-					/>
+					<GridNav icon="icon-[ph--gift-bold]" label="志愿组织" path="/pages/association/index" />
+					<GridNav icon="icon-[ph--star-bold]" label="志愿活动" path="/pages/activity/index" />
+					<GridNav icon="icon-[ph--hand-heart-bold]" label="服务大厅" path="/pages/demand/index" />
+					<GridNav icon="icon-[ph--briefcase-bold]" label="家门口就业" path="/pages/job/index" />
 				</Cell>
 			</View>
 
@@ -138,12 +129,8 @@ export default function HomePage() {
 			<View className="container-x mb-4">
 				<Cell>
 					<View className="flex items-center justify-between mb-3 border-b border-gray-50 pb-2">
-						<Text className="text-sm font-bold text-text-title">
-							{stats.associationName}
-						</Text>
-						<Text className="text-xs text-text-muted font-sans scale-90">
-							数据实时更新
-						</Text>
+						<Text className="text-sm font-bold text-text-title">{stats.associationName}</Text>
+						<Text className="text-xs text-text-muted font-sans scale-90">数据实时更新</Text>
 					</View>
 					<View
 						className={`flex justify-around py-1 transition-opacity duration-300 ${isDashboardLoading ? 'opacity-0' : 'opacity-100'}`}
@@ -159,9 +146,7 @@ export default function HomePage() {
 							<Text className="text-xl font-bold text-green-600 block">
 								{stats.totalDuration.toLocaleString()}
 							</Text>
-							<Text className="text-xs text-text-muted mt-0.5 block">
-								累计服务工时
-							</Text>
+							<Text className="text-xs text-text-muted mt-0.5 block">累计服务工时</Text>
 						</View>
 						<Divider orientation="vertical" />
 						<View className="text-center">
@@ -176,10 +161,7 @@ export default function HomePage() {
 
 			<View className="container-x mb-4">
 				<Cell>
-					<Heading
-						title="精选志愿活动"
-						link={{ name: '更多活动', url: '/pages/activity/index' }}
-					/>
+					<Heading title="精选志愿活动" link={{ name: '更多活动', url: '/pages/activity/index' }} />
 
 					{/* 志愿活动列表 */}
 					<View className="flex flex-col gap-2">
@@ -192,9 +174,7 @@ export default function HomePage() {
 								{activityList.map((item, index) => (
 									<View key={item.activityId}>
 										<ActivityCard activity={item} layout="horizontal" />
-										{index < activityList.length - 1 && (
-											<Divider className="mt-4" />
-										)}
+										{index < activityList.length - 1 && <Divider className="mt-4" />}
 									</View>
 								))}
 							</>
@@ -204,10 +184,7 @@ export default function HomePage() {
 			</View>
 
 			<View className="container-x mt-2 mb-4">
-				<Heading
-					title="家门口岗位"
-					link={{ name: '更多岗位', url: '/pages/activity/index' }}
-				/>
+				<Heading title="家门口岗位" link={{ name: '更多岗位', url: '/pages/activity/index' }} />
 
 				{/* 岗位列表 */}
 				<View className="flex flex-col gap-4 divide-y divide-gray-100">
