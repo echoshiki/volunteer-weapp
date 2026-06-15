@@ -40,6 +40,8 @@ export interface DemandItem {
 	districtName: string;
 	tenantId: number;
 	tenantName: string;
+	/** 转换的服务订单 ID */
+	orderId: number;
 	userId: number;
 	/** 需求单详细地址 */
 	address: string;

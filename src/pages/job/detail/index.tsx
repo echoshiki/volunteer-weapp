@@ -11,11 +11,7 @@ export default function JobDetail() {
 
 	const { data: detail, isLoading } = useJobDetail(id);
 
-	const {
-		data: resumeDetail,
-		error: resumeError,
-		isLoading: isResumeLoading,
-	} = useResumeDetail();
+	const { data: resumeDetail, error: resumeError, isLoading: isResumeLoading } = useResumeDetail();
 
 	const { deliverJob, isActionPending } = useResumeActions();
 
@@ -24,20 +20,30 @@ export default function JobDetail() {
 
 	// 处理投递简历
 	const handleDeliverClick = () => {
-		// 判定依据：如果拿到简历详情且有合法的姓名（说明已建档）
+		// 是否能获取到简历详情且有合法的姓名
 		const hasCreatedResume = !!resumeDetail && !resumeError;
+
 		if (hasCreatedResume) {
-			Taro.showModal({
-				title: '确认投递',
-				content: `是否确认将您的专属简历投递至【${detail.enterprisesName}】的【${detail.title}】岗位？`,
-				success: (res) => {
-					if (res.confirm) {
-						deliverJob.mutate({
-							id: Number(id), // 传入当前岗位 id
-						});
-					}
-				},
-			});
+			// 简历是否在审核中
+			const isPending = resumeDetail.reviewStatus === 'pending';
+			if (isPending) {
+				Taro.showToast({
+					title: '简历正在审核中，请勿重复投递',
+					icon: 'error',
+				});
+			} else {
+				Taro.showModal({
+					title: '确认投递',
+					content: `是否确认将您的专属简历投递至【${detail.enterprisesName}】的【${detail.title}】岗位？`,
+					success: (res) => {
+						if (res.confirm) {
+							deliverJob.mutate({
+								id: Number(id), // 传入当前岗位 id
+							});
+						}
+					},
+				});
+			}
 		} else {
 			Taro.showModal({
 				title: '提示',
@@ -58,12 +64,8 @@ export default function JobDetail() {
 				{/* 岗位核心信息 */}
 				<Cell className="border-b border-gray-100">
 					<View className="flex justify-between items-start mb-2">
-						<Text className="text-xl font-bold text-text-title leading-tight flex-1">
-							{detail.title}
-						</Text>
-						<Text className="text-xl font-bold text-primary">
-							{detail.salaryBudget}k
-						</Text>
+						<Text className="text-xl font-bold text-text-title leading-tight flex-1">{detail.title}</Text>
+						<Text className="text-xl font-bold text-primary">{detail.salaryBudget}k</Text>
 					</View>
 
 					<View className="flex items-center gap-3">

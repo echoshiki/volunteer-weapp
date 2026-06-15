@@ -14,6 +14,7 @@ import {
 	getMyBidsAPI,
 	updateBidAPI,
 	BidDemandRequest,
+	deleteDemandAPI,
 } from '@/services/demand';
 import { enabledWithTenant, tenantKey } from '@/utils/tenant';
 import Taro from '@tarojs/taro';
@@ -209,6 +210,28 @@ export const useEditDemand = () => {
 		},
 		onError: (err: any) => {
 			Taro.showToast({ title: err?.message || '修改失败', icon: 'none' });
+		},
+	});
+};
+
+/** Mutation - 删除需求单 */
+export const useDeleteDemand = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: (demandId: number) => deleteDemandAPI(demandId),
+		onSuccess: () => {
+			Taro.hideLoading();
+			Taro.showToast({ title: '删除成功', icon: 'success' });
+			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'demand', 'list'] });
+			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'demand', 'detail'] });
+			queryClient.invalidateQueries({ queryKey: ['user', 'demand', 'list'] });
+		},
+		onError: (err: any) => {
+			Taro.hideLoading();
+			Taro.showToast({
+				title: err?.msg || err?.message || '删除失败，请稍后再试',
+				icon: 'none',
+			});
 		},
 	});
 };

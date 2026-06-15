@@ -29,7 +29,7 @@ export interface GetDemandListRequest {
 export const getDemandListAPI = (params: GetDemandListRequest) =>
 	http.get<PageRes<DemandItem>>('/demand/web/demandList', params);
 
-/** 获取需求订单详情 */
+/** 获取需求单详情 */
 export const getDemandDetailAPI = (demandId: number) => http.get<DemandDetail>(`/demand/web/${demandId}`);
 
 /** 需求单抢单用户列表请求参数 */
@@ -75,7 +75,7 @@ export interface PublishDemandRequest {
 }
 
 /**
- * 发布需求订单
+ * 发布需求单
  */
 export const publishDemandAPI = (data: PublishDemandRequest) => {
 	return http.post('/demand/web/add', data);
@@ -86,11 +86,16 @@ export interface UpdateDemandRequest extends PublishDemandRequest {
 }
 
 /**
- * 编辑需求订单
+ * 编辑需求单
  */
 export const updateDemandAPI = (data: UpdateDemandRequest) => {
 	return http.put('/demand/web/update', data);
 };
+
+/**
+ * 删除需求单
+ */
+export const deleteDemandAPI = (demandId: number) => http.delete<void>(`/demand/web/${demandId}`);
 
 export interface BidDemandRequest {
 	demandId: number;

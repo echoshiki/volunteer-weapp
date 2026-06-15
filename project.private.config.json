@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "岗位详情",
+          "pathName": "pages/job/detail/index",
+          "query": "id=19",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "订单列表",
           "pathName": "pages/order/employer/index",
           "query": "status=pending",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "我的资料",
