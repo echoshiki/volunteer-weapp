@@ -8,9 +8,10 @@ export default function UserProfilePage() {
 	const { form, userInfo, updateField, onChooseAvatar, handleSave, isSaving } = useUpdateUser();
 
 	// 状态：回显表单里的地区
-	const [regionLabel, setRegionLabel] = useState(() =>
-		[userInfo?.provinceName, userInfo?.cityName, userInfo?.districtName].filter(Boolean).join(' '),
-	);
+	const [regionLabel, setRegionLabel] = useState(() => {
+		if (!userInfo?.provinceName) return '';
+		return `${userInfo.provinceName} ${userInfo.cityName ?? ''} ${userInfo.districtName ?? ''}`.trim();
+	});
 
 	return (
 		<Page className="pt-4 pb-10">

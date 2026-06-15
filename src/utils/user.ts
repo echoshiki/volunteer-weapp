@@ -31,24 +31,6 @@ export const formatUserInfo = (data: UserInfo): UserInfo => ({
 });
 
 /**
- * 用户资料表单字段提取器
- */
-export const getUserProfileFields = (data: UserInfo | null): UpdatesUserInfoRequest => {
-	if (!data) return EMPTY_PROFILE;
-	const f = formatUserInfo(data);
-	return {
-		nickName: f.nickName!,
-		avatar: f.avatar!,
-		sex: f.sex!,
-		birthday: f.birthday!,
-		provinceCode: f.provinceCode!,
-		cityCode: f.cityCode!,
-		districtCode: f.districtCode!,
-		address: f.address!,
-	};
-};
-
-/**
  * 志愿者申请表单初始数据
  */
 export const EMPTY_VOLUNTEER_FORM: ApplyVolunteerRequest = {

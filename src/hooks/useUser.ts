@@ -3,17 +3,17 @@ import {
 	getUserInfoAPI,
 	updateUserInfoAPI,
 	submitApplyReviewAPI,
+	getApplyHistoryListAPI,
+	type ApplyHistoryRequest,
 	type UpdatesUserInfoRequest,
 	type ApplyVolunteerRequest,
 	type ApplyInstitutionRequest,
-	getApplyHistoryListAPI,
-	ApplyHistoryRequest,
 } from '@/services/user';
 import { useAuthStore } from '@/store/auth';
 import Taro from '@tarojs/taro';
 import { useState } from 'react';
 import { uploadImageAPI } from '@/services/upload';
-import { formatUserInfo, getInstitutionFormFields, getUserProfileFields, getVolunteerFormFields } from '@/utils/user';
+import { formatUserInfo, getInstitutionFormFields, getVolunteerFormFields } from '@/utils/user';
 import { useUpload } from './useUpload';
 import { delayBack } from '@/utils/common';
 
@@ -41,7 +41,16 @@ export const useUpdateUser = () => {
 	const { userInfo, updateUserInfo } = useAuthStore();
 
 	// 状态：表单数据，从全量用户资料里提取出表单字段数据
-	const [form, setForm] = useState<UpdatesUserInfoRequest>(() => getUserProfileFields(userInfo));
+	const [form, setForm] = useState<UpdatesUserInfoRequest>({
+		nickName: userInfo?.nickName ?? '微信用户',
+		avatar: userInfo?.avatar ?? '',
+		sex: userInfo?.sex ?? '1',
+		birthday: userInfo?.birthday?.split(' ')[0] ?? '',
+		provinceCode: userInfo?.provinceCode ?? 0,
+		cityCode: userInfo?.cityCode ?? 0,
+		districtCode: userInfo?.districtCode ?? 0,
+		address: userInfo?.address ?? '',
+	});
 
 	// 执行：统一更新表单字段状态
 	const updateField = <K extends keyof UpdatesUserInfoRequest>(field: K, value: UpdatesUserInfoRequest[K]) => {
@@ -55,7 +64,6 @@ export const useUpdateUser = () => {
 
 		Taro.showLoading({ title: '上传中...', mask: true });
 		try {
-			// 将微信临时路径转为远端 URL
 			const data = await uploadImageAPI(avatarUrl);
 			if (data.list && data.list.length > 0) {
 				setForm((prev) => ({ ...prev, avatar: data.list[0].filePath }));
