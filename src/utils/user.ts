@@ -1,9 +1,5 @@
 import { ApplyReview, UserInfo } from '@/types/user';
-import {
-	UpdatesUserInfoRequest,
-	ApplyVolunteerRequest,
-	ApplyInstitutionRequest,
-} from '@/services/user';
+import { UpdatesUserInfoRequest, ApplyVolunteerRequest, ApplyInstitutionRequest } from '@/services/user';
 
 /**
  * 用户资料表单默认信息

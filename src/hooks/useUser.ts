@@ -11,17 +11,13 @@ import {
 } from '@/services/user';
 import { useAuthStore } from '@/store/auth';
 import Taro from '@tarojs/taro';
-import { useState, useEffect, useMemo } from 'react';
+import { useState } from 'react';
 import { uploadImageAPI } from '@/services/upload';
 import { formatUserInfo, getInstitutionFormFields, getUserProfileFields, getVolunteerFormFields } from '@/utils/user';
 import { useUpload } from './useUpload';
 import { delayBack } from '@/utils/common';
 
-/**
- * ============================================================================
- * 获取用户信息 Hook
- * ============================================================================
- */
+/** Query - 获取用户信息 */
 export const useUser = () => {
 	const { updateUserInfo, authStage } = useAuthStore();
 	const isLoggedIn = authStage === 'LOGGED_IN';
@@ -39,11 +35,7 @@ export const useUser = () => {
 	});
 };
 
-/**
- * ============================================================================
- * 更新用户信息 Hook
- * ============================================================================
- */
+/** Action - 更新用户资料 */
 export const useUpdateUser = () => {
 	const queryClient = useQueryClient();
 	const { userInfo, updateUserInfo } = useAuthStore();
@@ -103,11 +95,7 @@ export const useUpdateUser = () => {
 	};
 };
 
-/**
- * ============================================================================
- * 志愿者申请认证 Hook
- * ============================================================================
- */
+/** Action - 提交志愿者认证申请 */
 export const useVolunteerApply = (initialData: any = null) => {
 	const queryClient = useQueryClient();
 
@@ -154,11 +142,7 @@ export const useVolunteerApply = (initialData: any = null) => {
 	};
 };
 
-/**
- * ============================================================================
- * 服务机构入驻认证 Hook
- * ============================================================================
- */
+/** Action - 提交服务机构认证申请 */
 export const useInstitutionApply = (initialData: any = null) => {
 	const queryClient = useQueryClient();
 
@@ -201,6 +185,7 @@ export const useInstitutionApply = (initialData: any = null) => {
 	};
 };
 
+/** Query - 获取申请记录列表 */
 export const useApplyHistory = (params: Omit<ApplyHistoryRequest, 'pageNum' | 'pageSize'>) => {
 	return useInfiniteQuery({
 		queryKey: ['apply', 'history', 'list', params],

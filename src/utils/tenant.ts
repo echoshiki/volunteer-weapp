@@ -26,16 +26,13 @@ export const getTenantName = (): string => {
  * 获取本地缓存中的省市区强数字编码
  */
 export const getActiveRegionCodes = () => {
+	const rawProvinceCode = Taro.getStorageSync(ACTIVE_PROVINCE_KEY);
+	const rawCityCode = Taro.getStorageSync(ACTIVE_CITY_KEY);
+	const rawDistrictCode = Taro.getStorageSync(ACTIVE_DISTRICT_KEY);
 	return {
-		provinceCode: Taro.getStorageSync(ACTIVE_PROVINCE_KEY)
-			? Number(Taro.getStorageSync(ACTIVE_PROVINCE_KEY))
-			: undefined,
-		cityCode: Taro.getStorageSync(ACTIVE_CITY_KEY)
-			? Number(Taro.getStorageSync(ACTIVE_CITY_KEY))
-			: undefined,
-		districtCode: Taro.getStorageSync(ACTIVE_DISTRICT_KEY)
-			? Number(Taro.getStorageSync(ACTIVE_DISTRICT_KEY))
-			: undefined,
+		provinceCode: rawProvinceCode ? Number(rawProvinceCode) : undefined,
+		cityCode: rawCityCode ? Number(rawCityCode) : undefined,
+		districtCode: rawDistrictCode ? Number(rawDistrictCode) : undefined,
 	};
 };
 

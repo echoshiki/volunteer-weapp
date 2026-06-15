@@ -14,7 +14,7 @@ import {
 } from '@/services/order';
 import Taro from '@tarojs/taro';
 import { delayBack, mapsTo, showErrorToast } from '@/utils/common';
-import { getTenantId, tenantKey } from '@/utils/tenant';
+import { tenantKey } from '@/utils/tenant';
 import { OrderStatus, UnifiedOrderItem } from '@/types/order';
 import { useState } from 'react';
 
@@ -24,13 +24,18 @@ export const useCreateServiceOrder = () => {
 	return useMutation({
 		mutationFn: createServiceOrderAPI,
 		onSuccess: (res: any) => {
-			Taro.showToast({ title: '服务订单已生成', icon: 'success' });
 			// 刷新需求单数据、报价单列表
 			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'demand'] });
 			queryClient.invalidateQueries({ queryKey: ['user', 'bid', 'list'] });
-			setTimeout(() => mapsTo(`/pages/order/detail/index?id=${res.orderId}`, 'redirectTo'), 1500);
+			setTimeout(() => {
+				Taro.hideLoading();
+				mapsTo(`/pages/order/detail/index?id=${res.orderId}`, 'redirectTo');
+			}, 1000);
 		},
-		onError: (err) => showErrorToast(err, '订单创建失败，请稍后重试'),
+		onError: (err) => {
+			Taro.hideLoading();
+			showErrorToast(err, '订单创建失败，请稍后重试');
+		},
 	});
 };
 
@@ -84,9 +89,7 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 	const needCompletePunch = order ? order.status === 'serving' : false;
 
 	// 公共成功回调：刷新当前详情及双端列表
-	const refreshOrderCache = () => {
-		queryClient.invalidateQueries({ queryKey: ['order'] });
-	};
+	const refreshOrderCache = () => queryClient.invalidateQueries({ queryKey: ['order'] });
 
 	// 轮询订单的支付状态
 	const pollOrderPayStatus = async (id: string, counter = 1) => {
@@ -95,13 +98,12 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 			refreshOrderCache();
 			return;
 		}
-
 		try {
 			const res = await queryOrderPayStatusAPI(id);
 			if (res.return_code === 'SUCCESS' && res.result_code === 'SUCCESS' && res.trade_state === 'SUCCESS') {
 				Taro.hideLoading();
 				Taro.showToast({ title: '支付成功', icon: 'success' });
-				refreshOrderCache(); // 瞬间重刷，使界面从 pending 挺进 paid (待服务)
+				refreshOrderCache();
 			} else {
 				setTimeout(() => pollOrderPayStatus(id, counter + 1), 1000);
 			}

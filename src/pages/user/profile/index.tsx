@@ -1,13 +1,4 @@
-import {
-	Avatar,
-	Badge,
-	Cell,
-	DatePicker,
-	FormItem,
-	Page,
-	RegionPicker,
-	Button,
-} from '@/components/ui';
+import { Avatar, Badge, Cell, DatePicker, FormItem, Page, RegionPicker, Button } from '@/components/ui';
 import { SEX_OPTIONS } from '@/constants/user';
 import { useUpdateUser } from '@/hooks/useUser';
 import { View, Text, Input } from '@tarojs/components';
@@ -18,9 +9,7 @@ export default function UserProfilePage() {
 
 	// 状态：回显表单里的地区
 	const [regionLabel, setRegionLabel] = useState(() =>
-		[userInfo?.provinceName, userInfo?.cityName, userInfo?.districtName]
-			.filter(Boolean)
-			.join(' '),
+		[userInfo?.provinceName, userInfo?.cityName, userInfo?.districtName].filter(Boolean).join(' '),
 	);
 
 	return (
@@ -75,13 +64,8 @@ export default function UserProfilePage() {
 
 					{/* 生日 */}
 					<FormItem label="生日">
-						<DatePicker
-							value={form.birthday}
-							onChange={(value) => updateField('birthday', value)}
-						>
-							<Text
-								className={`text-sm ${form.birthday ? 'text-text-title' : 'text-gray-300'}`}
-							>
+						<DatePicker value={form.birthday} onChange={(value) => updateField('birthday', value)}>
+							<Text className={`text-sm ${form.birthday ? 'text-text-title' : 'text-gray-300'}`}>
 								{form.birthday || '请选择生日'}
 							</Text>
 						</DatePicker>
@@ -99,15 +83,11 @@ export default function UserProfilePage() {
 								updateField('provinceCode', Number(res.province.code));
 								updateField('cityCode', Number(res.city.code));
 								updateField('districtCode', Number(res.area.code));
-								setRegionLabel(
-									`${res.province.name} ${res.city.name} ${res.area.name}`,
-								);
+								setRegionLabel(`${res.province.name} ${res.city.name} ${res.area.name}`);
 							}}
 						>
 							<View className="flex items-center gap-1">
-								<Text
-									className={`text-sm ${regionLabel ? 'text-text-title' : 'text-gray-300'}`}
-								>
+								<Text className={`text-sm ${regionLabel ? 'text-text-title' : 'text-gray-300'}`}>
 									{regionLabel || '请选择省市区'}
 								</Text>
 								<View className="icon-[ph--caret-right-bold] text-gray-300 w-4 h-4" />
@@ -127,13 +107,7 @@ export default function UserProfilePage() {
 				</Cell>
 
 				{/* 保存 */}
-				<Button
-					size="xl"
-					variant="primary"
-					loading={isSaving}
-					disabled={isSaving}
-					onClick={handleSave}
-				>
+				<Button size="xl" variant="primary" loading={isSaving} disabled={isSaving} onClick={handleSave}>
 					保存资料
 				</Button>
 			</View>

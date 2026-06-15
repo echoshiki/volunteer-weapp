@@ -18,10 +18,8 @@ export default function UserDemandBidPage() {
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useDemandBidList(demandId);
 	const list = data?.pages.flatMap((page) => page.list) || [];
 
-	// 执行：跳转志愿者/机构统一公开主页
-	const handleViewProfile = (user: DemandBidItem) => {
-		mapsTo(`/pages/provider/index?id=${user.userId}`);
-	};
+	// 跳转志愿者/机构统一公开主页
+	const handleViewProfile = (user: DemandBidItem) => mapsTo(`/pages/provider/index?id=${user.userId}`);
 
 	// 创建服务订单的 mutation hook
 	const { mutate: createOrder, isLoading: isSubmitting } = useCreateServiceOrder();
@@ -37,17 +35,15 @@ export default function UserDemandBidPage() {
 					Taro.showActionSheet({
 						itemList: ['线上支付 (平台担保担保交易)', '线下支付 (线下自行现金/转账)'],
 						success: (sheetRes) => {
-							// tapIndex 0 代表第一项，1 代表第二项
 							const payType = sheetRes.tapIndex === 0 ? 'online' : 'offline';
+							Taro.showLoading({ title: '订单锁定生成中...', mask: true });
 							createOrder({
 								demandId,
 								id: bid.id,
 								payType,
 							});
 						},
-						fail: () => {
-							console.log('用户取消了支付方式选择');
-						},
+						fail: () => console.log('用户取消了支付方式选择'),
 					});
 				}
 			},

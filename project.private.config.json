@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "报价列表",
+          "pathName": "pages/user/demand/bid/index",
+          "query": "id=1",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "岗位详情",
           "pathName": "pages/job/detail/index",
           "query": "id=19",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "订单列表",
