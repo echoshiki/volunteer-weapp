@@ -36,7 +36,6 @@ export default function ActivityCheckPage() {
 
 		// 如果没有提取到合法的活动 ID，直接中断并报错
 		if (!currentActivityId || isNaN(Number(currentActivityId))) {
-			console.log('currentActivityId', currentActivityId);
 			setStatus('error');
 			setMessage('无效的打卡凭证，未找到关联的志愿活动');
 			return;

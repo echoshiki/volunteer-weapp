@@ -78,9 +78,10 @@ export default defineAppConfig({
 		backgroundColor: '#fff',
 		borderStyle: 'white',
 	},
-	permission: {
-		'scope.userLocation': {
-			desc: '您的位置信息将用于核验您是否已到达志愿活动履约现场',
-		},
-	},
+	// permission: {
+	// 	'scope.userLocation': {
+	// 		desc: '您的位置信息将用于核验您是否已到达志愿活动履约现场',
+	// 	},
+	// },
+	// requiredPrivateInfos: ['getLocation'],
 });
