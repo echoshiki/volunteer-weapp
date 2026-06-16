@@ -23,11 +23,25 @@
     "miniprogram": {
       "list": [
         {
+          "name": "活动列表",
+          "pathName": "pages/activity/index",
+          "query": "",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
+          "name": "岗位列表",
+          "pathName": "pages/job/index",
+          "query": "",
+          "launchMode": "default",
+          "scene": null
+        },
+        {
           "name": "打卡页面",
           "pathName": "pages/activity/check/index",
           "query": "activityId=10023",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "报价列表",

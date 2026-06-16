@@ -97,7 +97,7 @@ class HttpRequest {
 	// ==========================================
 	public async upload<T = any>(url: string, filePath: string, config?: UploadConfig): Promise<T> {
 		// 构建请求参数
-		let fullUrl = url.startsWith('http') ? url : `${this.baseUrl}${url}`;
+		const fullUrl = url.startsWith('http') ? url : `${this.baseUrl}${url}`;
 		const header = this.getBaseHeader(config?.header);
 		// 上传请求不能用 application/json
 		delete header['Content-Type'];
@@ -173,8 +173,7 @@ class HttpRequest {
 
 		const authStore = useAuthStore.getState();
 		const hasTokenBefore = !!authStore.token;
-
-		useAuthStore.getState().setLogout();
+		authStore.setLogout();
 
 		// 获取当前页面路径
 		const backUrl = getCurrentPageUrl();
@@ -205,6 +204,16 @@ class HttpRequest {
 		return Object.fromEntries(Object.entries(params).filter(([_, v]) => v !== undefined && v !== null));
 	};
 
+	private formRequest<T>(method: 'POST' | 'PUT', url: string, data?: any, config?: RequestConfig) {
+		return this.request<T>({
+			...config,
+			url,
+			data,
+			method,
+			header: { ...config?.header, 'Content-Type': 'application/x-www-form-urlencoded' },
+		});
+	}
+
 	public get<T = any>(url: string, params?: any, config?: RequestConfig) {
 		return this.request<T>({ ...config, url, data: this.cleanParams(params), method: 'GET' });
 	}
@@ -226,32 +235,14 @@ class HttpRequest {
 	 * 用于后端要求 application/x-www-form-urlencoded 的场景
 	 */
 	public postForm<T = any>(url: string, data?: any, config?: RequestConfig) {
-		return this.request<T>({
-			...config,
-			url,
-			data,
-			method: 'POST',
-			header: {
-				...config?.header,
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-		});
+		return this.formRequest<T>('POST', url, data, config);
 	}
 
 	/**
 	 * PUT 请求 (Form Data 格式)
 	 */
 	public putForm<T = any>(url: string, data?: any, config?: RequestConfig) {
-		return this.request<T>({
-			...config,
-			url,
-			data,
-			method: 'PUT',
-			header: {
-				...config?.header,
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-		});
+		return this.formRequest<T>('PUT', url, data, config);
 	}
 }
 

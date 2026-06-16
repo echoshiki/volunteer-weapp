@@ -63,7 +63,7 @@ export default function ActivityList() {
 	const handleSearch = () => setSearchValue(keyword);
 
 	return (
-		<Page hasTabBar>
+		<Page>
 			<View className="sticky top-0 z-20 shrink-0 bg-white border-b border-gray-100">
 				{/* 顶部操作面板 (横向排列) */}
 				<View className="container-x h-12 flex items-center justify-between">
@@ -77,9 +77,7 @@ export default function ActivityList() {
 							onChange={(e) => setCategoryIndex(Number(e.detail.value))}
 						>
 							<View className="flex items-center gap-1 active:opacity-70 transition-opacity">
-								<Text
-									className={`text-xs ${categoryIndex !== 0 ? 'text-primary' : 'text-text-title'}`}
-								>
+								<Text className={`text-xs ${categoryIndex !== 0 ? 'text-primary' : 'text-text-title'}`}>
 									{categoryOptions[categoryIndex].label}
 								</Text>
 								<View
@@ -97,9 +95,7 @@ export default function ActivityList() {
 							onChange={(e) => setStatusIndex(Number(e.detail.value))}
 						>
 							<View className="flex items-center gap-1 active:opacity-70 transition-opacity">
-								<Text
-									className={`text-xs ${statusIndex !== 0 ? 'text-primary' : 'text-text-title'}`}
-								>
+								<Text className={`text-xs ${statusIndex !== 0 ? 'text-primary' : 'text-text-title'}`}>
 									{STATUS_OPTIONS[statusIndex].label}
 								</Text>
 								<View
@@ -117,9 +113,7 @@ export default function ActivityList() {
 						<View
 							className={`size-4 ${isSearchOpen ? 'icon-[ph--x-bold] text-text-muted' : 'icon-[ph--magnifying-glass-bold] text-text-title'}`}
 						/>
-						<Text className="text-xs text-text-title">
-							{isSearchOpen ? '收起' : '搜索'}
-						</Text>
+						<Text className="text-xs text-text-title">{isSearchOpen ? '收起' : '搜索'}</Text>
 					</View>
 				</View>
 

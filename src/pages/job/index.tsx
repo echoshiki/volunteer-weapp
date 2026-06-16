@@ -1,18 +1,7 @@
 import { useState, useMemo } from 'react';
 import { View, Text, ScrollView } from '@tarojs/components';
 import { useJobCategories, useJobList } from '@/hooks/useJob';
-import {
-	Cell,
-	Empty,
-	Loading,
-	Badge,
-	Divider,
-	Page,
-	Button,
-	Drawer,
-	SearchBar,
-	Heading,
-} from '@/components/ui';
+import { Cell, Empty, Loading, Badge, Divider, Page, Button, Drawer, SearchBar, Heading } from '@/components/ui';
 import { JobCard } from '@/components/biz';
 
 export default function JobPage() {
@@ -67,16 +56,14 @@ export default function JobPage() {
 
 	// 执行：选中/取消选中岗位
 	const toggleDraftJobId = (id: number) => {
-		setDraftJobIds((prev) =>
-			prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id],
-		);
+		setDraftJobIds((prev) => (prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]));
 	};
 
 	// 计算：是否有选中的筛选条件
 	const hasActiveFilter = appliedJobIds.length > 0;
 
 	return (
-		<Page hasTabBar>
+		<Page>
 			{/* 顶部岗位分类筛选 */}
 			<View className="sticky top-0 z-20 shrink-0 bg-white border-b border-gray-100">
 				<View className="container-x h-12 flex items-center justify-between">
@@ -85,9 +72,7 @@ export default function JobPage() {
 						className="flex items-center gap-1 active:opacity-70 transition-opacity py-2"
 						onClick={handleOpenFilter}
 					>
-						<Text
-							className={`text-xs ${hasActiveFilter ? 'text-primary' : 'text-text-title'}`}
-						>
+						<Text className={`text-xs ${hasActiveFilter ? 'text-primary' : 'text-text-title'}`}>
 							高级筛选
 						</Text>
 						<View
@@ -103,9 +88,7 @@ export default function JobPage() {
 						<View
 							className={`size-4 ${isSearchOpen ? 'icon-[ph--x-bold] text-text-muted' : 'icon-[ph--magnifying-glass-bold] text-text-title'}`}
 						/>
-						<Text className="text-xs text-text-title">
-							{isSearchOpen ? '收起' : '搜索岗位'}
-						</Text>
+						<Text className="text-xs text-text-title">{isSearchOpen ? '收起' : '搜索岗位'}</Text>
 					</View>
 				</View>
 
@@ -125,12 +108,7 @@ export default function JobPage() {
 			</View>
 
 			{/* 岗位列表 */}
-			<ScrollView
-				scrollY
-				className="h-[calc(100vh-120px)]"
-				onScrollToLower={() => hasNextPage && fetchNextPage()}
-				style={{ height: 'calc(100vh - 60px)' }}
-			>
+			<ScrollView scrollY className="h-[calc(100vh-30px)]" onScrollToLower={() => hasNextPage && fetchNextPage()}>
 				<View className="container-x py-2 flex flex-col gap-4">
 					{isLoading ? (
 						<Loading />
@@ -160,12 +138,7 @@ export default function JobPage() {
 						<Button size="sm" variant="secondary" onClick={handleResetFilter}>
 							重置
 						</Button>
-						<Button
-							size="sm"
-							variant="primary"
-							className="flex-1"
-							onClick={handleConfirmFilter}
-						>
+						<Button size="sm" variant="primary" className="flex-1" onClick={handleConfirmFilter}>
 							确定
 						</Button>
 					</View>

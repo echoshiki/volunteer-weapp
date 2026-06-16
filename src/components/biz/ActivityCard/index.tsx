@@ -42,7 +42,7 @@ export const ActivityCard = ({ activity, layout = 'vertical', className = '' }: 
 					</View>
 
 					<View className="flex justify-between items-center">
-						<EnrollStatusBadge value={activity.status} />
+						<EnrollStatusBadge value={activity.enrollStatus} />
 						<View className="flex items-center gap-1 text-text-muted">
 							<View className="icon-[ph--users-three-light] w-5 h-5" />
 							<Text className="text-xs">
