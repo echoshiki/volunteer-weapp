@@ -61,7 +61,6 @@ export const useUpdateUser = () => {
 	const onChooseAvatar = async (e: any) => {
 		const { avatarUrl } = e.detail;
 		if (!avatarUrl) return;
-
 		Taro.showLoading({ title: '上传中...', mask: true });
 		try {
 			const data = await uploadImageAPI(avatarUrl);

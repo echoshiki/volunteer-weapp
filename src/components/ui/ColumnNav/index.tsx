@@ -5,7 +5,6 @@ export interface ColumnNavProps {
 	label: string;
 	border?: boolean;
 	type?: 'contact' | 'phone';
-	extra?: React.ReactNode;
 	onClick?: () => void;
 }
 
