@@ -73,7 +73,7 @@ export default function ActivityDetail() {
 		<Page className="bg-white pb-24">
 			<ScrollView scrollY className="h-full">
 				{/* 活动封面 */}
-				<Image src={activity.banner} className="w-full h-56 object-cover" />
+				<Image src={activity.banner} className="w-full h-56 object-cover" mode="aspectFill" />
 
 				<View className="container-x py-4">
 					{/* 活动状态 */}

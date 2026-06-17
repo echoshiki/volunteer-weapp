@@ -7,7 +7,7 @@ type HeadingSize = 'sm' | 'md' | 'lg';
 const sizeMap: Record<HeadingSize, { bar: string; icon: string; text: string; margin: string }> = {
 	sm: { bar: 'w-1 h-4', icon: 'size-4', text: 'text-sm', margin: 'mb-3' },
 	md: { bar: 'w-1 h-5', icon: 'size-5', text: 'text-base', margin: 'mb-3' },
-	lg: { bar: 'w-1.5 h-6 rounded-md', icon: 'size-6', text: 'text-lg', margin: 'mb-4' },
+	lg: { bar: 'w-1.5 h-6 rounded-md', icon: 'size-6', text: 'text-lg', margin: 'mb-6' },
 };
 
 export interface HeadingProps {
@@ -44,9 +44,7 @@ export const Heading = ({
 	const sizeConfig = sizeMap[size];
 
 	return (
-		<View
-			className={`w-full flex justify-between items-center ${sizeConfig.margin} ${className}`}
-		>
+		<View className={`w-full flex justify-between items-center ${sizeConfig.margin} ${className}`}>
 			{/* 左侧：装饰与标题 */}
 			<View>
 				<View className="flex items-center gap-2">

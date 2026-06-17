@@ -33,7 +33,7 @@ export default function UserDemandBidPage() {
 			success: (modalRes) => {
 				if (modalRes.confirm) {
 					Taro.showActionSheet({
-						itemList: ['线上支付 (平台担保担保交易)', '线下支付 (线下自行现金/转账)'],
+						itemList: ['线上支付', '线下支付'],
 						success: (sheetRes) => {
 							const payType = sheetRes.tapIndex === 0 ? 'online' : 'offline';
 							Taro.showLoading({ title: '订单锁定生成中...', mask: true });
