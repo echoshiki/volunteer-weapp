@@ -1,14 +1,5 @@
 import { View, Text, Input } from '@tarojs/components';
-import {
-	Page,
-	Cell,
-	FormItem,
-	RegionPicker,
-	Button,
-	Heading,
-	Alert,
-	ImageUploader,
-} from '@/components/ui';
+import { Page, Cell, FormItem, RegionPicker, Button, Heading, Alert, ImageUploader } from '@/components/ui';
 import { useVolunteerApply } from '@/hooks/useUser';
 import { useState } from 'react';
 import { useUpload } from '@/hooks/useUpload';
@@ -75,15 +66,11 @@ export default function ApplyVolunteerPage() {
 								updateField('provinceCode', Number(res.province.code));
 								updateField('cityCode', Number(res.city.code));
 								updateField('districtCode', Number(res.area.code));
-								setRegionLabel(
-									`${res.province.name} ${res.city.name} ${res.area.name}`,
-								);
+								setRegionLabel(`${res.province.name} ${res.city.name} ${res.area.name}`);
 							}}
 						>
 							<View className="flex items-center gap-1">
-								<Text
-									className={`text-sm ${regionLabel ? 'text-text-title' : 'text-gray-300'}`}
-								>
+								<Text className={`text-sm ${regionLabel ? 'text-text-title' : 'text-gray-300'}`}>
 									{regionLabel || '请选择省市区'}
 								</Text>
 								<View className="icon-[ph--caret-right-bold] text-gray-300 w-4 h-4" />
@@ -120,10 +107,10 @@ export default function ApplyVolunteerPage() {
 							<ImageUploader
 								value={form.idCardBack ? [form.idCardBack] : []}
 								onChange={(urls) => updateField('idCardBack', urls[0])}
-								onUpload={(files) => uploadFront(files)}
+								onUpload={(files) => uploadBack(files)}
 								isUploading={isUploadingBack}
 								icon="icon-[ph--shield-check-duotone]"
-								label="上传人像面"
+								label="上传国徽面"
 							/>
 						</View>
 						<Alert variant="info">请确保照片边缘完整、字迹清晰、无明显反光与遮挡</Alert>
