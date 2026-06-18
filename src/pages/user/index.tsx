@@ -117,18 +117,20 @@ export default function UserPage() {
 			</View>
 
 			<View className="px-4 -mt-10 flex flex-col gap-4">
-				<Cell>
-					<Heading
-						title="我的订单"
-						size="sm"
-						link={{ name: '全部订单', url: '/pages/order/employer/index' }}
-					/>
-					<View className="grid grid-cols-5 py-2">
-						{ORDER_NAV_ITEMS.map((item) => (
-							<OrderNavItem key={item.value} nav={item} viewMode="employer" />
-						))}
-					</View>
-				</Cell>
+				{!isWechatReview && (
+					<Cell>
+						<Heading
+							title="我的订单"
+							size="sm"
+							link={{ name: '全部订单', url: '/pages/order/employer/index' }}
+						/>
+						<View className="grid grid-cols-5 py-2">
+							{ORDER_NAV_ITEMS.map((item) => (
+								<OrderNavItem key={item.value} nav={item} viewMode="employer" />
+							))}
+						</View>
+					</Cell>
+				)}
 
 				{(indentity === 'volunteer' || indentity === 'institution') && (
 					<Cell className="grid grid-cols-4 gap-4">
@@ -190,7 +192,6 @@ export default function UserPage() {
 					<ColumnNav
 						icon="icon-[ph--shield-warning-light]"
 						label="实名认证"
-						extra={userInfo?.reviewId ? '已认证' : '未认证'}
 						onClick={() => navigateWithAuth('/pages/apply/index')}
 					/>
 					<ColumnNav icon="icon-[ph--question]" label="帮助与反馈" />
