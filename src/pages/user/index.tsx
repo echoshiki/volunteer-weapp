@@ -62,8 +62,6 @@ export default function UserPage() {
 	const { config } = useConfigStore();
 	const isWechatReview = config?.review ?? true;
 
-	console.log(isWechatReview);
-
 	// 挂载更新用户信息
 	const { refetch } = useUser();
 	useDidShow(() => {
