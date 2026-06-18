@@ -10,6 +10,7 @@ import { mapsTo } from '@/utils/common';
 import { ORDER_NAV_ITEMS } from '@/constants/order';
 import { Icon } from '@/components/ui/Icon';
 import { navigateWithAuth } from '@/utils/auth';
+import { useConfigStore } from '@/store/config';
 
 const VOLUNTEER_MENUS = [
 	{
@@ -57,6 +58,9 @@ export default function UserPage() {
 	const { userInfo } = useAuthStore();
 	const { isLoggedIn, onLogout } = useLogin();
 	const indentity = userInfo?.identity;
+
+	const { config } = useConfigStore();
+	const isWechatReview = config?.review ?? true;
 
 	// 挂载更新用户信息
 	const { refetch } = useUser();
@@ -162,16 +166,22 @@ export default function UserPage() {
 						label="我的需求"
 						onClick={() => navigateWithAuth('/pages/user/demand/index')}
 					/>
-					<ColumnNav
-						icon="icon-[ph--user-focus-light]"
-						label="我的求职"
-						onClick={() => navigateWithAuth('/pages/user/job/index')}
-					/>
-					<ColumnNav
-						icon="icon-[ph--clipboard-text-light]"
-						label="我的简历"
-						onClick={() => navigateWithAuth('/pages/user/resume/index?mode=view')}
-					/>
+
+					{isWechatReview ?? (
+						<>
+							<ColumnNav
+								icon="icon-[ph--user-focus-light]"
+								label="我的求职"
+								onClick={() => navigateWithAuth('/pages/user/job/index')}
+							/>
+							<ColumnNav
+								icon="icon-[ph--clipboard-text-light]"
+								label="我的简历"
+								onClick={() => navigateWithAuth('/pages/user/resume/index?mode=view')}
+							/>
+						</>
+					)}
+
 					<ColumnNav
 						icon="icon-[ph--user-gear-light]"
 						label="个人资料"

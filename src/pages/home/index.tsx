@@ -11,10 +11,14 @@ import { useState, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import Taro from '@tarojs/taro';
 import { doGlobalScan } from '@/utils/scan';
+import { useConfigStore } from '@/store/config';
 
 export default function HomePage() {
 	// 状态：当前 Tenant
 	const [currentName, setCurrentName] = useState(getTenantName() || '请选择街道');
+
+	const { config } = useConfigStore();
+	const isWechatReview = config?.review ?? true;
 
 	// 执行：切换 Tenant
 	const queryClient = useQueryClient();
@@ -103,7 +107,6 @@ export default function HomePage() {
 					</View>
 				</View>
 			</View>
-
 			{/* 轮播图区域 */}
 			<View className="mb-4">
 				<View className="overflow-hidden shadow-sm">
@@ -114,7 +117,6 @@ export default function HomePage() {
 					)}
 				</View>
 			</View>
-
 			<View className="container-x flex flex-col gap-3 mb-4">
 				{/* 核心金刚区 */}
 				<Cell className="grid grid-cols-4 px-1">
@@ -124,7 +126,6 @@ export default function HomePage() {
 					<GridNav icon="icon-[ph--briefcase-bold]" label="家门口就业" path="/pages/job/index" />
 				</Cell>
 			</View>
-
 			{/* 社区风采/数据看板 */}
 			<View className="container-x mb-4">
 				<Cell>
@@ -158,11 +159,9 @@ export default function HomePage() {
 					</View>
 				</Cell>
 			</View>
-
 			<View className="container-x mb-4">
 				<Cell>
 					<Heading title="精选志愿活动" link={{ name: '更多活动', url: '/pages/activity/index' }} />
-
 					{/* 志愿活动列表 */}
 					<View className="flex flex-col gap-2">
 						{isActivityLoading ? (
@@ -183,26 +182,27 @@ export default function HomePage() {
 				</Cell>
 			</View>
 
-			<View className="container-x mt-2 mb-4">
-				<Heading title="家门口岗位" link={{ name: '更多岗位', url: '/pages/activity/index' }} />
-
-				{/* 岗位列表 */}
-				<View className="flex flex-col gap-4 divide-y divide-gray-100">
-					{isJobLoading ? (
-						<Loading />
-					) : jobList.length === 0 ? (
-						<Empty title="暂无匹配的岗位" />
-					) : (
-						<>
-							{jobList.map((item) => (
-								<Cell>
-									<JobCard key={item.id} job={item} />
-								</Cell>
-							))}
-						</>
-					)}
+			{isWechatReview ?? (
+				<View className="container-x mt-2 mb-4">
+					<Heading title="家门口岗位" link={{ name: '更多岗位', url: '/pages/activity/index' }} />
+					{/* 岗位列表 */}
+					<View className="flex flex-col gap-4 divide-y divide-gray-100">
+						{isJobLoading ? (
+							<Loading />
+						) : jobList.length === 0 ? (
+							<Empty title="暂无匹配的岗位" />
+						) : (
+							<>
+								{jobList.map((item) => (
+									<Cell>
+										<JobCard key={item.id} job={item} />
+									</Cell>
+								))}
+							</>
+						)}
+					</View>
 				</View>
-			</View>
+			)}
 		</Page>
 	);
 }

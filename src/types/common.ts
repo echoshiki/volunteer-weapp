@@ -88,6 +88,8 @@ export interface WeappConfig {
 		demandChange: string;
 		demandSelected: string;
 	};
+	/** 是否审核 */
+	review: boolean;
 }
 
 export interface UploadFileItem {

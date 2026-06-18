@@ -64,7 +64,7 @@ export default defineAppConfig({
 				iconPath: 'assets/tabbar/job.png',
 				selectedIconPath: 'assets/tabbar/job_fill.png',
 				pagePath: 'pages/job/index',
-				text: '求职',
+				text: '便民信息',
 			},
 			{
 				iconPath: 'assets/tabbar/user.png',
