@@ -62,6 +62,8 @@ export default function UserPage() {
 	const { config } = useConfigStore();
 	const isWechatReview = config?.review ?? true;
 
+	console.log(isWechatReview);
+
 	// 挂载更新用户信息
 	const { refetch } = useUser();
 	useDidShow(() => {
@@ -167,7 +169,7 @@ export default function UserPage() {
 						onClick={() => navigateWithAuth('/pages/user/demand/index')}
 					/>
 
-					{isWechatReview ?? (
+					{!isWechatReview && (
 						<>
 							<ColumnNav
 								icon="icon-[ph--user-focus-light]"
