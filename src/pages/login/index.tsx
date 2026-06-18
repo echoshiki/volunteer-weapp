@@ -2,12 +2,14 @@ import { View, Text, Image } from '@tarojs/components';
 import { useLogin } from '@/hooks/useLogin';
 import { Page, Button, Alert } from '@/components/ui';
 import { useConfigStore } from '@/store/config';
-import { mapsTo } from '@/utils/common';
+import { mapsTo, stripHtml } from '@/utils/common';
 import Taro from '@tarojs/taro';
+import { useState } from 'react';
 
 const LoginPage = () => {
 	const { config } = useConfigStore();
 	const { authStage, onManualLogin, onBindPhone } = useLogin();
+	const [isAgreed, setIsAgreed] = useState(false);
 
 	const handleNavigationBack = () => {
 		const instance = Taro.getCurrentInstance();
@@ -34,16 +36,41 @@ const LoginPage = () => {
 		mapsTo('/pages/home/index', 'reLaunch');
 	};
 
+	const checkPrivacyAgreement = (): boolean => {
+		if (!isAgreed) {
+			Taro.showModal({
+				title: '提示',
+				content: '请先阅读并勾选页面下方的《用户协议》与《隐私政策》',
+				confirmText: '我知道了',
+				showCancel: false,
+			});
+			return false;
+		}
+		return true;
+	};
+
 	// 手动点击登陆
 	const handleLoginClick = async () => {
+		if (!checkPrivacyAgreement()) return;
 		const res = await onManualLogin();
 		if (res && res.stage === 'LOGGED_IN') handleNavigationBack();
 	};
 
 	// 绑定手机号
 	const handleBindPhoneSuccess = async (e: any) => {
+		if (!checkPrivacyAgreement()) return;
 		const token = await onBindPhone(e);
 		if (token) handleNavigationBack();
+	};
+
+	const handleShowTextModal = (title: string, content: string) => {
+		console.log('clicked');
+		Taro.showModal({
+			title: title,
+			content: content,
+			confirmText: '我已阅读',
+			showCancel: false,
+		});
 	};
 
 	return (
@@ -88,17 +115,42 @@ const LoginPage = () => {
 				)}
 			</View>
 
-			<View className="pb-10">
-				<Text className="text-xs text-gray-400">
-					登录即代表同意{' '}
-					<Text className="text-blue-500" onClick={() => mapsTo(config.agreementUrl || '/pages/home/index')}>
-						《用户协议》
-					</Text>{' '}
-					与{' '}
-					<Text className="text-blue-500" onClick={() => mapsTo(config.policyUrl || '/pages/home/index')}>
+			<View className="pb-10 flex items-start gap-2 max-w-[90%]">
+				<View
+					onClick={() => setIsAgreed(!isAgreed)}
+					className={`size-4 rounded-full border flex items-center justify-center mt-0.5 transition-colors duration-200 shrink-0 ${
+						isAgreed ? 'bg-primary border-primary' : 'border-gray-300'
+					}`}
+				>
+					{isAgreed && <View className="icon-[ph--check-bold] size-2.5 text-white" />}
+				</View>
+
+				<View className="text-xs text-gray-400 leading-normal">
+					<Text>我已阅读并同意</Text>
+					<Text
+						className="text-blue-500 font-semibold px-0.5"
+						onClick={(e) => {
+							e.stopPropagation();
+							handleShowTextModal(
+								'用户服务协议',
+								stripHtml(config.agreementExpert || '暂无服务协议内容'),
+							);
+						}}
+					>
+						《用户服务协议》
+					</Text>
+					<Text>与</Text>
+					<Text
+						className="text-blue-500 font-semibold px-0.5"
+						onClick={(e) => {
+							e.stopPropagation();
+							handleShowTextModal('隐私政策协议', stripHtml(config.policyExpert || '暂无服务协议内容'));
+						}}
+					>
 						《隐私政策》
 					</Text>
-				</Text>
+					<Text>，未勾选此项将无法继续登录服务。</Text>
+				</View>
 			</View>
 		</Page>
 	);
