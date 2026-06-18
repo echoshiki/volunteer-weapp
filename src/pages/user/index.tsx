@@ -132,7 +132,7 @@ export default function UserPage() {
 					</Cell>
 				)}
 
-				{(indentity === 'volunteer' || indentity === 'institution') && (
+				{(indentity === 'volunteer' || indentity === 'institution') && !isWechatReview && (
 					<Cell className="grid grid-cols-4 gap-4">
 						{indentity === 'volunteer' &&
 							VOLUNTEER_MENUS.map((menu) => (

@@ -123,7 +123,7 @@ export default function HomePage() {
 					<GridNav icon="icon-[ph--gift-bold]" label="志愿组织" path="/pages/association/index" />
 					<GridNav icon="icon-[ph--star-bold]" label="志愿活动" path="/pages/activity/index" />
 					<GridNav icon="icon-[ph--hand-heart-bold]" label="服务大厅" path="/pages/demand/index" />
-					<GridNav icon="icon-[ph--briefcase-bold]" label="家门口就业" path="/pages/job/index" />
+					<GridNav icon="icon-[ph--briefcase-bold]" label="便民信息" path="/pages/job/index" />
 				</Cell>
 			</View>
 			{/* 社区风采/数据看板 */}
