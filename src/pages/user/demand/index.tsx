@@ -7,10 +7,7 @@ import { DemandItem } from '@/types/demand';
 import Taro from '@tarojs/taro';
 
 export default function UserDemandPage() {
-	// 数据：用户活动报名记录列表
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useUserDemandList();
-	const list = data?.pages.flatMap((page) => page.list) || [];
-
+	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useUserDemandList();
 	const { mutate: deleteDemand, isLoading: isDeleting } = useDeleteDemand();
 
 	// 执行：跳转到需求编辑页

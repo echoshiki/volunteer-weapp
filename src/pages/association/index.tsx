@@ -4,11 +4,8 @@ import { Page, Empty, Loading, Divider, Cell } from '@/components/ui';
 import { AssociationCard } from '@/components/biz';
 
 export default function AllAssociationListPage() {
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useAssociationList(
-		{},
-	);
+	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useAssociationList({});
 	const { switchAssociation } = useAssociationActions();
-	const list = data?.pages.flatMap((page) => page.list) || [];
 
 	return (
 		<Page>
@@ -29,10 +26,7 @@ export default function AllAssociationListPage() {
 							{/* 遍历组织流水 */}
 							{list.map((association) => (
 								<Cell key={association.associationId}>
-									<AssociationCard
-										record={association}
-										onSwitch={switchAssociation}
-									/>
+									<AssociationCard record={association} onSwitch={switchAssociation} />
 								</Cell>
 							))}
 

@@ -15,8 +15,7 @@ export default function UserDemandBidPage() {
 	const demandId = Number(params.id);
 
 	// 获取投递了该需求单的所有服务方报价列表数据 (支持分页/无限滚动)
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useDemandBidList(demandId);
-	const list = data?.pages.flatMap((page) => page.list) || [];
+	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useDemandBidList(demandId);
 
 	// 跳转志愿者/机构统一公开主页
 	const handleViewProfile = (user: DemandBidItem) => mapsTo(`/pages/provider/index?id=${user.userId}`);

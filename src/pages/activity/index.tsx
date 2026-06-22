@@ -46,7 +46,7 @@ export default function ActivityList() {
 
 	// 数据：志愿活动列表
 	const {
-		data,
+		list,
 		fetchNextPage,
 		hasNextPage,
 		isFetchingNextPage,
@@ -56,8 +56,6 @@ export default function ActivityList() {
 		categoryId: activeCategoryId,
 		status: activeStatus || undefined,
 	});
-
-	const list = data?.pages.flatMap((page) => page.list) || [];
 
 	// 执行：搜索
 	const handleSearch = () => setSearchValue(keyword);

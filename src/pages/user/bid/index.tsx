@@ -7,8 +7,7 @@ import { MyBidItem } from '@/types/demand';
 import Taro from '@tarojs/taro';
 
 export default function MyBidsPage() {
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useMyBidList();
-	const list = data?.pages.flatMap((page) => page.list) || [];
+	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useMyBidList();
 
 	// 查看原需求单
 	const handleViewDemand = (demandId: number) => mapsTo(`/pages/demand/detail/index?id=${demandId}`);

@@ -47,7 +47,7 @@ export const useDemandTags = () => {
 
 /** Query - 需求单列表 */
 export const useDemandList = (params: Omit<GetDemandListRequest, 'pageNum' | 'pageSize'>) => {
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: [...tenantKey(), 'demand', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
 			getDemandListAPI({
@@ -59,6 +59,8 @@ export const useDemandList = (params: Omit<GetDemandListRequest, 'pageNum' | 'pa
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };
 
 /** Query - 需求单详情 */
@@ -72,7 +74,7 @@ export const useDemandDetail = (demandId: number) => {
 
 /** Query - 需求单报价列表 */
 export const useDemandBidList = (demandId: number) => {
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: [...tenantKey(), 'demand', 'bid', demandId],
 		queryFn: ({ pageParam = 1 }) =>
 			getDemandBidListAPI({
@@ -83,11 +85,13 @@ export const useDemandBidList = (demandId: number) => {
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(!!demandId),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };
 
 /** Query - 用户需求单列表 */
 export const useUserDemandList = () => {
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: ['user', 'demand', 'list'],
 		queryFn: ({ pageParam = 1 }) =>
 			getUserDemandListAPI({
@@ -97,6 +101,8 @@ export const useUserDemandList = () => {
 		// 根据后端返回的 page 和 totalPage 控制下一页
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };
 
 /** Hook - 需求表单 */
@@ -232,11 +238,13 @@ export const useDeleteDemand = () => {
 
 /** Query - 我的报价单列表 */
 export const useMyBidList = () => {
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: ['user', 'bid', 'list'],
 		queryFn: ({ pageParam = 1 }) => getMyBidsAPI({ pageNum: pageParam, pageSize: 10 }),
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };
 
 /** Mutation - 创建报价单 */

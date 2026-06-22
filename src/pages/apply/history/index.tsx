@@ -18,23 +18,14 @@ export default function ApplyHistoryPage() {
 	const [activeStatus, setActiveStatus] = useState<ReviewStatus | ''>('');
 
 	// Hook：获取无限滚动分页数据
-	const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useApplyHistory(
+	const { list, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } = useApplyHistory(
 		activeStatus ? { status: activeStatus } : {},
 	);
-
-	// 计算：展平多页数据
-	const flattenList = useMemo(() => {
-		return data?.pages.flatMap((page: any) => page.list || []) || [];
-	}, [data]);
 
 	return (
 		<Page>
 			{/* 顶部 Tab 栏 */}
-			<Tabs
-				tabs={TABS}
-				current={activeStatus}
-				onChange={(val) => setActiveStatus(val as ReviewStatus | '')}
-			/>
+			<Tabs tabs={TABS} current={activeStatus} onChange={(val) => setActiveStatus(val as ReviewStatus | '')} />
 
 			{/* 列表渲染区 */}
 			<ScrollView
@@ -47,11 +38,11 @@ export default function ApplyHistoryPage() {
 				<View className="container-x py-4 space-y-4">
 					{isLoading ? (
 						<Loading />
-					) : flattenList.length === 0 ? (
+					) : list.length === 0 ? (
 						<Empty title="暂无申请记录" />
 					) : (
 						<>
-							{flattenList.map((item) => (
+							{list.map((item) => (
 								<Cell key={item.reviewId}>
 									<ApplyRecordCard item={item} />
 								</Cell>

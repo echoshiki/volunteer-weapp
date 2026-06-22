@@ -19,9 +19,7 @@ export default function EmployerOrderListPage() {
 		}
 	}, [params.status]);
 
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-		useEmployerOrderList(currentTab);
-	const list = data?.pages.flatMap((page) => page.list) || [];
+	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useEmployerOrderList(currentTab);
 
 	const handleAction = (type: string, item: any) => {
 		mapsTo(`/pages/order/detail/index?id=${item.orderId}&action=${type}`);
@@ -54,9 +52,7 @@ export default function EmployerOrderListPage() {
 									<OrderRecordCard
 										record={order}
 										viewMode="employer"
-										onClick={(id) =>
-											mapsTo(`/pages/order/detail/index?id=${id}`)
-										}
+										onClick={(id) => mapsTo(`/pages/order/detail/index?id=${id}`)}
 										onAction={handleAction}
 									/>
 								</Cell>

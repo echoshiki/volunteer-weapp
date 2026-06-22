@@ -3,18 +3,7 @@ import { View, Text, ScrollView } from '@tarojs/components';
 import { useDemandCategoryList, useDemandTags, useDemandList } from '@/hooks/useDemand';
 import { mapsTo } from '@/utils/common';
 import { DemandCard } from '@/components/biz';
-import {
-	Badge,
-	Button,
-	Cell,
-	Divider,
-	Drawer,
-	Empty,
-	Heading,
-	Loading,
-	Page,
-	SearchBar,
-} from '@/components/ui';
+import { Badge, Button, Cell, Divider, Drawer, Empty, Heading, Loading, Page, SearchBar } from '@/components/ui';
 
 export default function DemandPage() {
 	// 状态：抽屉组件和搜索框组件是否显示
@@ -43,7 +32,7 @@ export default function DemandPage() {
 
 	// 数据：需求单列表
 	const {
-		data: demandListData,
+		list: demandList,
 		isLoading: demandListLoading,
 		fetchNextPage,
 		hasNextPage,
@@ -54,11 +43,6 @@ export default function DemandPage() {
 		tagIds: appliedTagIds.length > 0 ? appliedTagIds.join(',') : undefined,
 		charge: appliedCharge !== undefined ? String(appliedCharge) : undefined,
 	});
-
-	// 执行：展平分页数据
-	const demandList = useMemo(() => {
-		return demandListData?.pages.flatMap((page) => page.list) || [];
-	}, [demandListData]);
 
 	// 执行：搜索
 	const handleSearch = () => setKeyword(inputValue);
@@ -88,14 +72,11 @@ export default function DemandPage() {
 
 	// 执行：标签选择
 	const toggleDraftTagId = (id: number) => {
-		setDraftTagIds((prev) =>
-			prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id],
-		);
+		setDraftTagIds((prev) => (prev.includes(id) ? prev.filter((t) => t !== id) : [...prev, id]));
 	};
 
 	// 计算：是否存在筛选
-	const hasActiveFilter =
-		appliedCategoryId !== undefined || appliedTagIds.length > 0 || appliedCharge !== undefined;
+	const hasActiveFilter = appliedCategoryId !== undefined || appliedTagIds.length > 0 || appliedCharge !== undefined;
 
 	return (
 		<Page hasTabBar>
@@ -107,9 +88,7 @@ export default function DemandPage() {
 						className="flex items-center gap-1 active:opacity-70 transition-opacity py-2"
 						onClick={handleOpenFilter}
 					>
-						<Text
-							className={`text-xs ${hasActiveFilter ? 'text-primary' : 'text-text-title'}`}
-						>
+						<Text className={`text-xs ${hasActiveFilter ? 'text-primary' : 'text-text-title'}`}>
 							高级筛选
 						</Text>
 						<View
@@ -125,9 +104,7 @@ export default function DemandPage() {
 						<View
 							className={`size-4 ${isSearchOpen ? 'icon-[ph--x-bold] text-text-muted' : 'icon-[ph--magnifying-glass-bold] text-text-title'}`}
 						/>
-						<Text className="text-xs text-text-title">
-							{isSearchOpen ? '收起' : '搜索需求'}
-						</Text>
+						<Text className="text-xs text-text-title">{isSearchOpen ? '收起' : '搜索需求'}</Text>
 					</View>
 				</View>
 
@@ -191,12 +168,7 @@ export default function DemandPage() {
 						<Button size="sm" variant="secondary" onClick={handleResetFilter}>
 							重置
 						</Button>
-						<Button
-							size="sm"
-							variant="primary"
-							className="flex-1"
-							onClick={handleConfirmFilter}
-						>
+						<Button size="sm" variant="primary" className="flex-1" onClick={handleConfirmFilter}>
 							确定
 						</Button>
 					</View>
@@ -216,9 +188,7 @@ export default function DemandPage() {
 							{categoryList?.map((cat) => (
 								<Badge
 									key={cat.categoryId}
-									variant={
-										draftCategoryId === cat.categoryId ? 'primary' : 'secondary'
-									}
+									variant={draftCategoryId === cat.categoryId ? 'primary' : 'secondary'}
 									onClick={() => setDraftCategoryId(cat.categoryId)}
 									size="sm"
 								>
@@ -241,9 +211,7 @@ export default function DemandPage() {
 							{tagList?.map((tag) => (
 								<Badge
 									key={tag.tagId}
-									variant={
-										draftTagIds.includes(tag.tagId) ? 'primary' : 'secondary'
-									}
+									variant={draftTagIds.includes(tag.tagId) ? 'primary' : 'secondary'}
 									onClick={() => toggleDraftTagId(tag.tagId)}
 									size="sm"
 								>

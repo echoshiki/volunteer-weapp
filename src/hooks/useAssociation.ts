@@ -6,7 +6,7 @@ import { mapsTo } from '@/utils/common';
 
 /** Query 全域志愿者协会列表 */
 export const useAssociationList = (params: Omit<AssociationListRequest, 'pageNum' | 'pageSize'>) => {
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: ['association', 'all-list', params],
 		queryFn: ({ pageParam = 1 }) =>
 			getAssociationListAPI({
@@ -16,6 +16,8 @@ export const useAssociationList = (params: Omit<AssociationListRequest, 'pageNum
 			}),
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };
 
 /** Mutation 管理入驻/切换大区的行为动作 */

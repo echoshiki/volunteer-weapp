@@ -5,8 +5,7 @@ import Taro from '@tarojs/taro';
 import { ArticleCard } from '@/components/ui/ArticleCard';
 
 export const AuditInfoView = () => {
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useAuditArticleList();
-	const list = data?.pages.flatMap((page) => page.list) || [];
+	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useAuditArticleList();
 
 	// 点击直接通过原生 Modal 弹窗展示文章详情
 	const handleViewDetail = (title: string, content: string) => {

@@ -30,7 +30,7 @@ export const useJobCategories = () => {
 
 /** Query：岗位列表 */
 export const useJobList = (params: Omit<JobListParams, 'pageNum'>) => {
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: [...tenantKey(), 'job', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
 			getJobListAPI({
@@ -41,6 +41,8 @@ export const useJobList = (params: Omit<JobListParams, 'pageNum'>) => {
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };
 
 /** Query：岗位详情 */
@@ -132,10 +134,12 @@ export const useResumeActions = () => {
 
 /** Query：已投递岗位历史列表（无限滚动） */
 export const useAppliedJobList = () => {
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: [...tenantKey(), 'resume', 'applied', 'list'],
 		queryFn: ({ pageParam = 1 }) => getAppliedJobListAPI({ pageNum: pageParam, pageSize: 10 }),
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };

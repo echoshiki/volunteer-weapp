@@ -54,27 +54,16 @@ export default function HomePage() {
 	const banners = dashboard?.banners || [];
 
 	// 数据：推荐的志愿活动
-	const { data: activityData, isLoading: isActivityLoading } = useActivityList({
+	const { list: activityList, isLoading: isActivityLoading } = useActivityList({
 		isRecommend: true,
 		pageSize: 5,
 	});
 
 	// 数据：推荐的岗位列表
-	const { data: jobData, isLoading: isJobLoading } = useJobList({
+	const { list: jobList, isLoading: isJobLoading } = useJobList({
 		isRecommend: true,
 		pageSize: 5,
 	});
-
-	// 数据：推荐的企业列表
-	const { data: enterpriceData, isLoading: isEnterpriseLoading } = useEnterpriseList({
-		isRecommend: true,
-		pageSize: 10,
-	});
-
-	// 计算：扁平化分页数据
-	const activityList = activityData?.pages.flatMap((page) => page.list) || [];
-	const jobList = jobData?.pages.flatMap((page) => page.list) || [];
-	const enterpriceList = enterpriceData?.pages.flatMap((page) => page.list) || [];
 
 	return (
 		<Page hasTabBar>

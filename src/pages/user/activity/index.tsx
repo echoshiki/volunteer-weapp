@@ -5,19 +5,11 @@ import { ActivityRecordCard } from '@/components/biz';
 
 export default function UserActivityPage() {
 	// 数据：用户活动报名记录列表
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
-		useActivityRecordList();
-
-	// 执行：扁平化分页数据
-	const list = data?.pages.flatMap((page) => page.list) || [];
+	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useActivityRecordList();
 
 	return (
 		<Page>
-			<ScrollView
-				scrollY
-				className="h-[calc(100vh-10px)]"
-				onScrollToLower={() => hasNextPage && fetchNextPage()}
-			>
+			<ScrollView scrollY className="h-[calc(100vh-10px)]" onScrollToLower={() => hasNextPage && fetchNextPage()}>
 				<View className="container-x py-2 flex flex-col gap-4">
 					{isLoading ? (
 						<Loading />

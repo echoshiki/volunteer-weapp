@@ -26,7 +26,7 @@ export default function JobPage() {
 
 	// 数据：传递筛选条件后的岗位列表
 	const {
-		data: jobsData,
+		list: jobList,
 		isLoading,
 		fetchNextPage,
 		hasNextPage,
@@ -35,10 +35,6 @@ export default function JobPage() {
 		keyword,
 		jobIds: appliedJobIds.length ? appliedJobIds.join(',') : undefined,
 	});
-
-	const jobList = useMemo(() => {
-		return jobsData?.pages.flatMap((page) => page.list) || [];
-	}, [jobsData]);
 
 	// 执行：搜索
 	const handleSearch = () => setKeyword(inputValue);

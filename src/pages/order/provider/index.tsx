@@ -19,8 +19,7 @@ export default function ProviderOrderListPage() {
 		}
 	}, [params.status]);
 
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useProviderOrderList(currentTab);
-	const list = data?.pages.flatMap((page) => page.list) || [];
+	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useProviderOrderList(currentTab);
 
 	const handleAction = (type: string, item: any) => {
 		mapsTo(`/pages/order/detail/index?id=${item.orderId}&action=${type}`);

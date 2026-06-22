@@ -42,23 +42,27 @@ export const useCreateServiceOrder = () => {
 /** 需求方订单列表 */
 export const useEmployerOrderList = (status?: OrderStatus | 'all') => {
 	const requestStatus = status === 'all' ? undefined : status;
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: ['order', 'employer', 'list', requestStatus],
 		queryFn: ({ pageParam = 1 }) =>
 			getEmployerOrdersAPI({ pageNum: pageParam, pageSize: 10, status: requestStatus }),
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };
 
 /** 服务方订单列表 */
 export const useProviderOrderList = (status?: OrderStatus | 'all') => {
 	const requestStatus = status === 'all' ? undefined : status;
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: ['order', 'provider', 'list', requestStatus],
 		queryFn: ({ pageParam = 1 }) =>
 			getProviderOrdersAPI({ pageNum: pageParam, pageSize: 10, status: requestStatus }),
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };
 
 /** 订单详情 */

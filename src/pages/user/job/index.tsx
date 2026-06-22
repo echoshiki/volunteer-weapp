@@ -5,8 +5,7 @@ import { AppliedJobRecordCard } from '@/components/biz';
 import { mapsTo } from '@/utils/common';
 
 export default function UserJobPage() {
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useAppliedJobList();
-	const list = data?.pages.flatMap((page) => page.list) || [];
+	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useAppliedJobList();
 	const handleCardClick = (jobId: number) => mapsTo(`/pages/job/detail/index?id=${jobId}`);
 
 	return (
@@ -27,10 +26,7 @@ export default function UserJobPage() {
 						<>
 							{/* 遍历求职记录流 */}
 							{list.map((item, index) => (
-								<Cell
-									key={`${item.id}-${item.resumeId}-${index}`}
-									className="p-0 overflow-hidden"
-								>
+								<Cell key={`${item.id}-${item.resumeId}-${index}`} className="p-0 overflow-hidden">
 									<AppliedJobRecordCard record={item} onClick={handleCardClick} />
 								</Cell>
 							))}

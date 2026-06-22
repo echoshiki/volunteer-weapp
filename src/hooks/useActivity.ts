@@ -23,7 +23,7 @@ export const useActivityCategories = () => {
 
 /** Query - 活动列表 */
 export const useActivityList = (params: Partial<Omit<ActivityListParams, 'pageNum'>>) => {
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: [...tenantKey(), 'activity', 'list', params],
 		queryFn: ({ pageParam = 1 }) =>
 			getActivityListAPI({
@@ -34,6 +34,8 @@ export const useActivityList = (params: Partial<Omit<ActivityListParams, 'pageNu
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };
 
 /** Query - 活动详情 */
@@ -47,11 +49,13 @@ export const useActivityDetail = (id: string | number) => {
 
 /** Query - 用户活动列表 */
 export const useActivityRecordList = () => {
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: ['user', 'activity'],
 		queryFn: ({ pageParam = 1 }) => getActivityRecordListApi(pageParam),
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };
 
 /** Mutation - 活动报名 */
