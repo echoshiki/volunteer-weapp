@@ -194,14 +194,11 @@ export const useInstitutionApply = (initialData: any = null) => {
 
 /** Query - 获取申请记录列表 */
 export const useApplyHistory = (params: Omit<ApplyHistoryRequest, 'pageNum' | 'pageSize'>) => {
-	return useInfiniteQuery({
+	const query = useInfiniteQuery({
 		queryKey: ['apply', 'history', 'list', params],
-		queryFn: ({ pageParam = 1 }) =>
-			getApplyHistoryListAPI({
-				...params,
-				pageNum: pageParam,
-				pageSize: 10,
-			}),
+		queryFn: ({ pageParam = 1 }) => getApplyHistoryListAPI({ ...params, pageNum: pageParam, pageSize: 10 }),
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 	});
+	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
+	return { ...query, list };
 };

@@ -30,6 +30,16 @@ export default function ActivityDetail() {
 				if (res.confirm) {
 					// 报名流程
 					runWithAuth(() => {
+						const identity = userInfo?.identity;
+						if (identity === 'institution') {
+							return Taro.showModal({
+								title: '报名受限',
+								content:
+									'当前账户为【服务机构】主体。由于志愿活动仅限个人参与，如需报名，请切换或注册个人志愿者账户。',
+								confirmText: '我知道了',
+								showCancel: false,
+							});
+						}
 						if (userInfo?.identity !== 'volunteer') {
 							Taro.showModal({
 								title: '身份受限',
@@ -37,7 +47,7 @@ export default function ActivityDetail() {
 								confirmText: '去认证',
 								confirmColor: '#ea3323',
 								success: (res) => {
-									if (res.confirm) mapsTo('/pages/apply/volunteer/index');
+									if (res.confirm) mapsTo('/pages/apply/index');
 								},
 							});
 							return;

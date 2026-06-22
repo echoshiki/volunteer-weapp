@@ -15,6 +15,7 @@ interface ConfigState {
 const defaultConfig: WeappConfig = {
 	appName: '志愿活动服务平台',
 	appLogo: '/assets/images/default-logo.png',
+	review: true,
 };
 
 export const useConfigStore = create<ConfigState>()(
