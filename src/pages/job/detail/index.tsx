@@ -1,5 +1,5 @@
 import { useRouter, makePhoneCall } from '@tarojs/taro';
-import { View, Text, ScrollView } from '@tarojs/components';
+import { View, Text, ScrollView, RichText } from '@tarojs/components';
 import { useJobDetail, useResumeActions, useResumeDetail } from '@/hooks/useJob';
 import { mapsTo } from '@/utils/common';
 import { Cell, Alert, Heading, Button, Empty, Loading, Page } from '@/components/ui';
@@ -109,8 +109,8 @@ export default function JobDetail() {
 				{/* 岗位描述内容 */}
 				<Cell className="mt-3">
 					<Heading title="岗位描述" size="md" />
-					<View className="text-sm text-text-body leading-relaxed space-y-2">
-						<Text className="block whitespace-pre-wrap">{detail.content}</Text>
+					<View className="mt-4 text-gray-700 leading-relaxed text-sm">
+						<RichText nodes={detail.content} />
 					</View>
 				</Cell>
 			</ScrollView>
