@@ -1,6 +1,6 @@
 import { View, Text, Image } from '@tarojs/components';
 import { AssociationItem } from '@/types/association';
-import { Button, Divider } from '@/components/ui';
+import { Badge, Button, Divider } from '@/components/ui';
 import { getTenantId } from '@/utils/tenant';
 
 export interface AssociationCardProps {
@@ -21,27 +21,22 @@ export const AssociationCard = ({ record, onSwitch, className = '' }: Associatio
 			<View className="flex gap-3 items-start w-full min-w-0">
 				<Image
 					src={record.logo || 'https://placeholder.com/100'}
-					className="size-14 rounded-xl bg-gray-50 border border-gray-100 shrink-0"
+					className="size-15 rounded-xl bg-gray-50 border border-gray-100 shrink-0"
 					mode="aspectFit"
 				/>
 
-				<View className="flex-1 min-w-0 flex flex-col gap-1">
+				<View className="flex-1 min-w-0 flex flex-col gap-1.5">
 					<View className="flex items-center gap-2 flex-wrap">
-						<Text className="text-base font-bold text-text-title truncate">
-							{record.associationName}
-						</Text>
-						{isCurrentArea && (
-							<Text className="text-xs bg-blue-50 text-primary font-bold px-1.5 py-0.5 rounded-full border border-blue-100">
-								当前入驻
-							</Text>
-						)}
+						<Text className="text-base font-bold text-text-title truncate">{record.associationName}</Text>
+						{isCurrentArea && <Badge>当前入驻</Badge>}
 					</View>
-					<Text className="text-xs text-text-muted font-num flex items-center gap-1">
+					<View className="text-xs text-text-muted font-num flex items-center gap-1">
+						<Badge variant="info">{record.tenantName}</Badge>
 						<View className="icon-[ph--map-pin] size-3.5 shrink-0" />
 						{record.provinceName}
 						{record.cityName}
 						{record.districtName}
-					</Text>
+					</View>
 				</View>
 			</View>
 
