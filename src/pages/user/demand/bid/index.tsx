@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { View, ScrollView, Text } from '@tarojs/components';
-import Taro, { useRouter } from '@tarojs/taro';
+import Taro, { useRouter, useDidShow } from '@tarojs/taro';
 import { Page, Empty, Loading, Divider, Cell } from '@/components/ui';
 import { DemandBidCard } from '@/components/biz';
 import { useDemandBidList } from '@/hooks/useDemand';
@@ -15,7 +16,23 @@ export default function UserDemandBidPage() {
 	const demandId = Number(params.id);
 
 	// 获取投递了该需求单的所有服务方报价列表数据 (支持分页/无限滚动)
-	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useDemandBidList(demandId);
+	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, refetch } = useDemandBidList(demandId);
+	const [refreshing, setRefreshing] = useState(false);
+
+	// 页面可见/切回前台时自动拉取最新报价列表
+	useDidShow(() => {
+		if (demandId) refetch();
+	});
+
+	// 手动下拉刷新
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		try {
+			await refetch();
+		} finally {
+			setRefreshing(false);
+		}
+	};
 
 	// 跳转志愿者/机构统一公开主页
 	const handleViewProfile = (user: DemandBidItem) => mapsTo(`/pages/provider/index?id=${user.userId}`);
@@ -54,6 +71,9 @@ export default function UserDemandBidPage() {
 			<ScrollView
 				scrollY
 				className="h-screen"
+				refresherEnabled
+				refresherTriggered={refreshing}
+				onRefresherRefresh={handleRefresh}
 				onScrollToLower={() => hasNextPage && !isFetchingNextPage && fetchNextPage()}
 				enhanced
 				showScrollbar={false}

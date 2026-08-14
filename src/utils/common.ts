@@ -184,9 +184,31 @@ export const saveImageToAlbum = async (imageUrl: string): Promise<void> => {
 	}
 };
 
+let lastToastTitle = '';
+let lastToastTime = 0;
+
+/** 防抖单例 Toast，防止短时间内重复弹窗导致真机闪烁 */
+export const showToastOnce = (title: string, options?: Partial<Taro.showToast.Option>) => {
+	if (!title) return;
+	const now = Date.now();
+	if (title === lastToastTitle && now - lastToastTime < 1500) {
+		return;
+	}
+	lastToastTitle = title;
+	lastToastTime = now;
+	Taro.showToast({
+		title,
+		icon: 'none',
+		duration: 2500,
+		...options,
+	});
+};
+
 /** 统一错误提示 */
-export const showErrorToast = (err: any, fallback: string) =>
-	Taro.showToast({ title: err?.message || err?.msg || fallback, icon: 'none' });
+export const showErrorToast = (err: any, fallback: string) => {
+	const msg = err?.msg || err?.message || (typeof err === 'string' ? err : fallback);
+	showToastOnce(msg);
+};
 
 /** 延迟返回上一页 */
 export const delayBack = (delay = 1500) => setTimeout(() => Taro.navigateBack(), delay);

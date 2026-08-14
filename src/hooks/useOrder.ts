@@ -24,8 +24,9 @@ export const useCreateServiceOrder = () => {
 	return useMutation({
 		mutationFn: createServiceOrderAPI,
 		onSuccess: (res: any) => {
-			// 刷新需求单数据、报价单列表
+			// 刷新需求单数据、用户需求单列表、报价单列表
 			queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'demand'] });
+			queryClient.invalidateQueries({ queryKey: ['user', 'demand', 'list'] });
 			queryClient.invalidateQueries({ queryKey: ['user', 'bid', 'list'] });
 			setTimeout(() => {
 				Taro.hideLoading();
@@ -47,6 +48,7 @@ export const useEmployerOrderList = (status?: OrderStatus | 'all') => {
 		queryFn: ({ pageParam = 1 }) =>
 			getEmployerOrdersAPI({ pageNum: pageParam, pageSize: 10, status: requestStatus }),
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
+		staleTime: 0,
 	});
 	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
 	return { ...query, list };
@@ -60,6 +62,7 @@ export const useProviderOrderList = (status?: OrderStatus | 'all') => {
 		queryFn: ({ pageParam = 1 }) =>
 			getProviderOrdersAPI({ pageNum: pageParam, pageSize: 10, status: requestStatus }),
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
+		staleTime: 0,
 	});
 	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
 	return { ...query, list };
@@ -71,6 +74,7 @@ export const useOrderDetail = (orderId: string) => {
 		queryKey: ['order', 'detail', orderId],
 		queryFn: () => getOrderDetailAPI(orderId),
 		enabled: !!orderId,
+		staleTime: 0,
 	});
 };
 
@@ -80,6 +84,7 @@ export const useOrderTrajectoryList = (orderId: string) => {
 		queryKey: ['order', 'trajectory', 'list', orderId],
 		queryFn: () => getOrderTrajectoryListAPI({ orderId }),
 		enabled: !!orderId,
+		staleTime: 0,
 	});
 };
 
@@ -93,7 +98,11 @@ export const useOrderActions = (order?: UnifiedOrderItem) => {
 	const needCompletePunch = order ? order.status === 'serving' : false;
 
 	// 公共成功回调：刷新当前详情及双端列表
-	const refreshOrderCache = () => queryClient.invalidateQueries({ queryKey: ['order'] });
+	const refreshOrderCache = () => {
+		queryClient.invalidateQueries({ queryKey: ['order'] });
+		queryClient.invalidateQueries({ queryKey: ['user', 'demand', 'list'] });
+		queryClient.invalidateQueries({ queryKey: [...tenantKey(), 'demand'] });
+	};
 
 	// 轮询订单的支付状态
 	const pollOrderPayStatus = async (id: string, counter = 1) => {

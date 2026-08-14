@@ -1,16 +1,17 @@
+import { useState, useEffect } from 'react';
 import { View, ScrollView } from '@tarojs/components';
 import { useProviderOrderList } from '@/hooks/useOrder';
 import { Page, Empty, Loading, Divider, Cell, Tabs } from '@/components/ui';
 import { OrderRecordCard } from '@/components/biz';
 import { mapsTo } from '@/utils/common';
-import { useRouter } from '@tarojs/taro';
+import { useRouter, useDidShow } from '@tarojs/taro';
 import { OrderStatus } from '@/types/order';
-import { useEffect, useState } from 'react';
 import { ORDER_NAV_ITEMS } from '@/constants/order';
 
 export default function ProviderOrderListPage() {
 	const { params } = useRouter();
 	const [currentTab, setCurrentTab] = useState<OrderStatus | 'all'>('all');
+	const [refreshing, setRefreshing] = useState(false);
 	const allTabsConfig = [{ label: '全部', value: 'all' }, ...ORDER_NAV_ITEMS];
 
 	useEffect(() => {
@@ -19,7 +20,23 @@ export default function ProviderOrderListPage() {
 		}
 	}, [params.status]);
 
-	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } = useProviderOrderList(currentTab);
+	const { list, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading, refetch } =
+		useProviderOrderList(currentTab);
+
+	// 页面切回前台时自动刷新
+	useDidShow(() => {
+		refetch();
+	});
+
+	// 下拉刷新
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		try {
+			await refetch();
+		} finally {
+			setRefreshing(false);
+		}
+	};
 
 	const handleAction = (type: string, item: any) => {
 		mapsTo(`/pages/order/detail/index?id=${item.orderId}&action=${type}`);
@@ -38,7 +55,12 @@ export default function ProviderOrderListPage() {
 			<ScrollView
 				scrollY
 				className="h-screen"
+				refresherEnabled
+				refresherTriggered={refreshing}
+				onRefresherRefresh={handleRefresh}
 				onScrollToLower={() => hasNextPage && !isFetchingNextPage && fetchNextPage()}
+				enhanced
+				showScrollbar={false}
 			>
 				<View className="container-x py-3 flex flex-col gap-4">
 					{isLoading ? (
@@ -53,6 +75,7 @@ export default function ProviderOrderListPage() {
 										record={order}
 										viewMode="provider"
 										onClick={(id) => mapsTo(`/pages/order/detail/index?id=${id}`)}
+										onAction={handleAction}
 									/>
 								</Cell>
 							))}

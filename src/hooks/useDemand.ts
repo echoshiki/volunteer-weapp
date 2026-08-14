@@ -69,6 +69,7 @@ export const useDemandDetail = (demandId: number) => {
 		queryKey: [...tenantKey(), 'demand', 'detail', demandId],
 		queryFn: () => getDemandDetailAPI(demandId),
 		enabled: enabledWithTenant(!!demandId),
+		staleTime: 0,
 	});
 };
 
@@ -84,6 +85,7 @@ export const useDemandBidList = (demandId: number) => {
 			}),
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
 		enabled: enabledWithTenant(!!demandId),
+		staleTime: 0,
 	});
 	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
 	return { ...query, list };
@@ -100,6 +102,7 @@ export const useUserDemandList = () => {
 			}),
 		// 根据后端返回的 page 和 totalPage 控制下一页
 		getNextPageParam: (lastPage) => (lastPage.page < lastPage.totalPage ? lastPage.page + 1 : undefined),
+		staleTime: 0,
 	});
 	const list = query.data?.pages.flatMap((page) => page.list || []) ?? [];
 	return { ...query, list };

@@ -4,7 +4,6 @@ import { useDemandBid } from '@/hooks/useDemand';
 import { BidForm } from '@/components/biz';
 import { useConfigStore } from '@/store/config';
 import { BidDemandRequest } from '@/services/demand';
-import Taro from '@tarojs/taro';
 import { requestNotification } from '@/utils/notification';
 
 export default function DemandBidPage() {
@@ -14,11 +13,9 @@ export default function DemandBidPage() {
 	const { mutate: submitBid, isLoading } = useDemandBid();
 
 	const handleSubmit = async (data: BidDemandRequest) => {
-		Taro.showLoading({ title: '正在提交...', mask: true });
-
 		try {
 			const ids: string[] = [];
-			// 选中通知 & 选中通知
+			// 选中通知 & 变更通知
 			if (config.templateIds?.demandSelected) ids.push(config.templateIds.demandSelected);
 			if (config.templateIds?.demandChange) ids.push(config.templateIds.demandChange);
 
@@ -27,7 +24,7 @@ export default function DemandBidPage() {
 		} catch (error) {
 			console.error('订阅消息触发失败', error);
 		}
-		submitBid({ ...data, demandId }, { onSettled: () => Taro.hideLoading() });
+		submitBid({ ...data, demandId });
 	};
 
 	const isFree = params.charge === 'true';

@@ -71,7 +71,7 @@ export const BidForm = ({
 
 						<FormItem label="服务描述" layout="column">
 							<Textarea
-								className="w-full h-32 bg-gray-50 rounded-lg p-3 text-sm leading-relaxed"
+								className="w-full h-32 box-border bg-gray-50 rounded-lg p-3 text-sm leading-relaxed overflow-hidden"
 								placeholder="请描述您的服务方案、预计上门时间或您的专业优势，这能大大提高雇主选择您的概率哦~"
 								maxlength={500}
 								value={formData.description}
@@ -110,12 +110,7 @@ export const BidForm = ({
 
 			{/* 吸底提交按钮 */}
 			<View className="fixed bottom-0 left-0 w-full p-4 bg-white border-t border-gray-100 pb-safe z-50">
-				<Button
-					variant="primary"
-					className="w-full"
-					onClick={handleSubmit}
-					loading={isSubmitting}
-				>
+				<Button variant="primary" className="w-full" onClick={handleSubmit} loading={isSubmitting}>
 					{submitText}
 				</Button>
 			</View>

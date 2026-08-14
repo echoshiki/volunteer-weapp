@@ -1,17 +1,33 @@
-import { useRouter } from '@tarojs/taro';
+import { useState } from 'react';
+import Taro, { useRouter, useDidShow } from '@tarojs/taro';
 import { View, Text, ScrollView, RichText } from '@tarojs/components';
 import { useDemandDetail } from '@/hooks/useDemand';
 import { Badge, Cell, Description, Empty, Heading, Loading, Page, Button } from '@/components/ui';
 import { cleanHTML, mapsTo } from '@/utils/common';
 import { useAuthStore } from '@/store/auth';
-import Taro from '@tarojs/taro';
 
 export default function DemandDetailPage() {
 	const { params } = useRouter();
 	const demandId = Number(params.id);
 
 	// 数据：需求详情
-	const { data: detail, isLoading } = useDemandDetail(demandId);
+	const { data: detail, isLoading, refetch } = useDemandDetail(demandId);
+	const [refreshing, setRefreshing] = useState(false);
+
+	// 页面可见/返回时自动刷新最新详情
+	useDidShow(() => {
+		if (demandId) refetch();
+	});
+
+	// 手动下拉刷新
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		try {
+			await refetch();
+		} finally {
+			setRefreshing(false);
+		}
+	};
 
 	// 判断是否是自己发布的需求单
 	const { userInfo } = useAuthStore();
@@ -45,13 +61,52 @@ export default function DemandDetailPage() {
 		}
 	};
 
-	// 报价按钮配置
-	const getBidButtonConfig = () => {
+	// 针对自己的需求单的快捷跳转逻辑
+	const handleMyDemandAction = () => {
+		if (detail.status === 'completed' && detail.orderId) {
+			mapsTo(`/pages/order/detail/index?id=${detail.orderId}`);
+		} else if (detail.status === 'approved') {
+			mapsTo(`/pages/user/demand/bid/index?id=${demandId}`);
+		} else if (['pending', 'rejected'].includes(detail.status)) {
+			mapsTo(`/pages/user/demand/edit/index?id=${demandId}`);
+		}
+	};
+
+	// 底部主按钮配置
+	const getActionButtonConfig = () => {
 		if (isMyDemand) {
+			if (detail.status === 'completed' && detail.orderId) {
+				return {
+					text: '跟进服务订单 ↗',
+					disabled: false,
+					variant: 'warning' as const,
+					icon: 'icon-[ph--clipboard-text]',
+					onClick: handleMyDemandAction,
+				};
+			}
+			if (detail.status === 'approved') {
+				return {
+					text: `查看报价 (${detail.serviceUserCount || 0}人抢单)`,
+					disabled: false,
+					variant: 'success' as const,
+					icon: 'icon-[ph--hand-coins]',
+					onClick: handleMyDemandAction,
+				};
+			}
+			if (['pending', 'rejected'].includes(detail.status)) {
+				return {
+					text: '修改需求',
+					disabled: false,
+					variant: 'info' as const,
+					icon: 'icon-[ph--pencil-simple]',
+					onClick: handleMyDemandAction,
+				};
+			}
 			return {
-				text: '无法承接自己的需求',
+				text: '我的需求单',
 				disabled: true,
-				icon: 'icon-[ph--prohibit]',
+				icon: 'icon-[ph--user]',
+				onClick: () => {},
 			};
 		}
 		if (detail.isBid) {
@@ -59,6 +114,7 @@ export default function DemandDetailPage() {
 				text: '已提交接单申请',
 				disabled: true,
 				icon: 'icon-[ph--check-circle]',
+				onClick: () => {},
 			};
 		}
 		return {
@@ -66,18 +122,28 @@ export default function DemandDetailPage() {
 			disabled: false,
 			variant: 'primary' as const,
 			icon: 'icon-[ph--hand-coins]',
+			onClick: handleBidClick,
 		};
 	};
-	const buttonConfig = getBidButtonConfig();
+	const buttonConfig = getActionButtonConfig();
 
 	return (
 		<Page hasTabBar>
-			<ScrollView scrollY className="h-full">
+			<ScrollView
+				scrollY
+				className="h-full"
+				refresherEnabled
+				refresherTriggered={refreshing}
+				onRefresherRefresh={handleRefresh}
+				enhanced
+				showScrollbar={false}
+			>
 				{/* 头部核心信息 */}
 				<Cell className="border-b border-gray-100 py-6" rounded={false}>
 					<View className="flex items-center gap-2 mb-3">
 						<Badge variant="info">{detail.categoryName}</Badge>
 						{detail.charge && <Badge variant="success">公益</Badge>}
+						{isMyDemand && <Badge variant="warning">我发布的</Badge>}
 					</View>
 					<Text className="text-lg font-bold text-text-title leading-normal line-clamp-3">
 						{detail.demandName}
@@ -129,21 +195,22 @@ export default function DemandDetailPage() {
 				</Text>
 
 				<View className="w-full flex flex-row gap-2">
-					<Button
-						icon="icon-[ph--phone-call]"
-						size="md"
-						variant="info"
-						disabled={isMyDemand}
-						onClick={handleCallPublisher}
-					>
-						咨询发布者
-					</Button>
+					{!isMyDemand && (
+						<Button
+							icon="icon-[ph--phone-call]"
+							size="md"
+							variant="info"
+							onClick={handleCallPublisher}
+						>
+							咨询发布者
+						</Button>
+					)}
 					<Button
 						icon={buttonConfig.icon}
 						className="flex-1"
 						variant={buttonConfig.variant}
 						disabled={buttonConfig.disabled}
-						onClick={handleBidClick}
+						onClick={buttonConfig.onClick}
 					>
 						{buttonConfig.text}
 					</Button>

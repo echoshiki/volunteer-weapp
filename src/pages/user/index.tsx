@@ -14,40 +14,40 @@ import { useConfigStore } from '@/store/config';
 
 const VOLUNTEER_MENUS = [
 	{
-		label: '我的报名',
-		icon: 'icon-[ph--star-light]',
-		theme: 'red' as const,
-		url: '/pages/user/activity/index',
-	},
-	{
-		label: '我的报价',
-		icon: 'icon-[ph--hand-coins-light]',
-		theme: 'orange' as const,
-		url: '/pages/user/bid/index',
-	},
-	{
-		label: '服务订单',
-		icon: 'icon-[ph--clipboard-text-light]',
-		theme: 'blue' as const,
-		url: '/pages/order/provider/index',
-	},
-	{
 		label: '现场打卡',
 		icon: 'icon-[ph--scan-light]',
 		theme: 'green' as const,
 		handler: () => doGlobalScan(),
 	},
-];
-
-const INSITUTION_MENUS = [
 	{
-		label: '我的报价',
+		label: '活动报名',
+		icon: 'icon-[ph--star-light]',
+		theme: 'red' as const,
+		url: '/pages/user/activity/index',
+	},
+	{
+		label: '接单报价',
 		icon: 'icon-[ph--hand-coins-light]',
 		theme: 'orange' as const,
 		url: '/pages/user/bid/index',
 	},
 	{
-		label: '服务订单',
+		label: '承接订单',
+		icon: 'icon-[ph--clipboard-text-light]',
+		theme: 'blue' as const,
+		url: '/pages/order/provider/index',
+	},
+];
+
+const INSITUTION_MENUS = [
+	{
+		label: '接单报价',
+		icon: 'icon-[ph--hand-coins-light]',
+		theme: 'orange' as const,
+		url: '/pages/user/bid/index',
+	},
+	{
+		label: '承接订单',
 		icon: 'icon-[ph--clipboard-text-light]',
 		theme: 'blue' as const,
 		url: '/pages/order/provider/index',

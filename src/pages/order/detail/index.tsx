@@ -1,5 +1,6 @@
-import { View, Image, Text } from '@tarojs/components';
-import Taro, { useRouter } from '@tarojs/taro';
+import { useState } from 'react';
+import { View, Image, Text, ScrollView } from '@tarojs/components';
+import Taro, { useRouter, useDidShow } from '@tarojs/taro';
 import { Page, Cell, Heading, Divider, Button, Loading, Empty, Description, ImageUploader } from '@/components/ui';
 import { useOrderDetail, useOrderActions, useOrderTrajectoryList } from '@/hooks/useOrder';
 import { EmployerActions, ProviderActions, UserIdentityBadge } from '@/components/biz';
@@ -12,6 +13,7 @@ export default function OrderDetailPage() {
 	const { params } = useRouter();
 	const orderId = params.id || '';
 	const initialAction = params.action || '';
+	const [refreshing, setRefreshing] = useState(false);
 
 	// 数据：订单详情数据、订单服务轨迹
 	const { data: order, isLoading: isDetailLoading, refetch: refetchDetail } = useOrderDetail(orderId);
@@ -21,6 +23,24 @@ export default function OrderDetailPage() {
 		isLoading: isTrajectoryLoading,
 		refetch: refetchTrajectory,
 	} = useOrderTrajectoryList(orderId);
+
+	// 页面切回前台时自动刷新
+	useDidShow(() => {
+		if (orderId) {
+			refetchDetail();
+			refetchTrajectory();
+		}
+	});
+
+	// 下拉刷新
+	const handleRefresh = async () => {
+		setRefreshing(true);
+		try {
+			await Promise.all([refetchDetail(), refetchTrajectory()]);
+		} finally {
+			setRefreshing(false);
+		}
+	};
 
 	const { needArrivePunch, needCompletePunch, submitTrajectory, isActionLoading } = useOrderActions(order);
 
@@ -62,6 +82,15 @@ export default function OrderDetailPage() {
 
 	return (
 		<Page className="bg-main-bg pb-28">
+			<ScrollView
+				scrollY
+				className="h-screen"
+				refresherEnabled
+				refresherTriggered={refreshing}
+				onRefresherRefresh={handleRefresh}
+				enhanced
+				showScrollbar={false}
+			>
 			{/* 顶部高亮身份状态横幅 */}
 			<View className="bg-linear-to-r from-primary to-red-400 p-6 text-white flex justify-between items-center">
 				<View className="flex flex-col gap-2 flex-1 pr-4">
@@ -228,6 +257,7 @@ export default function OrderDetailPage() {
 					<Description label="完工时间" value={order.completeTime || '未完工'} />
 				</Cell>
 			</View>
+		</ScrollView>
 
 			{/* 吸底多状态多端联动的动作按钮控制中枢 */}
 			<View className="fixed bottom-0 left-0 w-full p-4 bg-white border-t border-gray-100 pb-safe z-50 flex gap-3 justify-end items-center">

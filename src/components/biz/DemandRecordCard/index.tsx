@@ -1,6 +1,6 @@
 import { View, Text } from '@tarojs/components';
 import { DemandItem } from '@/types/demand';
-import { Button, Divider } from '@/components/ui';
+import { Badge, Button, Divider } from '@/components/ui';
 import { AuditStatusBadge } from '../BizBadge';
 
 export interface DemandRecordCardProps {
@@ -30,7 +30,10 @@ export const DemandRecordCard = ({
 	// 提取需求单状态
 	const canEdit = ['pending', 'rejected', 'approved'].includes(record.status);
 	const isApproved = record.status === 'approved';
+	// 需求单 completed = 已锁定服务方（订单已生成），不代表服务真正结束
 	const isCompleted = record.status === 'completed';
+	// 有关联订单 ID 说明订单正在流转中（服务进行中），无则是异常态
+	const hasOrder = isCompleted && !!record.orderId;
 
 	return (
 		<View className={`flex flex-col ${className}`}>
@@ -41,7 +44,11 @@ export const DemandRecordCard = ({
 				<Text className="text-text-title font-bold text-base line-clamp-1 flex-1 pr-4">
 					{record.demandName}
 				</Text>
-				<AuditStatusBadge value={record.status} />
+				{hasOrder ? (
+					<Badge variant="warning">已成交</Badge>
+				) : (
+					<AuditStatusBadge value={record.status} />
+				)}
 			</View>
 
 			<View className="flex flex-col gap-2 mb-2" onClick={() => onClick?.(record)}>
@@ -111,15 +118,15 @@ export const DemandRecordCard = ({
 						</Button>
 					)}
 
-					{/* 已完成状态：允许查看订单 */}
-					{isCompleted && (
-						<Button variant="primary" size="sm" onClick={() => onViewOrder?.(record)}>
-							查看订单
+					{/* 已成交状态：引导进入订单详情查看实时进度 */}
+					{hasOrder && (
+						<Button variant="warning" size="sm" onClick={() => onViewOrder?.(record)}>
+							跟进服务订单 ↗
 						</Button>
 					)}
 
-					{/* 已完成状态：无法删除 */}
-					{!isCompleted && (
+					{/* 有关联订单后不允许删除 */}
+					{!hasOrder && (
 						<Button variant="ghost" size="sm" onClick={() => onDelete?.(record)}>
 							<Text className=" text-primary underline">删除</Text>
 						</Button>

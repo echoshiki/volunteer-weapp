@@ -1,7 +1,7 @@
 import Taro from '@tarojs/taro';
 import { useAuthStore } from '@/store/auth';
 import { BaseResponse } from '@/types/common';
-import { getCurrentPageUrl } from './common';
+import { getCurrentPageUrl, showToastOnce } from './common';
 import { getTenantId } from './tenant';
 
 /**
@@ -83,10 +83,13 @@ class HttpRequest {
 		return new Promise((resolve, reject) => {
 			Taro.request({
 				...options,
-				success: (res) => this.handleSuccess<T>(res.statusCode, res.data, options, resolve, reject),
-				fail: (err) => this.handleNetworkFail(err, reject),
-				complete: () => {
+				success: (res) => {
 					if (options.showLoading) this.hideLoading();
+					this.handleSuccess<T>(res.statusCode, res.data, options, resolve, reject);
+				},
+				fail: (err) => {
+					if (options.showLoading) this.hideLoading();
+					this.handleNetworkFail(err, reject);
 				},
 			});
 		});
@@ -112,6 +115,7 @@ class HttpRequest {
 				formData: config?.formData,
 				header,
 				success: (res) => {
+					if (config?.showLoading) this.hideLoading();
 					let parsedData;
 					try {
 						parsedData = JSON.parse(res.data);
@@ -123,9 +127,9 @@ class HttpRequest {
 
 					this.handleSuccess<T>(res.statusCode, parsedData, config || {}, resolve, reject);
 				},
-				fail: (err) => this.handleNetworkFail(err, reject),
-				complete: () => {
+				fail: (err) => {
 					if (config?.showLoading) this.hideLoading();
+					this.handleNetworkFail(err, reject);
 				},
 			});
 		});
@@ -149,12 +153,12 @@ class HttpRequest {
 				this.handleAuthError();
 				reject(responseData);
 			} else {
-				Taro.showToast({ title: msg || '服务器繁忙', icon: 'none' });
+				showToastOnce(msg || '服务器繁忙');
 				reject(responseData);
 			}
 		} else {
 			const msg = responseData?.msg || responseData?.message || `网络请求错误(${statusCode})`;
-			Taro.showToast({ title: msg, icon: 'none' });
+			showToastOnce(msg);
 			reject({ code: statusCode, msg, data: responseData });
 		}
 	}
