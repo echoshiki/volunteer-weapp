@@ -67,22 +67,55 @@ export const EmployerActions = ({ order }: OrderActionProps) => {
 	return null;
 };
 
-/** 接单服务方（志愿者/机构）专用的履约提示树 */
-export const ProviderActions = ({ order }: Omit<OrderActionProps, 'orderId'>) => {
-	console.log('OrderStatus II', order.status);
-	if (order.status === 'paid' || order.status === 'serving') {
+interface ProviderActionProps {
+	order: UnifiedOrderItem;
+	onOpenPunch?: (type: 'arrived' | 'completed') => void;
+}
+
+/** 接单服务方（志愿者/机构）专用的履约操作树 */
+export const ProviderActions = ({ order, onOpenPunch }: ProviderActionProps) => {
+	if (order.status === 'paid') {
 		return (
-			<View className="text-sm text-center w-full text-orange-500 font-medium py-2 flex items-center justify-center gap-1">
-				<View className="icon-[ph--info-bold] size-4" />
-				请在上方上传实地照片以推进服务流程
-			</View>
+			<Button
+				variant="primary"
+				size="md"
+				icon="icon-[ph--map-pin-line-bold]"
+				className="w-full shadow-sm shadow-blue-200"
+				onClick={() => onOpenPunch?.('arrived')}
+			>
+				到达现场打卡
+			</Button>
+		);
+	}
+
+	if (order.status === 'serving') {
+		return (
+			<Button
+				variant="success"
+				size="md"
+				icon="icon-[ph--check-square-offset-bold]"
+				className="w-full shadow-sm shadow-emerald-200"
+				onClick={() => onOpenPunch?.('completed')}
+			>
+				完成服务并提交验收
+			</Button>
 		);
 	}
 
 	if (order.status === 'confirming') {
 		return (
-			<View className="text-sm text-center w-full text-text-muted italic py-2">
+			<View className="text-sm text-center w-full text-text-muted italic py-2 flex items-center justify-center gap-1.5">
+				<View className="icon-[ph--clock-countdown-bold] size-4 text-orange-500" />
 				已向雇主发起完工申请，等待对方验收中...
+			</View>
+		);
+	}
+
+	if (order.status === 'reviewing') {
+		return (
+			<View className="text-sm text-center w-full text-text-muted italic py-2 flex items-center justify-center gap-1.5">
+				<View className="icon-[ph--chat-circle-dots-bold] size-4 text-primary" />
+				服务已验收，等待雇主评价...
 			</View>
 		);
 	}
