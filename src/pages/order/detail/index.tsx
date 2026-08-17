@@ -59,7 +59,7 @@ export default function OrderDetailPage() {
 	// 动态提取对方的联系资料名片串
 	const targetName = isEmployer ? order.name : order.employerName;
 	const targetPhone = isEmployer ? order.phone : order.employerPhone;
-	const targetAvatar = isEmployer ? order.avatar : '';
+	const targetAvatar = isEmployer ? order.avatar : order.employerAvatar;
 
 	// 服务轨迹列表
 	const logList = trajectoryData?.list || [];
@@ -336,10 +336,7 @@ export default function OrderDetailPage() {
 			{punchModalType && (
 				<View className="fixed inset-0 z-50 flex flex-col justify-end" catchMove>
 					{/* 遮罩层 */}
-					<View
-						className="absolute inset-0 bg-black/60 transition-opacity"
-						onClick={handleClosePunch}
-					/>
+					<View className="absolute inset-0 bg-black/60 transition-opacity" onClick={handleClosePunch} />
 
 					{/* 弹窗主体 */}
 					<View className="relative w-full bg-white rounded-t-3xl p-5 pb-safe z-10 flex flex-col gap-4 shadow-2xl">
@@ -374,11 +371,7 @@ export default function OrderDetailPage() {
 										? 'icon-[ph--map-pin-line-duotone]'
 										: 'icon-[ph--camera-duotone]'
 								}
-								label={
-									punchModalType === 'arrived'
-										? '点击拍照/上传到场照片'
-										: '点击拍照/上传完工成果'
-								}
+								label={punchModalType === 'arrived' ? '点击拍照/上传到场照片' : '点击拍照/上传完工成果'}
 								className="w-full h-44"
 							/>
 						</View>

@@ -36,6 +36,7 @@ export interface UnifiedOrderItem {
 	// 发单雇主数据 (服务方视角看)
 	employerName: string;
 	employerPhone: string;
+	employerAvatar: string;
 }
 
 /** 订单导航项 */

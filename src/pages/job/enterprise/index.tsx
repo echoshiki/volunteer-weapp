@@ -14,7 +14,7 @@ export default function JobEnterprisePage() {
 
 	return (
 		<Page>
-			<ScrollView scrollY className="h-full">
+			<ScrollView scrollY className="h-full pb-24">
 				{/* 企业名片 Header */}
 				<Cell className="border-b border-gray-100">
 					<View className="flex items-start gap-4 mb-4">

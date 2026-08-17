@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "企业详情",
+          "pathName": "pages/job/enterprise/index",
+          "query": "id=1",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "承接订单",
           "pathName": "pages/order/detail/index",
           "query": "id=order202608170697802940",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "活动列表",
