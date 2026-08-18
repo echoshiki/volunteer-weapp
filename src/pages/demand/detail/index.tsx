@@ -4,6 +4,7 @@ import { View, Text, ScrollView, RichText } from '@tarojs/components';
 import { useDemandDetail } from '@/hooks/useDemand';
 import { Badge, Cell, Description, Empty, Heading, Loading, Page, Button } from '@/components/ui';
 import { cleanHTML, mapsTo } from '@/utils/common';
+import { runWithAuth } from '@/utils/auth';
 import { useAuthStore } from '@/store/auth';
 
 export default function DemandDetailPage() {
@@ -41,24 +42,30 @@ export default function DemandDetailPage() {
 
 	const handleCallPublisher = () => {
 		if (isMyDemand) return;
-		Taro.makePhoneCall({ phoneNumber: detail.phone });
+		runWithAuth(() => {
+			Taro.makePhoneCall({ phoneNumber: detail.phone });
+		});
 	};
 
 	const handleBidClick = () => {
 		if (isMyDemand) return;
 		if (detail.isBid) return;
-		if (isServerRole) {
-			mapsTo(`/pages/demand/bid/index?id=${demandId}&charge=${detail.charge}`);
-		} else {
-			Taro.showModal({
-				title: '需要服务方认证',
-				content: '很抱歉，当前社区互助需求仅限平台实名认证的“志愿者”或“志愿组织”承接。',
-				confirmText: '去入驻',
-				success: (res) => {
-					if (res.confirm) mapsTo('/pages/apply/index');
-				},
-			});
-		}
+		runWithAuth(() => {
+			const currentIdentity = useAuthStore.getState().userInfo?.identity;
+			const canBid = currentIdentity === 'volunteer' || currentIdentity === 'institution';
+			if (canBid) {
+				mapsTo(`/pages/demand/bid/index?id=${demandId}&charge=${detail.charge}`);
+			} else {
+				Taro.showModal({
+					title: '需要服务方认证',
+					content: '很抱歉，当前社区互助需求仅限平台实名认证的“志愿者”或“志愿组织”承接。',
+					confirmText: '去入驻',
+					success: (res) => {
+						if (res.confirm) mapsTo('/pages/apply/index');
+					},
+				});
+			}
+		});
 	};
 
 	// 针对自己的需求单的快捷跳转逻辑

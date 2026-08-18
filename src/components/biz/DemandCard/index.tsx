@@ -1,8 +1,7 @@
 import { View, Text } from '@tarojs/components';
-import { stripHtml } from '@/utils/common';
+import { stripHtml, mapsTo } from '@/utils/common';
 import { DemandItem } from '@/types/demand';
 import { Badge } from '@/components/ui';
-import { navigateWithAuth } from '@/utils/auth';
 
 export interface DemandCardProps {
 	demand: DemandItem;
@@ -17,7 +16,7 @@ export const DemandCard = ({ demand, className = '' }: DemandCardProps) => {
 	return (
 		<View
 			className={`${className}`}
-			onClick={() => navigateWithAuth(`/pages/demand/detail/index?id=${demand.demandId}`)}
+			onClick={() => mapsTo(`/pages/demand/detail/index?id=${demand.demandId}`)}
 		>
 			{/* 标题与状态 */}
 			<View className="flex justify-between items-center mb-2">

@@ -1,6 +1,6 @@
 import { View, Text } from '@tarojs/components';
 import { JobItem } from '@/types/job';
-import { navigateWithAuth } from '@/utils/auth';
+import { mapsTo } from '@/utils/common';
 
 export interface JobCardProps {
 	/** 岗位数据对象 */
@@ -14,7 +14,7 @@ export interface JobCardProps {
  */
 export const JobCard = ({ job, className }: JobCardProps) => {
 	return (
-		<View className={className} onClick={() => navigateWithAuth(`/pages/job/detail/index?id=${job.id}`)}>
+		<View className={className} onClick={() => mapsTo(`/pages/job/detail/index?id=${job.id}`)}>
 			{/* 头部：标题与薪资 */}
 			<View className="flex justify-between items-start mb-2">
 				<Text className="text-text-title font-bold text-base line-clamp-1 flex-1 pr-2">{job.title}</Text>

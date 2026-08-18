@@ -2,7 +2,7 @@ import { View, Text, Image } from '@tarojs/components';
 import { Divider } from '@/components/ui';
 import { EnrollStatusBadge } from '@/components/biz';
 import { ActivityItem } from '@/types/activity';
-import { navigateWithAuth } from '@/utils/auth';
+import { mapsTo } from '@/utils/common';
 
 export interface ActivityCardProps {
 	/** 活动数据源 */
@@ -18,7 +18,7 @@ export interface ActivityCardProps {
  * 支持横向和竖向布局
  */
 export const ActivityCard = ({ activity, layout = 'vertical', className = '' }: ActivityCardProps) => {
-	const handleClick = () => navigateWithAuth(`/pages/activity/detail/index?id=${activity.activityId}`);
+	const handleClick = () => mapsTo(`/pages/activity/detail/index?id=${activity.activityId}`);
 
 	// 横向布局
 	if (layout === 'horizontal') {

@@ -2,6 +2,7 @@ import { useRouter, makePhoneCall } from '@tarojs/taro';
 import { View, Text, ScrollView, RichText } from '@tarojs/components';
 import { useJobDetail, useResumeActions, useResumeDetail } from '@/hooks/useJob';
 import { mapsTo } from '@/utils/common';
+import { runWithAuth } from '@/utils/auth';
 import { Cell, Alert, Heading, Button, Empty, Loading, Page } from '@/components/ui';
 import Taro from '@tarojs/taro';
 
@@ -20,42 +21,44 @@ export default function JobDetail() {
 
 	// 处理投递简历
 	const handleDeliverClick = () => {
-		// 是否能获取到简历详情且有合法的姓名
-		const hasCreatedResume = !!resumeDetail && !resumeError;
+		runWithAuth(() => {
+			// 是否能获取到简历详情且有合法的姓名
+			const hasCreatedResume = !!resumeDetail && !resumeError;
 
-		if (hasCreatedResume) {
-			// 简历是否在审核中
-			const isPending = resumeDetail.reviewStatus === 'pending';
-			if (isPending) {
-				Taro.showToast({
-					title: '简历正在审核中，请勿重复投递',
-					icon: 'error',
-				});
+			if (hasCreatedResume) {
+				// 简历是否在审核中
+				const isPending = resumeDetail.reviewStatus === 'pending';
+				if (isPending) {
+					Taro.showToast({
+						title: '简历正在审核中，请勿重复投递',
+						icon: 'error',
+					});
+				} else {
+					Taro.showModal({
+						title: '确认投递',
+						content: `是否确认将您的专属简历投递至【${detail.enterprisesName}】的【${detail.title}】岗位？`,
+						success: (res) => {
+							if (res.confirm) {
+								deliverJob.mutate({
+									id: Number(id), // 传入当前岗位 id
+								});
+							}
+						},
+					});
+				}
 			} else {
 				Taro.showModal({
-					title: '确认投递',
-					content: `是否确认将您的专属简历投递至【${detail.enterprisesName}】的【${detail.title}】岗位？`,
+					title: '提示',
+					content: '您目前尚未在平台创建求职简历，请先完善您的个人基础求职名片。',
+					confirmText: '去创建',
 					success: (res) => {
 						if (res.confirm) {
-							deliverJob.mutate({
-								id: Number(id), // 传入当前岗位 id
-							});
+							mapsTo('/pages/user/resume/index?mode=create');
 						}
 					},
 				});
 			}
-		} else {
-			Taro.showModal({
-				title: '提示',
-				content: '您目前尚未在平台创建求职简历，请先完善您的个人基础求职名片。',
-				confirmText: '去创建',
-				success: (res) => {
-					if (res.confirm) {
-						mapsTo('/pages/user/resume/index?mode=create');
-					}
-				},
-			});
-		}
+		});
 	};
 
 	return (
