@@ -1,12 +1,6 @@
 import { http } from '@/utils/http';
-import {
-	ApplyHistoryItem,
-	ApplyReview,
-	ReviewStatus,
-	ServiceProviderProfile,
-	UserInfo,
-} from '@/types/user';
-import { ListRes, PageRes } from '@/types/common';
+import { ApplyHistoryItem, ApplyReview, ReviewStatus, ServiceProviderProfile, UserInfo } from '@/types/user';
+import { PageRes } from '@/types/common';
 
 /**
  * 获取用户信息接口
@@ -75,3 +69,15 @@ export const getApplyHistoryListAPI = (params: ApplyHistoryRequest) =>
 export const getProviderProfileAPI = (userId: number): Promise<ServiceProviderProfile> => {
 	return http.get(`/demand/web/user/${userId}`);
 };
+
+/** 更新服务方履历请求体 */
+export interface UpdateProviderResumeRequest {
+	/** 志愿者/机构履历信息 */
+	resume: string;
+}
+
+/**
+ * 更新服务方履历信息
+ * @param data 包含 resume 字段的对象
+ */
+export const updateProviderResumeAPI = (data: UpdateProviderResumeRequest) => http.put('/demand/web/user/edit', data);

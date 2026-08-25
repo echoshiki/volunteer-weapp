@@ -2,6 +2,7 @@ import { useQuery, useQueryClient, useMutation, useInfiniteQuery } from '@tansta
 import {
 	getUserInfoAPI,
 	updateUserInfoAPI,
+	updateProviderResumeAPI,
 	submitApplyReviewAPI,
 	getApplyHistoryListAPI,
 	type ApplyHistoryRequest,
@@ -11,11 +12,12 @@ import {
 } from '@/services/user';
 import { useAuthStore } from '@/store/auth';
 import Taro from '@tarojs/taro';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { uploadImageAPI } from '@/services/upload';
 import { formatUserInfo, getInstitutionFormFields, getVolunteerFormFields } from '@/utils/user';
 import { useUpload } from './useUpload';
 import { delayBack } from '@/utils/common';
+import { useProviderProfile } from './useProvider';
 
 /** Query - 获取用户信息 */
 export const useUser = () => {
@@ -39,6 +41,13 @@ export const useUser = () => {
 export const useUpdateUser = () => {
 	const queryClient = useQueryClient();
 	const { userInfo, updateUserInfo } = useAuthStore();
+	const userId = Number(userInfo?.userId);
+	const isProvider = userInfo?.identity === 'volunteer' || userInfo?.identity === 'institution';
+
+	// 获取已认证服务方的公开资料
+	const { data: providerProfile, isLoading: isProviderLoading } = useProviderProfile(
+		isProvider ? userId : 0,
+	);
 
 	// 状态：表单数据，从全量用户资料里提取出表单字段数据
 	const [form, setForm] = useState<UpdatesUserInfoRequest>({
@@ -52,9 +61,23 @@ export const useUpdateUser = () => {
 		address: userInfo?.address ?? '',
 	});
 
+	// 服务履历状态（可编辑）
+	const [resume, setResume] = useState('');
+
+	// 当服务方资料拉取完毕时，自动初始化 resume 字段
+	useEffect(() => {
+		if (providerProfile?.resume !== undefined) {
+			setResume(providerProfile.resume || '');
+		}
+	}, [providerProfile?.resume]);
+
 	// 执行：统一更新表单字段状态
 	const updateField = <K extends keyof UpdatesUserInfoRequest>(field: K, value: UpdatesUserInfoRequest[K]) => {
 		setForm((prev) => ({ ...prev, [field]: value }));
+	};
+
+	const updateResume = (value: string) => {
+		setResume(value);
 	};
 
 	// 执行：获取微信头像并上传
@@ -76,11 +99,21 @@ export const useUpdateUser = () => {
 	};
 
 	const mutation = useMutation({
-		mutationFn: (data: UpdatesUserInfoRequest) => updateUserInfoAPI(data),
+		mutationFn: async () => {
+			const tasks: Promise<any>[] = [updateUserInfoAPI(form)];
+			// 如果是已认证服务方，同时提交更新服务履历
+			if (isProvider) {
+				tasks.push(updateProviderResumeAPI({ resume }));
+			}
+			return Promise.all(tasks);
+		},
 		onSuccess: () => {
 			Taro.showToast({ title: '修改成功', icon: 'success' });
 			if (userInfo) updateUserInfo({ ...userInfo, ...form });
 			queryClient.invalidateQueries(['user', 'profile']);
+			if (userId) {
+				queryClient.invalidateQueries(['provider', 'public', 'profile', userId]);
+			}
 			delayBack();
 		},
 	});
@@ -89,12 +122,17 @@ export const useUpdateUser = () => {
 		if (!form.avatar) return Taro.showToast({ title: '请设置头像', icon: 'none' });
 		if (!form.nickName) return Taro.showToast({ title: '请输入昵称', icon: 'none' });
 		if (!form.provinceCode) return Taro.showToast({ title: '请选择常住地区', icon: 'none' });
-		mutation.mutate(form);
+		mutation.mutate();
 	};
 
 	return {
 		form,
 		userInfo,
+		isProvider,
+		providerProfile,
+		isProviderLoading,
+		resume,
+		updateResume,
 		updateField,
 		onChooseAvatar,
 		handleSave,
