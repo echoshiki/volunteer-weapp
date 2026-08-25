@@ -22,6 +22,7 @@ export default defineAppConfig({
 		'pages/user/resume/index',
 		'pages/user/job/index',
 		'pages/provider/index',
+		'pages/provider/orders/index',
 		'pages/apply/index',
 		'pages/apply/history/index',
 		'pages/apply/volunteer/index',

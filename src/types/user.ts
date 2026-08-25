@@ -151,3 +151,24 @@ export interface ServiceProviderProfile {
 	/** 履历 */
 	resume: string;
 }
+
+/** 服务方历史服务单简易列表项 */
+export interface ProviderOrderItem {
+	/** 需求单名称 */
+	demandName: string;
+	/** 需求单区域名称 */
+	tenantName: string;
+	/** 服务评分 (1-5) */
+	rating: number;
+	/** 评价内容 */
+	comment: string;
+	/** 服务完成时间 */
+	completeTime: string;
+}
+
+/** 服务方历史服务单列表请求参数 */
+export interface ProviderOrderListParams {
+	userId?: number;
+	pageNum?: number;
+	pageSize?: number;
+}

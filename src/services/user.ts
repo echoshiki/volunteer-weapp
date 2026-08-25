@@ -1,5 +1,13 @@
 import { http } from '@/utils/http';
-import { ApplyHistoryItem, ApplyReview, ReviewStatus, ServiceProviderProfile, UserInfo } from '@/types/user';
+import {
+	ApplyHistoryItem,
+	ApplyReview,
+	ProviderOrderItem,
+	ProviderOrderListParams,
+	ReviewStatus,
+	ServiceProviderProfile,
+	UserInfo,
+} from '@/types/user';
 import { PageRes } from '@/types/common';
 
 /**
@@ -81,3 +89,10 @@ export interface UpdateProviderResumeRequest {
  * @param data 包含 resume 字段的对象
  */
 export const updateProviderResumeAPI = (data: UpdateProviderResumeRequest) => http.put('/demand/web/user/edit', data);
+
+/**
+ * 获取服务方历史服务单简易列表
+ * @param params 分页与目标用户ID
+ */
+export const getProviderOrderListAPI = (params?: ProviderOrderListParams) =>
+	http.get<PageRes<ProviderOrderItem>>('/demand/web/user/orderList', params);

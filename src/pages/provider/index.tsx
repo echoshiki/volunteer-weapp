@@ -3,6 +3,7 @@ import { useRouter } from '@tarojs/taro';
 import { Page, Cell, Heading, Loading, Empty, Description } from '@/components/ui';
 import { UserIdentityBadge } from '@/components/biz';
 import { useProviderProfile } from '@/hooks/useProvider';
+import { mapsTo } from '@/utils/common';
 
 export default function ProviderPage() {
 	const { params } = useRouter();
@@ -49,8 +50,14 @@ export default function ProviderPage() {
 				<Cell className="p-4">
 					<Heading title="服务档案" size="md" className="mb-3" />
 					<View className="grid grid-cols-2 gap-4 text-center">
-						<View className="bg-gray-50 rounded-lg p-3 flex flex-col justify-center">
-							<Text className="text-xs text-text-muted mb-1">累计服务单数</Text>
+						<View
+							className="bg-gray-50 rounded-lg p-3 flex flex-col justify-center active:bg-gray-100 transition-colors cursor-pointer"
+							onClick={() => mapsTo(`/pages/provider/orders/index?userId=${userId}`)}
+						>
+							<View className="flex items-center justify-center gap-0.5 mb-1">
+								<Text className="text-xs text-text-muted">累计服务单数</Text>
+								<View className="icon-[ph--caret-right] size-3 text-text-muted opacity-60" />
+							</View>
 							<Text className="text-sm font-bold font-num text-orange-500">
 								{profile.serviceCount || 0} <Text className="text-sm font-normal">单</Text>
 							</Text>
