@@ -148,4 +148,6 @@ export interface ServiceProviderProfile {
 	tenantName: string;
 	/** 办公驻地/服务点详细地址 */
 	address: string;
+	/** 履历 */
+	resume: string;
 }

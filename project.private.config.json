@@ -23,11 +23,18 @@
     "miniprogram": {
       "list": [
         {
+          "name": "志愿者履历",
+          "pathName": "pages/provider/index",
+          "query": "id=106",
+          "scene": null,
+          "launchMode": "default"
+        },
+        {
           "name": "企业详情",
           "pathName": "pages/job/enterprise/index",
           "query": "id=1",
-          "scene": null,
-          "launchMode": "default"
+          "launchMode": "default",
+          "scene": null
         },
         {
           "name": "承接订单",

@@ -1,16 +1,7 @@
 import { useState, useEffect } from 'react';
 import { View, Text, Input } from '@tarojs/components';
 import Taro, { useRouter } from '@tarojs/taro';
-import {
-	Page,
-	Cell,
-	Heading,
-	Button,
-	Loading,
-	FormItem,
-	FileUploader,
-	Alert,
-} from '@/components/ui';
+import { Page, Cell, Heading, Button, Loading, FormItem, FileUploader, Alert } from '@/components/ui';
 import { useResumeActions, useResumeDetail } from '@/hooks/useJob';
 import { useUpload } from '@/hooks/useUpload';
 import { ResumeFileItem } from '@/types/job';
@@ -41,16 +32,14 @@ export default function MyResumePage() {
 			setName(detail.applicantName);
 			setPhone(detail.applicantPhone);
 			setEmail(detail.applicantEmail);
-			if (detail.volunteerFile && detail.volunteerFile.length > 0)
-				setAttachedFile(detail.volunteerFile[0]);
+			if (detail.volunteerFile && detail.volunteerFile.length > 0) setAttachedFile(detail.volunteerFile[0]);
 		}
 	}, [detail, mode]);
 
 	// 表单提交核心拦截器
 	const handleSubmit = () => {
 		if (!name.trim()) return Taro.showToast({ title: '请输入姓名', icon: 'none' });
-		if (!/^1[3-9]\d{9}$/.test(phone))
-			return Taro.showToast({ title: '手机号不正确', icon: 'none' });
+		if (!/^1[3-9]\d{9}$/.test(phone)) return Taro.showToast({ title: '手机号不正确', icon: 'none' });
 		if (!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(email))
 			return Taro.showToast({ title: '邮箱格式不正确', icon: 'none' });
 		if (!attachedFile) return Taro.showToast({ title: '请上传简历附件', icon: 'none' });
@@ -115,10 +104,8 @@ export default function MyResumePage() {
 										: '资质审核中'}
 							</Text>
 							<Text className="text-xs opacity-80 block mt-0.5">
-								{detail.reviewStatus === 'pending' &&
-									'您的简历正在提交社区人才库审核，不影响您直接投递岗位。'}
-								{detail.reviewStatus === 'approved' &&
-									'您的双端资质已通过平台认证，将获得优先推荐。'}
+								{detail.reviewStatus === 'pending' && '您的简历正在提交社区人才库审核。'}
+								{detail.reviewStatus === 'approved' && '您的双端资质已通过平台认证，将获得优先推荐。'}
 								{detail.reviewStatus === 'rejected' &&
 									'简历部分信息有误，您可以点击下方修改后重新提交。'}
 							</Text>
@@ -129,13 +116,7 @@ export default function MyResumePage() {
 				{/* 基本名片表单卡片 */}
 				<Cell>
 					<Heading
-						title={
-							isReadonly
-								? '我的求职名片'
-								: mode === 'create'
-									? '新建求职名片'
-									: '编辑求职名片'
-						}
+						title={isReadonly ? '我的求职名片' : mode === 'create' ? '新建求职名片' : '编辑求职名片'}
 						subtitle="完善以下基础信息，以便企业HR与您取得联系"
 						size="md"
 					/>
@@ -186,9 +167,7 @@ export default function MyResumePage() {
 							label="选择聊天记录中的简历文件"
 							subLabel="支持 .pdf / .doc / .docx 格式文档"
 						/>
-						<Alert variant="info">
-							求职附件一经上传，平台将自动解析录入社区人才大盘进行精准岗位撮合。
-						</Alert>
+						<Alert variant="info">求职附件一经上传，平台将自动解析录入社区人才大盘进行精准岗位撮合。</Alert>
 					</View>
 				</Cell>
 

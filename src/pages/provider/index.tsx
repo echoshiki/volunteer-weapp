@@ -1,4 +1,4 @@
-import { View, Image, Text } from '@tarojs/components';
+import { View, Image, Text, RichText } from '@tarojs/components';
 import { useRouter } from '@tarojs/taro';
 import { Page, Cell, Heading, Loading, Empty, Description } from '@/components/ui';
 import { UserIdentityBadge } from '@/components/biz';
@@ -103,6 +103,13 @@ export default function ProviderPage() {
 						value={profile.address || '暂无详细登记的办公驻地'}
 						variant="between"
 					/>
+				</Cell>
+
+				<Cell>
+					<Heading title="服务履历" size="md" className="mb-1" />
+					<View>
+						<RichText nodes={profile.resume || '暂无服务履历'}></RichText>
+					</View>
 				</Cell>
 			</View>
 		</Page>

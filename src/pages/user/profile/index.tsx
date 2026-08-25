@@ -1,4 +1,4 @@
-import { Avatar, Badge, Cell, DatePicker, FormItem, Page, RegionPicker, Button } from '@/components/ui';
+import { Avatar, Badge, Cell, DatePicker, FormItem, Page, RegionPicker, Button, Heading } from '@/components/ui';
 import { SEX_OPTIONS } from '@/constants/user';
 import { useUpdateUser } from '@/hooks/useUser';
 import { View, Text, Input } from '@tarojs/components';
@@ -37,6 +37,7 @@ export default function UserProfilePage() {
 				</Cell>
 
 				<Cell>
+					<Heading title="基本信息" size="md" />
 					{/* 昵称 */}
 					<FormItem label="昵称">
 						<Input
@@ -105,6 +106,10 @@ export default function UserProfilePage() {
 							onInput={(e) => updateField('address', e.detail.value)}
 						/>
 					</FormItem>
+				</Cell>
+
+				<Cell>
+					<Heading title="认证信息" size="md" />
 				</Cell>
 
 				{/* 保存 */}
