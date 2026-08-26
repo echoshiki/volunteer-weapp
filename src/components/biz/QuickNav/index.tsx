@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { View, Text } from '@tarojs/components';
+import Taro from '@tarojs/taro';
 import { mapsTo } from '@/utils/common';
 import { runWithAuth } from '@/utils/auth';
 
@@ -21,13 +22,13 @@ export interface QuickNavItem {
 }
 
 export interface QuickNavProps {
-	/** 悬浮按钮距离底部的样式类，默认 'bottom-24' (带TabBar页面)，普通页面可传 'bottom-8' */
-	bottomClass?: string;
-	/** 是否在带TabBar的页面中使用，若未指定 bottomClass，会根据 hasTabBar 自动适配 */
+	/** 初始距离屏幕顶部的像素值（不传则自动计算在屏幕下半部） */
+	defaultTop?: number;
+	/** 是否在带TabBar的页面中使用 (用于计算底部拖拽边界) */
 	hasTabBar?: boolean;
 	/** 自定义覆盖导航项列表 */
 	items?: QuickNavItem[];
-	/** 悬浮球的显示文字，默认 '快捷导航' */
+	/** 悬浮球的显示文字，默认 '快捷入口' */
 	triggerText?: string;
 	/** 悬浮按钮外部附加样式 */
 	className?: string;
@@ -69,18 +70,68 @@ const DEFAULT_QUICK_ITEMS: QuickNavItem[] = [
 
 /**
  * 悬浮快捷导航组件 (Floating Quick Nav)
- * 可在任何页面即插即用，点击唤起常用功能大按钮导航弹窗，专为老年人与快捷操作优化
+ * 支持上下自由拖动，可在任何页面即插即用，点击唤起常用功能大按钮导航弹窗
  */
 export const QuickNav = ({
-	bottomClass,
+	defaultTop,
 	hasTabBar = true,
 	items = DEFAULT_QUICK_ITEMS,
-	triggerText = '快捷导航',
+	triggerText = '快捷入口',
 	className = '',
 }: QuickNavProps) => {
 	const [isOpen, setIsOpen] = useState(false);
 
-	const computedBottom = bottomClass || (hasTabBar ? 'bottom-24' : 'bottom-8');
+	// 屏幕高度与上下安全边界
+	const systemInfo = useRef(Taro.getSystemInfoSync());
+	const windowHeight = systemInfo.current.windowHeight || 667;
+	const minTop = 75; // 顶部导航栏安全距离
+	const maxTop = windowHeight - (hasTabBar ? 155 : 95); // 底部 TabBar / 安全区距离
+
+	// 纵向坐标 top 状态
+	const [top, setTop] = useState(() => {
+		if (defaultTop !== undefined) return defaultTop;
+		return Math.round(windowHeight * 0.8);
+	});
+
+	// 拖拽手势相关引用
+	const touchStartY = useRef(0);
+	const startTop = useRef(0);
+	const isDragging = useRef(false);
+
+	const handleTouchStart = (e: any) => {
+		const touch = e.touches[0];
+		if (!touch) return;
+		touchStartY.current = touch.clientY;
+		startTop.current = top;
+		isDragging.current = false;
+	};
+
+	const handleTouchMove = (e: any) => {
+		const touch = e.touches[0];
+		if (!touch) return;
+		const deltaY = touch.clientY - touchStartY.current;
+
+		if (Math.abs(deltaY) > 4) {
+			isDragging.current = true;
+		}
+
+		const nextTop = startTop.current + deltaY;
+		// 限制在安全可见区域内
+		const clampedTop = Math.max(minTop, Math.min(nextTop, maxTop));
+		setTop(clampedTop);
+	};
+
+	const handleTouchEnd = () => {
+		// 手势结束后若不是明显拖拽，则允许点击触发
+		setTimeout(() => {
+			isDragging.current = false;
+		}, 100);
+	};
+
+	const handleTriggerClick = () => {
+		if (isDragging.current) return;
+		setIsOpen(true);
+	};
 
 	const handleItemClick = (item: QuickNavItem) => {
 		setIsOpen(false);
@@ -114,15 +165,19 @@ export const QuickNav = ({
 				</>
 			);
 		}
-		return <Text className="writing-vertical">{triggerText}</Text>;
+		return <Text>{triggerText}</Text>;
 	};
 
 	return (
 		<>
-			{/* 紧贴右边缘悬浮挂耳触发器 */}
+			{/* 紧贴右边缘可上下拖拽的悬浮挂耳触发器 */}
 			<View
-				className={`fixed right-0 ${computedBottom} z-40 flex flex-col items-center justify-center pl-3 pr-2 py-3 rounded-l-xl rounded-r-none bg-linear-to-l from-primary to-[#ff4e3e] text-white shadow-md shadow-primary/25 border-y border-l border-white/20 active:opacity-90 active:scale-95 transition-all cursor-pointer ${className}`}
-				onClick={() => setIsOpen(true)}
+				className={`fixed right-0 z-40 flex flex-col items-center justify-center pl-3 pr-2 py-3 rounded-l-xl rounded-r-none bg-linear-to-l from-primary to-[#ff4e3e] opacity-95 text-white shadow-md shadow-primary/25 border-y border-l border-white/20 active:opacity-90 transition-opacity cursor-pointer ${className}`}
+				style={{ top: `${top}px` }}
+				onTouchStart={handleTouchStart}
+				onTouchMove={handleTouchMove}
+				onTouchEnd={handleTouchEnd}
+				onClick={handleTriggerClick}
 			>
 				<View className="icon-[ph--squares-four-fill] size-6 mb-0.5 shrink-0" />
 				<View className="flex flex-col items-center justify-center text-xs font-bold leading-tight tracking-wider">

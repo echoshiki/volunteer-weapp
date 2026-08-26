@@ -4,7 +4,7 @@ import { useActivityList } from '@/hooks/useActivity';
 import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';
 import { useHomeDashboard } from '@/hooks/useHome';
-import { useJobList, useEnterpriseList } from '@/hooks/useJob';
+import { useJobList } from '@/hooks/useJob';
 import { ActivityCard, TenantChangeEventProps, JobCard, TenantPicker, QuickNav } from '@/components/biz';
 import { getTenantName, setTenant, getTenantId } from '@/utils/tenant';
 import { useState, useCallback } from 'react';
@@ -192,9 +192,6 @@ export default function HomePage() {
 					</View>
 				</View>
 			)}
-
-			{/* 悬浮快捷导航入口 */}
-			{!isWechatReview && <QuickNav hasTabBar />}
 		</Page>
 	);
 }
