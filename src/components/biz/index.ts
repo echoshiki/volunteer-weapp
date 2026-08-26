@@ -16,3 +16,4 @@ export * from './AppliedJobRecordCard';
 export * from './AssociationCard';
 export * from './BidRecordCard';
 export * from './AuditInfoView';
+export * from './QuickNav';

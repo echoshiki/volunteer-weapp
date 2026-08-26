@@ -5,7 +5,7 @@ import { mapsTo } from '@/utils/common';
 import { Loading } from '@/components/ui/Loading';
 import { useHomeDashboard } from '@/hooks/useHome';
 import { useJobList, useEnterpriseList } from '@/hooks/useJob';
-import { ActivityCard, TenantChangeEventProps, JobCard, TenantPicker } from '@/components/biz';
+import { ActivityCard, TenantChangeEventProps, JobCard, TenantPicker, QuickNav } from '@/components/biz';
 import { getTenantName, setTenant, getTenantId } from '@/utils/tenant';
 import { useState, useCallback } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
@@ -171,7 +171,7 @@ export default function HomePage() {
 				</Cell>
 			</View>
 
-			{isWechatReview ?? (
+			{!isWechatReview && (
 				<View className="container-x mt-2 mb-4">
 					<Heading title="家门口岗位" link={{ name: '更多岗位', url: '/pages/activity/index' }} />
 					{/* 岗位列表 */}
@@ -192,6 +192,9 @@ export default function HomePage() {
 					</View>
 				</View>
 			)}
+
+			{/* 悬浮快捷导航入口 */}
+			{!isWechatReview && <QuickNav hasTabBar />}
 		</Page>
 	);
 }
