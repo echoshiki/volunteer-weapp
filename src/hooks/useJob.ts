@@ -14,6 +14,7 @@ import {
 	deliverJobAPI,
 } from '@/services/job';
 import { enabledWithTenant, tenantKey } from '@/utils/tenant';
+import { useAuthStore } from '@/store/auth';
 import Taro from '@tarojs/taro';
 import { delayBack, showErrorToast } from '@/utils/common';
 
@@ -79,13 +80,22 @@ export const useEnterpriseDetail = (enterprisesId: number | string) => {
 };
 
 /** Query：获取简历详情 */
-export const useResumeDetail = () => {
-	return useQuery({
+export const useResumeDetail = (options?: { enabled?: boolean }) => {
+	const isLoggedIn = useAuthStore((s) => s.authStage === 'LOGGED_IN');
+	const isEnabled = options?.enabled !== undefined ? options.enabled : isLoggedIn;
+
+	const query = useQuery({
 		queryKey: ['resume', 'detail'],
 		queryFn: () => getResumeDetailAPI(),
 		retry: false,
 		staleTime: 5 * 60 * 1000,
+		enabled: isEnabled,
 	});
+
+	return {
+		...query,
+		isLoading: isEnabled && query.isLoading,
+	};
 };
 
 /** Mutation：管理简历创建、修改与投递历史动作 */

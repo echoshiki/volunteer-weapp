@@ -12,7 +12,7 @@ export default function JobDetail() {
 
 	const { data: detail, isLoading } = useJobDetail(id);
 
-	const { data: resumeDetail, error: resumeError, isLoading: isResumeLoading } = useResumeDetail();
+	const { data: resumeDetail, error: resumeError, isFetching: isResumeFetching } = useResumeDetail();
 
 	const { deliverJob, isActionPending } = useResumeActions();
 
@@ -22,6 +22,11 @@ export default function JobDetail() {
 	// 处理投递简历
 	const handleDeliverClick = () => {
 		runWithAuth(() => {
+			if (isResumeFetching) {
+				Taro.showToast({ title: '加载中，请稍候', icon: 'loading' });
+				return;
+			}
+
 			// 是否能获取到简历详情且有合法的姓名
 			const hasCreatedResume = !!resumeDetail && !resumeError;
 
@@ -124,7 +129,7 @@ export default function JobDetail() {
 					variant="primary"
 					icon="icon-[ph--paper-plane-tilt]"
 					className="flex-[1.5]"
-					loading={isActionPending || isResumeLoading}
+					loading={isActionPending}
 					onClick={handleDeliverClick}
 				>
 					投递简历
